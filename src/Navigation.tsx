@@ -1,5 +1,5 @@
 import { IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from "@ionic/react"
-import { triangle, ellipse, square, mapOutline } from 'ionicons/icons'
+import { mapOutline } from 'ionicons/icons'
 import { IonReactRouter } from "@ionic/react-router"
 import { Redirect, Route } from "react-router"
 
