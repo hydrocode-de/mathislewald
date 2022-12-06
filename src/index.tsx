@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 // import some contexts
 import { SettingsProvider } from './context/settings';
+import { DataProvider } from './context/data';
 
 
 const container = document.getElementById('root');
@@ -13,7 +14,9 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <SettingsProvider>
-      <App />
+      <DataProvider>
+        <App />
+      </DataProvider>
     </SettingsProvider>
   </React.StrictMode>
 );
