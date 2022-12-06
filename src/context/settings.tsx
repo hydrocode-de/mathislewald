@@ -11,6 +11,7 @@ interface SettingsState {
     geoserverUrl: string
 }
 
+// TODO: add the resource structures Public/Inventory etc
 const initialState: SettingsState = {
     geoserverUrl: 'http://geowwd.uni-freiburg.de/geoserver'
 }
