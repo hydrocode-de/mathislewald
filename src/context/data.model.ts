@@ -9,5 +9,8 @@ export interface InventoryProperties {
     [key: string]: any;
 }
 
+// export only one of the inventory data features
+export type InventoryFeature = GeoJSON.Feature<GeoJSON.Point, InventoryProperties>
+
 // define how inventory data looks like
 export type InventoryData = GeoJSON.FeatureCollection<GeoJSON.Point, InventoryProperties>
