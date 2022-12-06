@@ -22,6 +22,7 @@
     "@types/react-router-dom": "^5.1.7",
     "axios": "^1.2.1",
     "ionicons": "^6.0.3",
+    "lodash.clonedeep": "^4.5.0",
     "mapbox-gl": "^2.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -72,6 +73,7 @@
     "@capacitor/cli": "4.3.0",
     "@types/geojson": "^7946.0.10",
     "@types/googlemaps": "^3.43.3",
+    "@types/lodash.clonedeep": "^4.5.7",
     "@types/mapbox-gl": "^2.7.6"
   },
   "description": "An Ionic project"
