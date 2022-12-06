@@ -1,24 +1,34 @@
 import { IonIcon, IonSpinner } from '@ionic/react';
-import { GoogleMap, useJsApiLoader, Marker, Circle } from '@react-google-maps/api'
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { GoogleMap, useJsApiLoader, Marker, Circle, InfoBox } from '@react-google-maps/api'
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useData } from '../context/data';
 import { walkOutline } from 'ionicons/icons';
+import { useHistory } from 'react-router';
+import { InventoryProperties } from '../context/data.model';
+import { Link } from 'react-router-dom';
 
 const { REACT_APP_GOOGLE_MAPS_KEY } = process.env;
 
 
 const InventorySource: React.FC<{map: google.maps.Map | undefined}> = ({ map }) => {
+    // create infoBox state
+    
+
     // use the Data context
     const { inventory } = useData()
+
+    // use history to navigate to the list page
+    const history = useHistory()
 
     useEffect(() => {
         if (inventory && inventory.bbox) {
             // map?.fitBounds(inventory.bbox)
+            map?.fitBounds(new google.maps.LatLngBounds({lng: inventory.bbox[0], lat: inventory.bbox[1]}, {lng: inventory.bbox[2], lat: inventory.bbox[3]}), 90)
         }
     }, [map, inventory])
 
     return <>
-        {inventory?.features.map((feature, idx) => <Marker key={idx}  onClick={() => console.log(feature)} position={new google.maps.LatLng({lng: feature.geometry.coordinates[0], lat: feature.geometry.coordinates[1]})} />)}
+        {inventory?.features.map((feature, idx) => <Marker key={idx} onClick={() => history.push(`/list/${feature.id}`)} position={new google.maps.LatLng({lng: feature.geometry.coordinates[0], lat: feature.geometry.coordinates[1]})} />)}
     </>
 }
 const MainMap: React.FC = () => {
