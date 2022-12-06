@@ -1,10 +1,12 @@
 import { IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from "@ionic/react"
-import { mapOutline } from 'ionicons/icons'
+import { mapOutline, listOutline } from 'ionicons/icons'
 import { IonReactRouter } from "@ionic/react-router"
 import { Redirect, Route } from "react-router"
 
 // import pages
 import MainMapTab from "./pages/MainMapTab"
+import InventoryListTab from "./pages/InventoryListTab"
+import TreeOverviewPage from "./pages/TreeOverviewPage"
 
 
 /**
@@ -18,16 +20,29 @@ const Navigation: React.FC = () => {
             <IonTabs>
                 <IonRouterOutlet>
                     <Route exact path="/map">
-                    <MainMapTab />
+                        <MainMapTab />
                     </Route>
+                    
+                    <Route exact path="/list">
+                        <InventoryListTab />
+                    </Route>
+
+                    <Route path="/list/:id" component={TreeOverviewPage} /> 
+
                     <Route exact path="/">
-                    <Redirect to="/map" />
+                        <Redirect to="/map" />
                     </Route>
                 </IonRouterOutlet>
                 <IonTabBar slot="bottom">
+                    
                     <IonTabButton tab="map" href="/map">
-                    <IonIcon icon={mapOutline} />
-                    <IonLabel>Map</IonLabel>
+                        <IonIcon icon={mapOutline} />
+                        <IonLabel>Map</IonLabel>
+                    </IonTabButton>
+
+                    <IonTabButton tab="list" href="/list">
+                        <IonIcon icon={listOutline} />
+                        <IonLabel>List</IonLabel>
                     </IonTabButton>
                 </IonTabBar>
             </IonTabs>
