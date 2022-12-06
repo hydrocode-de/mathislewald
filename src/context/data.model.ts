@@ -1,7 +1,7 @@
 /**
  * Model the Invetory properties within the GeoJSON specification
  */
-interface InventoryProperties {
+export interface InventoryProperties {
     treeid: number;
     radius: number;
     height: number;
