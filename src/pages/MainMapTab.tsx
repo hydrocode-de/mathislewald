@@ -1,6 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-//import MainMap from '../components/MainMapGoogle';
-import MainMap from '../components/MainMapMapbox';
+import MainMap from '../components/MainMapGoogle';
+//import MainMap from '../components/MainMapMapbox';
 
 const MainMapTab: React.FC = () => {
   return (
