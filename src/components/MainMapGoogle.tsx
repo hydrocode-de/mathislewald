@@ -1,5 +1,5 @@
 import {  IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonLabel, IonSpinner } from '@ionic/react';
-import { GoogleMap, useJsApiLoader, Marker, InfoBox, InfoWindow } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader, Marker, InfoBox, InfoWindow, useGoogleMap } from '@react-google-maps/api'
 import React, { useCallback, useEffect, useState } from 'react';
 import { useData } from '../context/data';
 import { useHistory } from 'react-router';
@@ -45,7 +45,10 @@ const InventoryMarker: React.FC<{feature: InventoryFeature}> = ({ feature }) => 
     )
 }
 
-const InventorySource: React.FC<{map: google.maps.Map | undefined}> = ({ map }) => {
+const InventorySource: React.FC = () => {
+    // get a reference to the map 
+    const map = useGoogleMap()
+
     // create component state
     const [inventory, setInventory] = useState<InventoryData>()
     
@@ -75,8 +78,6 @@ const InventorySource: React.FC<{map: google.maps.Map | undefined}> = ({ map }) 
 }
 
 const MainMap: React.FC = () => {
-    const [map, setMap] = useState<google.maps.Map>()
-    
     // get the prefered color settings to load correct mapId
     const prefer = window.matchMedia('(prefers-color-scheme: dark)')
 
@@ -88,7 +89,6 @@ const MainMap: React.FC = () => {
 
     // callback run when the maps JS has been loaded and initialized
     const onLoad = useCallback((map: google.maps.Map) => {
-        setMap(map)
         map.setZoom(12)
         map.setCenter({lat: 48., lng: 7.843});
     
@@ -98,15 +98,25 @@ const MainMap: React.FC = () => {
 
     const onUnmount = useCallback(() => {}, [])
 
+    const options: google.maps.MapOptions = {
+        mapId: prefer.matches ? '6060cca46b3b8e75' : '',
+        zoomControlOptions: {
+            position: 5 // google.maps.ControlPosition.LEFT_TOP
+        },
+        streetViewControl: false,
+        fullscreenControl: false,
+        mapTypeControl: false
+    }
+
     if (isLoaded) {
         return (
             <GoogleMap
               mapContainerStyle={{height: '100%', width: '100%'}}
               onLoad={onLoad}
               onUnmount={onUnmount}
-              options={{ mapId: prefer.matches ? '6060cca46b3b8e75' : '' }}
+              options={options}
             >
-                <InventorySource map={map}/>
+                <InventorySource />
             </GoogleMap>
         )
     } else {
