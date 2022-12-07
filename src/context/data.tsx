@@ -63,8 +63,6 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
             axios.get<InventoryData>(`${geoserverUrl}/Public/ows`, {params: params})
             .then((response => {
                 setAllInventory(response.data)
-                setSynced(true)
-                console.log(response.data)
             })).catch(error => console.log(error))
         } else {
             console.log('No geoserver url')
