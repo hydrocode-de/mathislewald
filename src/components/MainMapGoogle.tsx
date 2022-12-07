@@ -21,8 +21,8 @@ const InventoryMarker: React.FC<{feature: InventoryFeature}> = ({ feature }) => 
     return (
         <Marker
             position={geo.featureToLngLat(feature)}
-            // onMouseOver={() => !showInfo ? setShowInfo(true) : null}
-            onMouseOut={() => setShowInfo(false)}
+            //onMouseOver={() => !showInfo ? setShowInfo(true) : null}
+            // onMouseOut={() => setShowInfo(false)}
             onClick={() => setShowInfo(true)}
             // onClick={() => history.push(`/list/${feature.id}`)}
         >
