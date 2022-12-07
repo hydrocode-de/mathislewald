@@ -1,12 +1,13 @@
-import {  IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonLabel, IonSpinner } from '@ionic/react';
-import { GoogleMap, useJsApiLoader, Marker, InfoBox, InfoWindow, useGoogleMap } from '@react-google-maps/api'
+import {  IonButton, IonCardContent, IonCardHeader, IonCardTitle, IonLabel, IonSpinner } from '@ionic/react';
+import { GoogleMap, useJsApiLoader, Marker, InfoWindow, useGoogleMap } from '@react-google-maps/api'
 import React, { useCallback, useEffect, useState } from 'react';
+import cloneDeep from 'lodash.clonedeep';
+
+
 import { useData } from '../context/data';
-import { useHistory } from 'react-router';
 import { InventoryData, InventoryFeature } from '../context/data.model';
 import * as geo from '../util/geo'
-import cloneDeep from 'lodash.clonedeep';
-import { Link } from 'react-router-dom';
+import LayerDrawer from './LayerDrawer';
 
 const { REACT_APP_GOOGLE_MAPS_KEY } = process.env;
 
@@ -78,6 +79,9 @@ const InventorySource: React.FC = () => {
 }
 
 const MainMap: React.FC = () => {
+    // store the map somewhere
+    const [map, setMap] = useState<google.maps.Map>()
+
     // get the prefered color settings to load correct mapId
     const prefer = window.matchMedia('(prefers-color-scheme: dark)')
 
@@ -88,12 +92,13 @@ const MainMap: React.FC = () => {
     })
 
     // callback run when the maps JS has been loaded and initialized
-    const onLoad = useCallback((map: google.maps.Map) => {
-        map.setZoom(12)
-        map.setCenter({lat: 48., lng: 7.843});
+    const onLoad = useCallback((_map: google.maps.Map) => {
+        if (!_map) setMap(_map)
+        _map.setZoom(12)
+        _map.setCenter({lat: 48., lng: 7.843});
     
         // dev
-        (window as any).map = map
+        (window as any).map = _map
     }, [])
 
     const onUnmount = useCallback(() => {}, [])
@@ -109,16 +114,17 @@ const MainMap: React.FC = () => {
     }
 
     if (isLoaded) {
-        return (
+        return <>
             <GoogleMap
               mapContainerStyle={{height: '100%', width: '100%'}}
               onLoad={onLoad}
               onUnmount={onUnmount}
               options={options}
             >
+                <LayerDrawer />
                 <InventorySource />
             </GoogleMap>
-        )
+        </>
     } else {
         return <IonSpinner name="circular" /> 
     }
