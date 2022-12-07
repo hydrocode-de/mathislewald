@@ -1,48 +1,79 @@
-import {  IonSpinner } from '@ionic/react';
-import { GoogleMap, useJsApiLoader, Marker, InfoBox } from '@react-google-maps/api'
+import {  IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonLabel, IonSpinner } from '@ionic/react';
+import { GoogleMap, useJsApiLoader, Marker, InfoBox, InfoWindow } from '@react-google-maps/api'
 import React, { useCallback, useEffect, useState } from 'react';
 import { useData } from '../context/data';
 import { useHistory } from 'react-router';
-import { InventoryFeature } from '../context/data.model';
+import { InventoryData, InventoryFeature } from '../context/data.model';
+import * as geo from '../util/geo'
+import cloneDeep from 'lodash.clonedeep';
+import { Link } from 'react-router-dom';
 
 const { REACT_APP_GOOGLE_MAPS_KEY } = process.env;
 
 
-const InventorySource: React.FC<{map: google.maps.Map | undefined}> = ({ map }) => {
-    // create infoBox state
-    const [showBox, setShowBox] = useState<boolean>(false);
-    const [boxFeature, setBoxFeature] = useState<InventoryFeature>()
-    
-    // use the Data context
-    const { inventory } = useData()
+const InventoryMarker: React.FC<{feature: InventoryFeature}> = ({ feature }) => {
+    // component state
+    const [showInfo, setShowInfo] = useState<boolean>(false)
 
     // use history to navigate to the list page
-    const history = useHistory()
+    // const history = useHistory()
+    
+    return (
+        <Marker
+            position={geo.featureToLngLat(feature)}
+            // onMouseOver={() => !showInfo ? setShowInfo(true) : null}
+            onMouseOut={() => setShowInfo(false)}
+            onClick={() => setShowInfo(true)}
+            // onClick={() => history.push(`/list/${feature.id}`)}
+        >
+            {showInfo ? (
+                <InfoWindow>
+                    <>
+                        <IonCardHeader>
+                            <IonCardTitle>Tree ID:{ feature.id }</IonCardTitle>
+                        </IonCardHeader>
+                        <IonCardContent>
+                            <IonLabel>Height: {feature.properties.height}</IonLabel><br />
+                            <IonLabel>Radius: {feature.properties.radius}</IonLabel>
+                        </IonCardContent>
+                        {/* <Link to={`/list/${feature.id}`}>{`/list/${feature.id}`}</Link> */}
+                        <IonButton fill="solid" routerLink={`/list/${feature.id}`} routerDirection="forward">More info</IonButton>
+                    </>
+                </InfoWindow>
+            ) : null}
+        </Marker>
+    )
+}
 
+const InventorySource: React.FC<{map: google.maps.Map | undefined}> = ({ map }) => {
+    // create component state
+    const [inventory, setInventory] = useState<InventoryData>()
+    
+    // use the Data context
+    const { inventory: contextInventory } = useData()
+    
+    // clone the inventory as the Map fails to set context data directly
+    useEffect(() => {
+        if (contextInventory) setInventory(cloneDeep(contextInventory))
+    }, [contextInventory])
+
+    // zoom to the inventory data
     useEffect(() => {
         if (inventory && inventory.bbox) {
             // map?.fitBounds(inventory.bbox)
-            map?.fitBounds(new google.maps.LatLngBounds({lng: inventory.bbox[0], lat: inventory.bbox[1]}, {lng: inventory.bbox[2], lat: inventory.bbox[3]}), 90)
+            map?.fitBounds(geo.bboxToLngLat(inventory.bbox), 90)
         }
     }, [map, inventory])
-
-    const onMarkerEnter = (f: InventoryFeature) => {
-        setBoxFeature(f)
-        setShowBox(true)
-    }
-    const onMarkerLeave = () => setShowBox(false)
     
+    // if the inventory is not loaded, return nothing
+    if (!inventory) return null
+
+    // if inventory is loaded, map the features to markers
     return <>
-        { showBox && boxFeature ? (
-            <InfoBox position={new google.maps.LatLng({lng: boxFeature.geometry.coordinates[0], lat: boxFeature.geometry.coordinates[1]})}>
-                <div style={{backgroundColor: 'white', padding: '0.3rem', color: 'black', boxShadow: '0 2px 4px silver'}}>
-                    <h3>{boxFeature?.id}</h3>
-                </div>
-            </InfoBox>
-        ) : null }
-        {inventory?.features.map((feature, idx) => <Marker key={idx} onClick={() => history.push(`/list/${feature.id}`)} onMouseOver={() => onMarkerEnter(feature)} onMouseOut={onMarkerLeave} position={new google.maps.LatLng({lng: feature.geometry.coordinates[0], lat: feature.geometry.coordinates[1]})} />)}
+        { inventory.features.map(feature => <InventoryMarker key={feature.id} feature={feature} />) }
     </>
 }
+
 const MainMap: React.FC = () => {
     const [map, setMap] = useState<google.maps.Map>()
     
@@ -58,7 +89,7 @@ const MainMap: React.FC = () => {
     // callback run when the maps JS has been loaded and initialized
     const onLoad = useCallback((map: google.maps.Map) => {
         setMap(map)
-        map.setZoom(14)
+        map.setZoom(12)
         map.setCenter({lat: 48., lng: 7.843});
     
         // dev
