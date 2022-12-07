@@ -25,7 +25,7 @@ const MainPage: React.FC = () => {
                     </IonFabButton>
                 </IonFab>
 
-                <IonModal ref={listRef} trigger="list-button" initialBreakpoint={0.85} breakpoints={[0, 0.25, 0.5, 0.85, 1.]}>
+                <IonModal ref={listRef} trigger="list-button" initialBreakpoint={0.5} breakpoints={[0, 0.25, 0.5, 0.85, 1.]}>
                     <InventoryList modalRef={listRef} />
                 </IonModal>
 
