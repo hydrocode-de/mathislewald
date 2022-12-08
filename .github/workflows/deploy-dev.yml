@@ -24,7 +24,7 @@ jobs:
       run: echo ${{ secrets.ENV_FILE }} > .env
     
     - name: Install ionic
-      run: npm i @ionic/cli
+      run: npm i -g @ionic/cli
 
     - name: build
       run: ionic build --engine=browser --public-url=geowwd.uni-freiburg.de/dev
