@@ -55,6 +55,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
             wfs.getInventoryData(geoserverUrl)
             .then(invData => setAllInventory(invData))
             .catch(error => console.log(error))
+
+            wfs.getInventories(geoserverUrl).then(js => console.log(js))
         }
     }, [geoserverUrl])
 
