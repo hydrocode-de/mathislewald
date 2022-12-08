@@ -9,11 +9,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js 16.x
@@ -27,6 +22,9 @@ jobs:
     
     - name: Add the env file
       run: echo ${{ secrets.ENV_FILE }} > .env
+    
+    - name: Install ionic
+      run: npm i @ionic/cli
 
     - name: build
       run: ionic build --engine=browser --public-url=geowwd.uni-freiburg.de/dev
@@ -36,6 +34,6 @@ jobs:
       with:
         username: geouser
         server: geowwd.uni-freiburg.de
-        local_path: ./build/html/*
+        local_path: ./build/*
         remote_path: /home/geouser/www/html-dev
         password: ${{ secrets.SSH_PASSWORD }}
