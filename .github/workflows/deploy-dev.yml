@@ -1,0 +1,42 @@
+name: Deploy development version 
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
+        cache: 'npm'
+        
+    - name: Install package
+      run: npm i
+    
+    - name: Add the env file
+      run: echo ${{ secrets.ENV_FILE }} > .env
+    
+    - name: Install ionic
+      run: npm i -g @ionic/cli
+
+    - name: build
+      run: ionic build --engine=browser --public-url=/dev --ci=false
+      env:
+        CI: false
+        REACT_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
+    
+    - name: Copy files
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      with:
+        username: geouser
+        server: geowwd.uni-freiburg.de
+        local_path: ./build/*
+        remote_path: /home/geouser/www/html-dev
+        password: ${{ secrets.SSH_PASSWORD }}
