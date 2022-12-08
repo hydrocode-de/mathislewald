@@ -10,11 +10,11 @@
  */
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import axios from 'axios';
 import { InventoryData } from "./data.model";
 import { useSettings } from "./settings";
 import cloneDeep from "lodash.clonedeep";
-import { features } from "process";
+
+import * as wfs from '../util/wfs';
 
 // model the data types
 interface DataState {
@@ -51,21 +51,10 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     useEffect(() => {
         // run only if settings loaded
         if (geoserverUrl) {
-            // build query params -> TODO: this should be configurable as well
-            const params = {
-                service: 'WFS',
-                version: '1.0.0',
-                request: 'GetFeature',
-                typeName: 'Public:inventory',
-                outputFormat: 'application/json',
-                srsName: 'EPSG:4326'
-            }
-            axios.get<InventoryData>(`${geoserverUrl}/Public/ows`, {params: params})
-            .then((response => {
-                setAllInventory(response.data)
-            })).catch(error => console.log(error))
-        } else {
-            console.log('No geoserver url')
+            // TODO: we do not handle layer names so far
+            wfs.getInventoryData(geoserverUrl)
+            .then(invData => setAllInventory(invData))
+            .catch(error => console.log(error))
         }
     }, [geoserverUrl])
 
