@@ -25,7 +25,7 @@ jobs:
       run: npm i -g @ionic/cli
 
     - name: build
-      run: ionic build --engine=browser --public-url=/dev/ --ci=false
+      run: ionic build --engine=browser --ci=false
       env:
         CI: false
         REACT_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
@@ -36,5 +36,5 @@ jobs:
         username: geouser
         server: geowwd.uni-freiburg.de
         local_path: ./build/*
-        remote_path: /home/geouser/www/html/dev
+        remote_path: /home/geouser/www/html
         password: ${{ secrets.SSH_PASSWORD }}
