@@ -1,0 +1,41 @@
+name: Deploy development version 
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16.x
+        cache: 'npm'
+        
+    - name: Install package
+      run: npm i
+    
+    - name: Add the env file
+      run: echo ${{ secrets.ENV_FILE }} > .env
+
+    - name: build
+      run: ionic build --engine=browser --public-url=geowwd.uni-freiburg.de/dev
+    
+    - name: Copy files
+      uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      with:
+        username: geouser
+        server: geowwd.uni-freiburg.de
+        local_path: ./build/html/*
+        remote_path: /home/geouser/www/html-dev
+        password: ${{ secrets.SSH_PASSWORD }}
