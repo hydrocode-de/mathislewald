@@ -36,5 +36,5 @@ jobs:
         username: geouser
         server: geowwd.uni-freiburg.de
         local_path: ./build/*
-        remote_path: /home/geouser/www/html-dev
+        remote_path: /home/geouser/www/html/dev
         password: ${{ secrets.SSH_PASSWORD }}
