@@ -1,16 +1,15 @@
-import { IonCheckbox, IonContent, IonFab, IonFabButton, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonRadio, IonRadioGroup, IonTitle } from "@ionic/react"
+import { IonCheckbox, IonContent, IonFab, IonFabButton, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonModal, IonRadio, IonRadioGroup, IonTitle } from "@ionic/react"
 import { layersOutline } from 'ionicons/icons'
 import { useGoogleMap } from "@react-google-maps/api"
 import { useEffect, useRef, useState } from "react"
-import { useData } from "../context/data"
+import { useLayers } from "../../context/layers"
 
 const LayerDrawer: React.FC = () => {
     // get the map reference
     const map = useGoogleMap()
 
     // get a reference to the available baseLayers and inventories
-    const { availableBaselayer, availableInventory } = useData()
-
+    const { availableBaselayer, availableInventory } = useLayers()
 
     // ref for the drawer
     const modalRef = useRef<HTMLIonModalElement>(null)
