@@ -5,6 +5,7 @@ import React, { useCallback, useState } from 'react';
 import LayerDrawer from './map-components/LayerDrawer';
 import { LayersProvider } from '../context/layers';
 import InventorySource from './map-components/InventorySource';
+import BaseLayerSource from './map-components/BaseLayerSource';
 
 const { REACT_APP_GOOGLE_MAPS_KEY } = process.env;
 
@@ -55,16 +56,7 @@ const MainMap: React.FC = () => {
                 >
                     <LayerDrawer />
                     <InventorySource />
-                    {/* <GroundOverlay 
-                        key={'url'} 
-                        url="http://geowwd.uni-freiburg.de/geoserver/Baselayer/wms?service=wms&request=GetMap&version=1.1.1&format=image/png&layers=Baselayer:ortho&styles=raster&height=768&width=676&transparent=true&bbox=8.087004650932549%2C47.8836823330856%2C8.089897671665396%2C47.8858838151575&srs=EPSG:4326" 
-                        bounds={{
-                            north: 47.8858838151575,
-                            south: 47.8836823330856,
-                            east: 8.089897671665396,
-                            west: 8.087004650932549
-                        }}
-                    /> */}
+                    <BaseLayerSource />
                 </GoogleMap>
             </LayersProvider>
         </>
