@@ -51,7 +51,7 @@ export const getBaseLayers = (baseUrl: string): Promise<GroundLayerType[]> => {
         // reach out
         axios.get<string>(url, { params })
             .then(response => {
-                const parser = new XMLParser
+                const parser = new XMLParser()
                 const rawObj: GetCapabilitiesResponse = parser.parse(response.data)
                 console.log(rawObj)
                 // parse out the layers
