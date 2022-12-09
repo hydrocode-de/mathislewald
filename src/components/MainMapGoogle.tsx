@@ -1,5 +1,5 @@
 import {  IonButton, IonCardContent, IonCardHeader, IonCardTitle, IonLabel, IonSpinner } from '@ionic/react';
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow, useGoogleMap } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader, Marker, InfoWindow, useGoogleMap, KmlLayer, GroundOverlay } from '@react-google-maps/api'
 import React, { useCallback, useEffect, useState } from 'react';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -123,6 +123,16 @@ const MainMap: React.FC = () => {
             >
                 <LayerDrawer />
                 <InventorySource />
+                <GroundOverlay 
+                    key={'url'} 
+                    url="http://geowwd.uni-freiburg.de/geoserver/Baselayer/wms?service=wms&request=GetMap&version=1.1.1&format=image/png&layers=Baselayer:ortho&styles=raster&height=768&width=676&transparent=true&bbox=8.087004650932549%2C47.8836823330856%2C8.089897671665396%2C47.8858838151575&srs=EPSG:4326" 
+                    bounds={{
+                        north: 47.8858838151575,
+                        south: 47.8836823330856,
+                        east: 8.089897671665396,
+                        west: 8.087004650932549
+                    }}
+                />
             </GoogleMap>
         </>
     } else {
