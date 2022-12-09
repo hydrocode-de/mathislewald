@@ -15,9 +15,12 @@ import { useSettings } from "./settings";
 import cloneDeep from "lodash.clonedeep";
 
 import * as wfs from '../util/wfs';
+import * as wms from '../util/wms';
 
 // model the data types
 interface DataState {
+    availableInventory: wfs.FeatureType[];
+    availableBaselayer: wms.GroundLayerType[];
     allInventory: InventoryData | null;
     inventory: InventoryData | null;
     synced: boolean;
@@ -25,6 +28,8 @@ interface DataState {
 
 // initial empty state
 const initialState: DataState = {
+    availableInventory: [],
+    availableBaselayer: [],
     allInventory: null,
     inventory: null,
     synced: false
@@ -38,6 +43,14 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     // create internal state of the provider
     const [allInventory, setAllInventory] = useState<InventoryData>()
     const [inventory, setInventory] = useState<InventoryData>()
+
+    // create internal state for available layer
+    const [availableInventory, setAvailableInventory] = useState<wfs.FeatureType[]>([])
+    const [availableBaselayer, setAvailableBaselayer] = useState<wms.GroundLayerType[]>([])
+
+    // create internal and external state to distribute active layers
+    const [activeDataLayer, setActiveDataLayer] = useState<string[]>([])
+    const [activeBaseLayer, setActiveBaseLayer] = useState<string[]>([])
 
     // create state for synchronization
     const [synced, setSynced] = useState<boolean>(false)
@@ -56,7 +69,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
             .then(invData => setAllInventory(invData))
             .catch(error => console.log(error))
 
-            wfs.getInventories(geoserverUrl).then(js => console.log(js))
+            // get the available options from the Geoserver instance
+            wfs.getInventories(geoserverUrl).then(invTypes => setAvailableInventory(invTypes))
+            wms.getBaseLayers(geoserverUrl).then(bl => setAvailableBaselayer(bl))
         }
     }, [geoserverUrl])
 
@@ -80,6 +95,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     const value = {
         allInventory: allInventory || null,
         inventory: inventory || null,
+        availableInventory,
+        availableBaselayer,
         synced
     }
 
