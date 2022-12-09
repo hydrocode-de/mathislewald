@@ -31,7 +31,6 @@ interface GetCapabilitiesResponse {
 
 const getInventoryUrl = (baseUrl: string): string => `${baseUrl}/Inventory/ows`
 
-const getBaseUrl = (baseUrl: string): string => `${baseUrl}/Base/ows`
 
 export const getInventories = (baseUrl: string): Promise<FeatureType[]> => {
     return new Promise((resolve, reject) => {
