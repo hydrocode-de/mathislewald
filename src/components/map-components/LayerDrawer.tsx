@@ -9,7 +9,7 @@ const LayerDrawer: React.FC = () => {
     const map = useGoogleMap()
 
     // get a reference to the available baseLayers and inventories
-    const { availableBaselayer, availableInventory } = useLayers()
+    const { availableBaselayer, availableInventory, activateBaseLayer, deactivateBaseLayer } = useLayers()
 
     // ref for the drawer
     const modalRef = useRef<HTMLIonModalElement>(null)
@@ -26,6 +26,17 @@ const LayerDrawer: React.FC = () => {
     }, [mapId, map])
 
     // switch the base Layers
+    const onBaseLayerToggle = (layerName: string, checked: boolean) => {
+        // switch between layer activation and deactivation
+        if (checked) {
+            activateBaseLayer(layerName)
+        } else {
+            deactivateBaseLayer(layerName)
+        }
+    }
+
+    // switch the data Layers
+    const onDataLayerToggle = () => {}
 
     
     return <>
@@ -65,7 +76,7 @@ const LayerDrawer: React.FC = () => {
                 { availableBaselayer.map(bl => {
                     return (
                         <IonItem key={bl.name}>
-                            <IonCheckbox slot="start"/>
+                            <IonCheckbox slot="start" onIonChange={e => onBaseLayerToggle(bl.name, e.target.checked)} />
                             <IonLabel>{bl.title}</IonLabel>
                         </IonItem>
                     )
