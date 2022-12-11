@@ -6,6 +6,7 @@ import LayerDrawer from './map-components/LayerDrawer';
 import { LayersProvider } from '../context/layers';
 import InventorySource from './map-components/InventorySource';
 import BaseLayerSource from './map-components/BaseLayerSource';
+import InventoryLayerSource from './map-components/InventoryLayerSource';
 
 const { REACT_APP_GOOGLE_MAPS_KEY } = process.env;
 
@@ -57,6 +58,7 @@ const MainMap: React.FC = () => {
                     <LayerDrawer />
                     <InventorySource />
                     <BaseLayerSource />
+                    <InventoryLayerSource />
                 </GoogleMap>
             </LayersProvider>
         </>
