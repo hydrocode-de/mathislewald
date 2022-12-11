@@ -1,4 +1,4 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
+import { IonBackButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonItem, IonLabel, IonNote, IonPage, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
 import { useEffect, useState } from "react"
 import { RouteComponentProps } from "react-router"
 import { useData } from "../context/data"
@@ -37,9 +37,57 @@ const TreeOverviewPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }
                 </IonToolbar>
             </IonHeader>
 
-            { feature ? (
-                <pre><code>{ JSON.stringify(feature, null, 4) }</code></pre>
-            ) : <IonSpinner name="crescent" style={{width: '100%', height: '30vh', marginTop: '25vh'}} /> }
+            <IonCard>
+                <IonCardHeader>
+                    <IonCardTitle>Overview</IonCardTitle>
+                </IonCardHeader>
+
+                <IonCardContent>
+
+                    <IonItem lines="none">
+                        <IonLabel slot="start">TreeID</IonLabel>
+                        <IonLabel slot="end">{ feature?.properties.treeid }</IonLabel>
+                    </IonItem>
+
+                    <IonItem lines="none">
+                        <IonLabel slot="start">Radius</IonLabel>
+                        <IonLabel slot="end">{ feature?.properties.radius.toFixed(2) }m</IonLabel>
+                        <IonNote slot="helper">
+                            Radius describes half of the trunk diameter to 15 of the tree.
+                        </IonNote>
+                    </IonItem>
+
+                    <IonItem lines="none">
+                        <IonLabel slot="start">Height</IonLabel>
+                        <IonLabel slot="end">{ feature?.properties.height.toFixed(1) }m</IonLabel>
+                        <IonNote slot="helper">
+                            Measured individual tree height using a combination of 
+                            stereophotogrammetry and LiDAR.
+                        </IonNote>
+                    </IonItem>
+
+
+                </IonCardContent>
+            </IonCard>
+
+            <IonCard>
+                <IonCardHeader>
+                    <IonCardTitle>LiDAR</IonCardTitle>
+                </IonCardHeader>
+
+                <IonCardContent>
+
+                    <IonItem lines="none">
+                        <IonLabel className="ion-text-wrap">
+                            <h3>LiDAR scan images</h3>
+                            <p>Measured individual tree height using a combination of 
+                            stereophotogrammetry and LiDAR.</p>
+                        </IonLabel>
+                    </IonItem>
+
+                    <img src={`http://geowwd.uni-freiburg.de/img/${feature?.properties.image}`} alt="a lidar image" />
+                </IonCardContent>
+            </IonCard>
 
         </IonContent>
     </IonPage>
