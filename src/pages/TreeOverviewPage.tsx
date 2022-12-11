@@ -1,15 +1,27 @@
-import { IonBackButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonItem, IonLabel, IonNote, IonPage, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
+import { IonBackButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonItem, IonLabel, IonNote, IonPage, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
 import { useEffect, useState } from "react"
 import { RouteComponentProps } from "react-router"
+import Plot from 'react-plotly.js'
+import { Data, Layout } from 'plotly.js'
+
 import { useData } from "../context/data"
 import { InventoryProperties } from "../context/data.model"
+import * as plot from '../util/plot'
+
 
 const TreeOverviewPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }) => {
     // compnent state to store this feature
     const [feature, setFeature] = useState<GeoJSON.Feature<GeoJSON.Point, InventoryProperties>>()
 
+    // state for the plot data
+    const [data, setData] = useState<Data[]>([])
+    const [layout, setLayout] = useState<Partial<Layout>>({} as Layout)
+
+    // state to set the plot type
+    const [plotType, setPlotType] = useState<'hist2d' | 'heights' | 'radius'>('heights')
+
     // load all inventory data
-    const { inventory } = useData()
+    const { inventory, allInventory } = useData()
 
     // load the correct feature, whenever the URL param or inventory updates
     useEffect(() => {
@@ -18,6 +30,34 @@ const TreeOverviewPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }
             setFeature(f)
         }
     }, [inventory, match])
+
+    // update the plot data, when the feature changes
+    useEffect(() => {
+        if (!allInventory || !feature) return
+        
+        // create traces and layout container
+        let traces: Data[] = []
+        let layout = {autosize: true}
+
+        // switch the plot type
+        if (plotType === "hist2d") {
+            const [t, l] = plot.histogram2d(feature, allInventory)
+            traces = t
+            layout = {...layout, ...l}
+        } else if (plotType === 'radius') {
+            const [t, l] = plot.histogram(feature, allInventory, 'radius')
+            traces = t
+            layout = {...layout, ...l}
+        } else if (plotType === 'heights') {
+            const [t, l] = plot.histogram(feature, allInventory, 'height')
+            traces = t
+            layout = {...layout, ...l}
+        }
+        
+        // update
+        setData(traces)
+        setLayout(layout)
+    }, [allInventory, feature, plotType])
 
     return <IonPage>
         <IonHeader>
@@ -56,6 +96,22 @@ const TreeOverviewPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }
                             Radius describes half of the trunk diameter to 15 of the tree.
                         </IonNote>
                     </IonItem>
+
+                    <IonItem lines="none">
+                        <IonSegment value={plotType} onIonChange={e => setPlotType(e.target.value as 'heights' | 'radius' | 'hist2d')}>
+                            <IonSegmentButton value="hist2d">
+                                <IonLabel>Heights ~ Radius (2D Histogram)</IonLabel>
+                            </IonSegmentButton>
+                            <IonSegmentButton value="heights">
+                                <IonLabel>Heights histogram</IonLabel>
+                            </IonSegmentButton>
+                            <IonSegmentButton value="radius">
+                                <IonLabel>Radius histogram</IonLabel>
+                            </IonSegmentButton>
+                        </IonSegment>
+                    </IonItem>
+
+                    <Plot data={data} layout={layout} useResizeHandler style={{width: '100%', height: '40vh'}} />
 
                     <IonItem lines="none">
                         <IonLabel slot="start">Height</IonLabel>
