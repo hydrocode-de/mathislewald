@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 // import some contexts
 import { SettingsProvider } from './context/settings';
 import { DataProvider } from './context/data';
+import { OfflineProvider } from './context/offline';
 
 
 const container = document.getElementById('root');
@@ -14,9 +15,11 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <SettingsProvider>
-      <DataProvider>
-        <App />
-      </DataProvider>
+      <OfflineProvider>
+        <DataProvider>
+          <App />
+        </DataProvider>
+      </OfflineProvider>
     </SettingsProvider>
   </React.StrictMode>
 );
