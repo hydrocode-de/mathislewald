@@ -3,7 +3,8 @@ import { listSharp } from 'ionicons/icons'
 import { useRef } from "react"
 import InventoryList from "../components/InventoryList"
 
-import MainMap from "../components/MainMapGoogle"
+// import MainMap from "../components/MainMapGoogle"
+import MainMap from "../components/MainMapMaplibre"
 
 const MainPage: React.FC = () => {
     const listRef = useRef<HTMLIonModalElement>(null)
