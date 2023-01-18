@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 // import some contexts
 import { SettingsProvider } from './context/settings';
 import { DataProvider } from './context/data';
+import { LayersProvider } from './context/layers';
 
 
 const container = document.getElementById('root');
@@ -15,7 +16,9 @@ root.render(
   <React.StrictMode>
     <SettingsProvider>
       <DataProvider>
-        <App />
+        <LayersProvider>
+          <App />
+        </LayersProvider>
       </DataProvider>
     </SettingsProvider>
   </React.StrictMode>
