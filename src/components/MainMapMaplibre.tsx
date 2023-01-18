@@ -5,6 +5,7 @@ import Map from 'react-map-gl'
 
 // load the maplibre CSS styles
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { LayersProvider } from '../context/layers';
 
 const MainMap: React.FC = () => {
     // onload callback handler
@@ -35,13 +36,12 @@ const MainMap: React.FC = () => {
     } as Style;
 
     return (
-        <Map mapLib={maplibregl}
-            style={{width: '100%', height: '100%'}}
-            onLoad={m => onLoad(m)}
-            mapStyle={style}
-        >
-
-        </Map>
+            <Map mapLib={maplibregl}
+                style={{width: '100%', height: '100%'}}
+                onLoad={m => onLoad(m)}
+                mapStyle={style}
+            >
+            </Map>
     )
 }
 
