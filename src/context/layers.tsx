@@ -3,7 +3,6 @@ import { useSettings } from "./settings";
 
 import * as wfs from '../util/wfs';
 import * as wms from '../util/wms';
-import cloneDeep from "lodash.clonedeep";
 
 interface LayersState {
     availableInventory: wfs.FeatureType[];
@@ -51,16 +50,23 @@ export const LayersProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     // listen to changes on the geoserverUrl
     useEffect(() => {
         if (geoserverUrl) {
-            wfs.getInventories(geoserverUrl).then(iv => {
-                setAvailableInventory(cloneDeep(iv))
+            wfs.getInventories(geoserverUrl)
+            .then(iv => {
+                // console.log(iv)
+                setAvailableInventory(iv)
                 
                 // set the last on activee by default
-                setActiveDataLayer([ iv.pop()?.name || '' ])
+                setActiveDataLayer([ iv.length > 0 ? iv[0].name : '' ])
             })
-            wms.getBaseLayers(geoserverUrl).then(bl => {
+            //.catch(err => console.log(err))
+            
+            wms.getBaseLayers(geoserverUrl)
+            .then(bl => {
+                // console.log(bl)
                 setAvailableBaselayer(bl)
                 setActiveBaseLayer([])
             })
+            .catch(err => console.log(err))
         }
     }, [geoserverUrl])
 
