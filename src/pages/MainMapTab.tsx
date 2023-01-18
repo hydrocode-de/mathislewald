@@ -1,5 +1,6 @@
 import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonMenu, IonMenuToggle, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { layersOutline, ellipsisHorizontal } from 'ionicons/icons'
+import DataLayerDrawer from '../components/DataLayerDrawer';
 
 //import MainMap from '../components/MainMapGoogle';
 //import MainMap from '../components/MainMapMapbox';
@@ -14,7 +15,7 @@ const MainMapTab: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent class="ion-padding">
-        CONTENT
+        <DataLayerDrawer />
       </IonContent>
     </IonMenu>
     <IonPage id="main">
