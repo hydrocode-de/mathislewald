@@ -3,7 +3,7 @@ import { useData } from "../context/data"
 
 const InventoryListTab: React.FC = () => {
     // subscribe to filtered inventory updates
-    const { inventory } = useData()
+    const { filteredInventory } = useData()
 
     return <>
         <IonPage>
@@ -25,7 +25,7 @@ const InventoryListTab: React.FC = () => {
                 </IonHeader>
 
                 <IonList>
-                    { inventory ? inventory.features.map(f => {
+                    { filteredInventory ? filteredInventory.features.map(f => {
                         return (
                             <IonItem key={f.id} routerDirection="forward" routerLink={`/list/${f.id}`}>
                                 <IonLabel>Tree ID: {f.properties.treeid}</IonLabel>
