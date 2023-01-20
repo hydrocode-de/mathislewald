@@ -5,7 +5,8 @@ import Map from 'react-map-gl'
 
 // load the maplibre CSS styles
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { LayersProvider } from '../context/layers';
+
+import InventorySource from './map-components/InventorySource'
 
 const MainMap: React.FC = () => {
     // onload callback handler
@@ -41,6 +42,7 @@ const MainMap: React.FC = () => {
                 onLoad={m => onLoad(m)}
                 mapStyle={style}
             >
+                <InventorySource />
             </Map>
     )
 }
