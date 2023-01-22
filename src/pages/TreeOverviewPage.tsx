@@ -26,7 +26,7 @@ const TreeOverviewPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }
     // load the correct feature, whenever the URL param or inventory updates
     useEffect(() => {
         if (filteredInventory?.features) {
-            const f = filteredInventory.features.find(f => f.id === match.params.id)
+            const f = filteredInventory.features.find(f => f.properties.treeid === Number(match.params.id))
             setFeature(f)
         }
     }, [filteredInventory, match])

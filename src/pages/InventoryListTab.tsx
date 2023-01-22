@@ -27,7 +27,7 @@ const InventoryListTab: React.FC = () => {
                 <IonList>
                     { filteredInventory ? filteredInventory.features.map(f => {
                         return (
-                            <IonItem key={f.id} routerDirection="forward" routerLink={`/list/${f.id}`}>
+                            <IonItem key={f.properties.treeid} routerDirection="forward" routerLink={`/list/${f.properties.treeid}`}>
                                 <IonLabel>Tree ID: {f.properties.treeid}</IonLabel>
                             </IonItem>
                         )
