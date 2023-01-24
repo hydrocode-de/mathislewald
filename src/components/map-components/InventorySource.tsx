@@ -52,7 +52,7 @@ const InventoryLayer: React.FC = () => {
 
     // add event listener to map
     useEffect(() => {
-        if (!map.current) {
+        if (!map.current || src?.features.length == 0) {
             return
         }
         // mouse Enter
@@ -79,7 +79,7 @@ const InventoryLayer: React.FC = () => {
 
         // mouseLeave
         map.current.on('mouseleave', 'inventory', (e: MapLayerMouseEvent) => {
-            setHovered(undefined) 
+            setHovered(undefined)
             // disable hover state for all features, not matter what
             src?.features.forEach(f => {
                 map.current?.setFeatureState(
@@ -99,7 +99,7 @@ const InventoryLayer: React.FC = () => {
                 history.push(`/list/${(f as InventoryFeature).properties.treeid}`)
             }
         })
-    }, [map])
+    }, [map, src])
 
     // build paint and layout
     const paint = {
