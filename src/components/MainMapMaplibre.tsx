@@ -7,19 +7,24 @@ import Map from 'react-map-gl'
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 import InventorySource from './map-components/InventorySource'
+import BaseLayerSource from './map-components/BaseLayerSource';
+import { useLayers } from '../context/layers';
 
 const MainMap: React.FC = () => {
     // onload callback handler
     const onLoad = (e: any) => {
         // resize the map once loaded
         (e as MapLibreEvent).target.resize()
+        setTimeout(() => e.target.resize(), 500)
     }
+
+    const { activeBaseLayer } = useLayers()
 
     // some hard-coded styles
     const style = {
         version: 8,
         sources: {
-            terrain: {
+            terrainSource: {
                 type: 'raster',
                 tiles: ['https://stamen-tiles.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.jpg'],
                 tileSize: 256,
@@ -29,8 +34,8 @@ const MainMap: React.FC = () => {
         },
         layers: [
             {
-                id: 'terrain',
-                source: 'terrain',
+                id: 'terrainSource',
+                source: 'terrainSouce',
                 type: 'raster'
             }
         ]
@@ -41,8 +46,12 @@ const MainMap: React.FC = () => {
                 style={{width: '100%', height: '100%'}}
                 onLoad={m => onLoad(m)}
                 mapStyle={style}
+                // terrain={activeBaseLayer.includes('dtm') ? {source: 'dtm', exaggeration: 0.1} : undefined}
             >
                 <InventorySource />
+                <BaseLayerSource />
+
+                
             </Map>
     )
 }
