@@ -43,12 +43,19 @@ const DataLayerDrawer: React.FC = () => {
         <IonListHeader>
           <IonLabel>Forest Inventory</IonLabel>
         </IonListHeader>
-        <IonRadioGroup allowEmptySelection={true}>
+        <IonRadioGroup
+          allowEmptySelection={true}
+          value="Inventory:inventory-2022"
+        >
           {layers.availableInventoryLayer.map((l) => (
             <IonItem key={l.name} onClick={() => toggleInventoryLayer(l.name)}>
               <IonLabel>{l.title}</IonLabel>
               {/* <IonCheckbox slot="end" checked={layers.activeInventoryLayer.includes(l.name)} /> */}
-              <IonRadio slot="end" value={l.name} />
+              <IonRadio
+                slot="end"
+                value={l.name}
+                // ionChange={() => layers.activeInventoryLayer.includes(l.name)}
+              />
             </IonItem>
           ))}
         </IonRadioGroup>
@@ -62,7 +69,7 @@ const DataLayerDrawer: React.FC = () => {
         <IonListHeader>
           <IonLabel>Map Layer</IonLabel>
         </IonListHeader>
-        <IonRadioGroup>
+        <IonRadioGroup allowEmptySelection={true}>
           {layers.availableBaseLayer.map((l) => (
             <IonItem key={l.name} onClick={() => toggleBaseLayer(l.name)}>
               <IonLabel>{l.title}</IonLabel>
