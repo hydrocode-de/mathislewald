@@ -1,26 +1,22 @@
-import { GroundOverlay, useGoogleMap } from "@react-google-maps/api";
+import { Layer, Source } from "react-map-gl";
 import { useLayers } from "../../context/layers";
-
+import * as wms from '../../util/wms';
 
 const BaseLayerSource: React.FC = () => {
-    // subscribe to the ground layers
-    const { availableBaselayer, activeBaseLayer } = useLayers()
+    // subscribe to layers
+    const layers = useLayers()
 
+    console.log(layers.availableBaseLayer)
+    
     return <>
-        { availableBaselayer.map(l => {
-                return (
-                    <GroundOverlay 
-                        key={l.name}
-                        url={`http://geowwd.uni-freiburg.de/geoserver/Baselayer/wms?service=WMS&version=1.1.0&request=GetMap&layers=Baselayer:${l.name}&bbox=${l.bbox.west}%2C${l.bbox.south}%2C${l.bbox.east}%2C${l.bbox.north}&width=1920&height=1080&srs=EPSG:4326&format=image/jpeg`} 
-                        bounds={l.bbox}
-
-                        // I am not sure about this: long loading time but fast in usage
-                        opacity={activeBaseLayer.includes(l.name) ? 1 : 0}
-
-                        onClick={e => console.log(e)}
-                    />
-                )
-        }) }
+        {layers.availableBaseLayer.filter(l => layers.activeBaseLayer.includes(l.name)).map(l => (
+            <Source key={l.name} id={l.name} type={l.name == 'dtm' ? 'raster-dem' : 'raster'} 
+                tiles={[wms.getBaseLayersUri('http://geowwd.uni-freiburg.de/geoserver', l.name)]} tileSize={256}
+            >
+                <Layer id={l.name} type={l.name == 'dtm' ? 'hillshade' : 'raster'} source={l.name}  paint={{}} 
+                beforeId="inventory" />
+            </Source>
+        )) } 
     </>
 }
 

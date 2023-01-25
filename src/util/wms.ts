@@ -53,7 +53,7 @@ export const getBaseLayers = (baseUrl: string): Promise<GroundLayerType[]> => {
             .then(response => {
                 const parser = new XMLParser()
                 const rawObj: GetCapabilitiesResponse = parser.parse(response.data)
-                console.log(rawObj)
+
                 // parse out the layers
                 const layers: GroundLayerType[] = rawObj.WMS_Capabilities.Capability.Layer.Layer.map(L => {
                     return {
@@ -75,4 +75,9 @@ export const getBaseLayers = (baseUrl: string): Promise<GroundLayerType[]> => {
             })
             .catch(error => reject(error))
     })
+}
+
+
+export const getBaseLayersUri = (baseUrl: string, layerName: string): string => {
+    return `${baseUrl}/Baselayer/wms?service=WMS&version=1.1.1&request=getMap&layers=Baselayer:${layerName}&bbox={bbox-epsg-3857}&srs=EPSG:3857&transparent=true&format=image/png&width=256&height=256`
 }

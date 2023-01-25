@@ -19,14 +19,14 @@ import * as wfs from '../util/wfs';
 // model the data types
 interface DataState {
     allInventory: InventoryData | null;
-    inventory: InventoryData | null;
+    filteredInventory: InventoryData | null;
     synced: boolean;
 }
 
 // initial empty state
 const initialState: DataState = {
     allInventory: null,
-    inventory: null,
+    filteredInventory: null,
     synced: false
 }
 
@@ -37,7 +37,7 @@ const DataContext = createContext(initialState)
 export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     // create internal state of the provider
     const [allInventory, setAllInventory] = useState<InventoryData>()
-    const [inventory, setInventory] = useState<InventoryData>()
+    const [filteredInventory, setFilteredInventory] = useState<InventoryData>()
 
     // create state for synchronization
     const [synced, setSynced] = useState<boolean>(false)
@@ -46,7 +46,6 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     const { geoserverUrl } = useSettings()
 
     // create effect to load data
-    // TODO: refactor this into a module to read WFS
     // TODO: change to sync with offline store
     useEffect(() => {
         // run only if settings loaded
@@ -67,17 +66,17 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
                 bbox: allInventory?.bbox,  // TODO after filter, update this
                 features: [...cloneDeep(allInventory.features.filter(f => true))]
             } as InventoryData
-            setInventory(inv)
+            setFilteredInventory(inv)
             setSynced(true)
         } else {
-            setInventory(undefined)
+            setFilteredInventory(undefined)
         }
     }, [allInventory])
 
     // create the final value
     const value = {
         allInventory: allInventory || null,
-        inventory: inventory || null,
+        filteredInventory: filteredInventory || null,
         synced
     }
 

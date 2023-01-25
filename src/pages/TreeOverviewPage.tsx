@@ -21,15 +21,15 @@ const TreeOverviewPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }
     const [plotType, setPlotType] = useState<'hist2d' | 'heights' | 'radius'>('heights')
 
     // load all inventory data
-    const { inventory, allInventory } = useData()
+    const { filteredInventory, allInventory } = useData()
 
     // load the correct feature, whenever the URL param or inventory updates
     useEffect(() => {
-        if (inventory?.features) {
-            const f = inventory.features.find(f => f.id === match.params.id)
+        if (filteredInventory?.features) {
+            const f = filteredInventory.features.find(f => f.properties.treeid === Number(match.params.id))
             setFeature(f)
         }
-    }, [inventory, match])
+    }, [filteredInventory, match])
 
     // update the plot data, when the feature changes
     useEffect(() => {

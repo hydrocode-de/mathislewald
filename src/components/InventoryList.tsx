@@ -5,7 +5,7 @@ import { useData } from "../context/data"
 
 const InventoryList: React.FC<{modalRef:React.RefObject<HTMLIonModalElement>}> = ({ modalRef }) => {
     // load the filtered inventory list
-    const { inventory } = useData()
+    const { filteredInventory } = useData()
 
     // get a history context
     const history = useHistory()
@@ -21,7 +21,7 @@ const InventoryList: React.FC<{modalRef:React.RefObject<HTMLIonModalElement>}> =
     
     return (
         <IonList style={{overflowY: 'scroll'}}>
-            { inventory?.features.map(f => {
+            { filteredInventory?.features.map(f => {
                 return (
                     <IonCard 
                         key={f.id} 

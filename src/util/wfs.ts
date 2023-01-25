@@ -15,16 +15,17 @@ export interface FeatureType {
     srs?: string
 }
 
+interface WFS_FEATURE_TYPE {
+    Abstract: string,
+    Keywords: string,
+    LatLonBoundingBox: string,
+    Name: string,
+    SRS: string,
+    Title: string
+}
 interface GetCapabilitiesResponse {
     WFS_Capabilities: {
-        FeatureTypeList: {
-            Abstract: string,
-            Keywords: string,
-            LatLonBoundingBox: string,
-            Name: string,
-            SRS: string,
-            Title: string
-        }[]
+        FeatureTypeList: {FeatureType: WFS_FEATURE_TYPE} | WFS_FEATURE_TYPE[]
         [key: string]: any
     }
 }
@@ -34,42 +35,51 @@ const getInventoryUrl = (baseUrl: string): string => `${baseUrl}/Inventory/ows`
 
 export const getInventories = (baseUrl: string): Promise<FeatureType[]> => {
     return new Promise((resolve, reject) => {
-        // build the parameters
-        const params = {
-            service: 'WFS',
-            version: '1.0.0',
-            request: 'getCapabilities'
-        }
+    // build the parameters
+    const params = {
+        service: 'WFS',
+        version: '1.0.0',
+        request: 'getCapabilities'
+    }
 
-        // get the url
-        const url = getInventoryUrl(baseUrl)
+    // get the url
+    const url = getInventoryUrl(baseUrl)
 
-        // reach out
-        axios.get<string>(url, { params })
-            .then(response => {
-                // parse the XML response
-                const parser = new XMLParser()
-                const rawObj: GetCapabilitiesResponse = parser.parse(response.data)
-                
-                // if there is only one Feature Type, it will not be iterable
-                if (typeof rawObj.WFS_Capabilities.FeatureTypeList[Symbol.iterator] !== 'function') {
-                    rawObj.WFS_Capabilities.FeatureTypeList = [(rawObj.WFS_Capabilities.FeatureTypeList as any).FeatureType]
-                }
-
-                // map into more usable structure
-                resolve(rawObj.WFS_Capabilities.FeatureTypeList.map(R => {
-                    return {
+    // reach out
+    axios.get<string>(url, { params })
+        .then(response => {
+            // parse the XML response
+            const parser = new XMLParser()
+            const rawObj: GetCapabilitiesResponse = parser.parse(response.data)
+            
+            const featureList: FeatureType[] = []
+            // add data
+            if (!Array.isArray(rawObj.WFS_Capabilities.FeatureTypeList)) {
+                featureList.push({
+                    abstract: (rawObj.WFS_Capabilities.FeatureTypeList.FeatureType).Abstract,
+                    name: (rawObj.WFS_Capabilities.FeatureTypeList.FeatureType).Name,
+                    title: (rawObj.WFS_Capabilities.FeatureTypeList.FeatureType).Title,
+                    keywords: (rawObj.WFS_Capabilities.FeatureTypeList.FeatureType).Keywords.split(','),
+                    srs: (rawObj.WFS_Capabilities.FeatureTypeList.FeatureType).SRS,
+                })
+            } else {
+                rawObj.WFS_Capabilities.FeatureTypeList.forEach(R => {
+                    featureList.push({
                         abstract: R.Abstract,
-                        title: R.Title,
                         name: R.Name,
+                        title: R.Title,
                         keywords: R.Keywords.split(','),
                         srs: R.SRS
-                    } as FeatureType
-                }))
-            })
-            .catch(error => reject(error))
+                    })
+                })
+            }
+            
+            resolve(featureList)
+        })
+        .catch(err => reject(err))
     })
 }
+
 
 export const getInventoryData = (baseUrl: string, layerName: string ='inventory-2022'):Promise<InventoryData> => {
     return new Promise((resolve, reject) => {

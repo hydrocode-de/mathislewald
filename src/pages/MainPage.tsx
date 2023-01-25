@@ -3,7 +3,8 @@ import { listSharp } from 'ionicons/icons'
 import { useRef } from "react"
 import InventoryList from "../components/InventoryList"
 
-import MainMap from "../components/MainMapGoogle"
+// import MainMap from "../components/MainMapGoogle"
+import MainMap from "../components/MainMapMaplibre"
 
 const MainPage: React.FC = () => {
     const listRef = useRef<HTMLIonModalElement>(null)
@@ -19,7 +20,7 @@ const MainPage: React.FC = () => {
 
                 <MainMap />
 
-                <IonFab slot="fixed" horizontal="start" vertical="bottom">
+                {/* <IonFab slot="fixed" horizontal="start" vertical="bottom">
                     <IonFabButton id="list-button">
                         <IonIcon icon={listSharp} />
                     </IonFabButton>
@@ -27,7 +28,7 @@ const MainPage: React.FC = () => {
 
                 <IonModal ref={listRef} trigger="list-button" initialBreakpoint={0.5} breakpoints={[0, 0.25, 0.5, 0.85, 1.]}>
                     <InventoryList modalRef={listRef} />
-                </IonModal>
+                </IonModal> */}
 
             </IonContent>
         </IonPage>
