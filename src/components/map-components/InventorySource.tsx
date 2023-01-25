@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import cloneDeep from "lodash.clonedeep";
 import { CirclePaint, CircleLayout, MapLayerMouseEvent } from 'mapbox-gl';
-import { Source, Layer, useMap } from 'react-map-gl';
+import { Source, Layer, useMap, MapRef } from 'react-map-gl';
 
 import { useData } from "../../context/data";
 import { InventoryData, InventoryFeature } from "../../context/data.model";
@@ -37,15 +37,18 @@ const InventoryLayer: React.FC = () => {
 
     // zoom to layer
     useEffect(() => {
-        if (!map.current || !(src?.features.length === 0)) {
+        if (!map.current || !(src) || src.features.length === 0) {
+            console.log('[zoom] uninitialized')
             return
+        } else {
+            console.log('[zoom] ran')
         }
         // zoom to layer
-        if (src?.bbox) {
-            map.current.fitBounds(src.bbox as [number, number, number, number], {padding: 150})
-        }
-        
-        src?.features.forEach(f => {
+        //console.log(src.bbox)
+        map.current?.fitBounds(src.bbox as [number, number, number, number], {padding: 90})
+        //map.current.fitBounds([8.0878, 47.8843, 8.0891, 47.8852], {padding: 50})
+
+        src.features.forEach(f => {
             map.current?.setFeatureState(
                 {source: 'inventory', id: f.id},
                 {color: 'red'}
@@ -55,7 +58,7 @@ const InventoryLayer: React.FC = () => {
 
     // add event listener to map
     useEffect(() => {
-        if (!map.current || !(src?.features.length === 0)) {
+        if (!map.current || !(src) || src.features.length === 0) {
             return
         }
         // mouse Enter
@@ -102,14 +105,10 @@ const InventoryLayer: React.FC = () => {
                 history.push(`/list/${(f as InventoryFeature).properties.treeid}`)
             }
         })
-    }, [map, src])
+    }, [map, src, history])
 
     // build paint and layout
     useEffect(() => {
-        if (!map.current || !(src?.features.length === 0)) {
-            return
-        }
-
         const defaultPaint = {
             'circle-color': ['case', ['boolean', ['feature-state', 'hover'], false], 
                 'purple', 
@@ -123,7 +122,7 @@ const InventoryLayer: React.FC = () => {
 
         setPaint(defaultPaint)
     
-    }, [map, src])
+    }, [])
     
     const layout = {
         // TODO: NEED TO CHANGE THE FORMAT OF INVENTORY LAYER
