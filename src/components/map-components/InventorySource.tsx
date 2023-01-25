@@ -17,6 +17,9 @@ const InventoryLayer: React.FC = () => {
     // store selected and hovered features for effects
     const [hovered, setHovered] = useState<InventoryFeature>()
 
+    // make the paint a state property
+    const [paint, setPaint] = useState<CirclePaint>({})
+
     // load needed contexts
     const { filteredInventory } = useData()
     const layers = useLayers()
@@ -34,12 +37,12 @@ const InventoryLayer: React.FC = () => {
 
     // zoom to layer
     useEffect(() => {
-        if (!map.current) {
+        if (!map.current || !(src?.features.length === 0)) {
             return
         }
         // zoom to layer
         if (src?.bbox) {
-            map.current.fitBounds(src.bbox as [number, number, number, number], {padding: 90})
+            map.current.fitBounds(src.bbox as [number, number, number, number], {padding: 150})
         }
         
         src?.features.forEach(f => {
@@ -52,7 +55,7 @@ const InventoryLayer: React.FC = () => {
 
     // add event listener to map
     useEffect(() => {
-        if (!map.current || src?.features.length == 0) {
+        if (!map.current || !(src?.features.length === 0)) {
             return
         }
         // mouse Enter
@@ -102,17 +105,26 @@ const InventoryLayer: React.FC = () => {
     }, [map, src])
 
     // build paint and layout
-    const paint = {
-        'circle-color': ['case', ['boolean', ['feature-state', 'hover'], false], 
-            'purple', 
-            ['to-color', ['feature-state', 'color'], 'gray']
-        ],
-        'circle-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.9, 0.4],
-        'circle-radius': ['case', ['boolean', ['feature-state', 'hover'], false], 8.5, 6],
-        'circle-stroke-width': 0.8,
-        'circle-stroke-color': 'white'
-    } as CirclePaint
+    useEffect(() => {
+        if (!map.current || !(src?.features.length === 0)) {
+            return
+        }
 
+        const defaultPaint = {
+            'circle-color': ['case', ['boolean', ['feature-state', 'hover'], false], 
+                'purple', 
+                ['to-color', ['feature-state', 'color'], 'gray']
+            ],
+            'circle-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.9, 0.4],
+            'circle-radius': ['case', ['boolean', ['feature-state', 'hover'], false], 8.5, 6],
+            'circle-stroke-width': 0.8,
+            'circle-stroke-color': 'white'
+        } as CirclePaint
+
+        setPaint(defaultPaint)
+    
+    }, [map, src])
+    
     const layout = {
         // TODO: NEED TO CHANGE THE FORMAT OF INVENTORY LAYER
         visibility: layers.activeInventoryLayer.length > 0 ? 'visible' : 'none'

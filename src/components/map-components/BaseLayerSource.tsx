@@ -13,7 +13,8 @@ const BaseLayerSource: React.FC = () => {
             <Source key={l.name} id={l.name} type={l.name == 'dtm' ? 'raster-dem' : 'raster'} 
                 tiles={[wms.getBaseLayersUri('http://geowwd.uni-freiburg.de/geoserver', l.name)]} tileSize={256}
             >
-                <Layer id={l.name} type={l.name == 'dtm' ? 'hillshade' : 'raster'} source={l.name}  paint={{}} />
+                <Layer id={l.name} type={l.name == 'dtm' ? 'hillshade' : 'raster'} source={l.name}  paint={{}} 
+                beforeId="inventory" />
             </Source>
         )) } 
     </>

@@ -8,7 +8,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 
 import InventorySource from './map-components/InventorySource'
 import BaseLayerSource from './map-components/BaseLayerSource';
-import { useLayers } from '../context/layers';
+// import { useLayers } from '../context/layers';
 
 const MainMap: React.FC = () => {
     // onload callback handler
@@ -18,7 +18,7 @@ const MainMap: React.FC = () => {
         setTimeout(() => e.target.resize(), 500)
     }
 
-    const { activeBaseLayer } = useLayers()
+    // const { activeBaseLayer } = useLayers()
 
     // some hard-coded styles
     const style = {
@@ -29,13 +29,13 @@ const MainMap: React.FC = () => {
                 tiles: ['https://stamen-tiles.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.jpg'],
                 tileSize: 256,
                 attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-                maxzoom: 19
+                maxzoom: 16
             }
         },
         layers: [
             {
                 id: 'terrainSource',
-                source: 'terrainSouce',
+                source: 'terrainSource',
                 type: 'raster'
             }
         ]
@@ -46,7 +46,7 @@ const MainMap: React.FC = () => {
                 style={{width: '100%', height: '100%'}}
                 onLoad={m => onLoad(m)}
                 mapStyle={style}
-                // terrain={activeBaseLayer.includes('dtm') ? {source: 'dtm', exaggeration: 0.1} : undefined}
+                // terrain={activeBaseLayer.includes('dtm') ? {source: 'dtm', exaggeration: 0.001} : undefined}
             >
                 <InventorySource />
                 <BaseLayerSource />
