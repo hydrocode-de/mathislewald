@@ -1,30 +1,46 @@
-import { IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from "@ionic/react"
-import { mapOutline, listOutline } from 'ionicons/icons'
-import { IonReactRouter } from "@ionic/react-router"
-import { Redirect, Route } from "react-router"
+import { IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
+import { Redirect, Route } from "react-router";
+import DataLayerDrawer from "./components/DataLayerDrawer";
+import MainMap from "./components/MainMapMaplibre";
+import TreeOverviewPage from "./pages/TreeOverviewPage";
 
-// import pages
-import MainMapTab from "./pages/MainMapTab"
-import InventoryListTab from "./pages/InventoryListTab"
-import TreeOverviewPage from "./pages/TreeOverviewPage"
-
-
-/**
- * Builds the main navigation for the application.
- * 
- * @returns 
- */
-const Navigation: React.FC = () => {
+const SplitPaneNavigation: React.FC = () => {
     return (
         <IonReactRouter>
-            <IonTabs>
-                <IonRouterOutlet>
+            <IonSplitPane when="md" contentId="main">
+                
+                <IonMenu contentId="main">
+                    <IonHeader>
+                        <IonToolbar>
+                            <IonTitle>Data Layer</IonTitle>
+                        </IonToolbar>
+                    </IonHeader>
+                    <IonContent>
+                        <DataLayerDrawer />
+                    </IonContent>
+                </IonMenu>
+
+                <IonRouterOutlet id="main">
                     <Route exact path="/map">
-                        <MainMapTab />
-                    </Route>
-                    
-                    <Route exact path="/list">
-                        <InventoryListTab />
+
+                        <IonPage>
+                            <IonHeader>
+                                <IonToolbar>
+                                    <IonButtons slot="start">
+                                        <IonMenuButton />
+                                    </IonButtons>
+                                    <IonTitle>Mathislewand</IonTitle>
+                                </IonToolbar>
+                            </IonHeader>
+
+                            <IonContent fullscreen>
+                                
+                                <MainMap />
+
+                            </IonContent>
+                        </IonPage>
+
                     </Route>
 
                     <Route path="/list/:id" component={TreeOverviewPage} /> 
@@ -33,22 +49,10 @@ const Navigation: React.FC = () => {
                         <Redirect to="/map" />
                     </Route>
                 </IonRouterOutlet>
-                <IonTabBar slot="bottom">
-                    
-                    <IonTabButton tab="map" href="/map">
-                        <IonIcon icon={mapOutline} />
-                        <IonLabel>Map</IonLabel>
-                    </IonTabButton>
 
-                    <IonTabButton tab="list" href="/list">
-                        <IonIcon icon={listOutline} />
-                        <IonLabel>List</IonLabel>
-                    </IonTabButton>
-                </IonTabBar>
-            </IonTabs>
-      </IonReactRouter>
-  
+            </IonSplitPane>
+        </IonReactRouter>
     )
 }
 
-export default Navigation
+export default SplitPaneNavigation;

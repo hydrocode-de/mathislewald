@@ -20,8 +20,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 // import application wide Navigation
-// import Navigation from './Navigation';
-import Navigation from './SplitPaneNavigation';
+import Navigation from './Navigation';
 
 setupIonicReact();
 
