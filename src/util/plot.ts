@@ -9,7 +9,7 @@ export const histogram2d = (feature: InventoryFeature, referenceData: InventoryD
     const hist: Data = {
         type: 'histogram2dcontour',
         x: referenceData.features.map(f => f.properties.height),
-        y: referenceData.features.map(f => f.properties.radius),
+        y: referenceData.features.map(f => f.properties.radius * 100),
         colorscale: 'Greens',
         reversescale: true,
         showscale: false,
@@ -19,22 +19,22 @@ export const histogram2d = (feature: InventoryFeature, referenceData: InventoryD
     const scat: Data = {
         type: 'scatter',
         x: referenceData.features.map(f => f.properties.height),
-        y: referenceData.features.map(f => f.properties.radius),
+        y: referenceData.features.map(f => f.properties.radius * 100),
         mode: 'markers',
         marker: {size: 4, opacity: 0.4},
         name: 'all inventory data',
         customdata: referenceData.features.map(f => f.id || 'NaN'),
-        hovertemplate: '<b>Tree ID %{customdata}</b><br><b>Height: </b>%{x:.1f}m<br><b>Radius: </b>%{y:.2f}m<extra></extra>'
+        hovertemplate: '<b>Tree ID %{customdata}</b><br><b>Height: </b>%{x:.1f} m<br><b>Radius: </b>%{y:.2f} cm<extra></extra>'
     }
 
     const myself: Data = {
         type: 'scatter',
         x: [feature!.properties.height],
-        y: [feature!.properties.radius],
+        y: [feature!.properties.radius * 100],
         mode: 'markers',
         marker: {size: 15, opacity: 0.8, color: 'purple'},
         name: `${feature?.id}`,
-        hovertemplate: '<b>Height: </b>%{x:.1f}m<br><b>Radius: </b>%{y:.2f}m<extra></extra>'
+        hovertemplate: '<b>Height: </b>%{x:.1f} m<br><b>Radius: </b>%{y:.2f} cm<extra></extra>'
     }
 
     // make some plot specific adaptions to the layout
@@ -42,7 +42,7 @@ export const histogram2d = (feature: InventoryFeature, referenceData: InventoryD
         legend: {orientation: 'h'},
         margin: {t: 5, b: 25, l: 50, r: 2},
         xaxis: {title: 'Tree height (m)'},
-        yaxis: {title: 'Tree radius (m)'}
+        yaxis: {title: 'Tree radius (cm)'}
     } as Partial<Layout>
 
     return [[hist, scat, myself], layoutUpdate]
@@ -59,7 +59,7 @@ export const histogram = (feature: InventoryFeature, referenceData: InventoryDat
     // make some plot specific adaptions to the layout
     const layoutUpdate = {
         title: `Tree ${yValue} distribution`,
-        xaxis: {title: `${yValue} (m)`},
+        xaxis: {title: `${yValue} (${yValue.includes('adius') ? 'cm' : 'm'})`},
         yaxis: {title: 'number of trees'},
         shapes: [{
             type: 'line',
