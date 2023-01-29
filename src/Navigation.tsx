@@ -1,8 +1,8 @@
-import { IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonPage, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
+import {  IonContent, IonHeader, IonMenu, IonRouterOutlet, IonSplitPane, IonTitle, IonToolbar } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
 import DataLayerDrawer from "./components/DataLayerDrawer";
-import MainMap from "./components/MainMapMaplibre";
+import MainPage from "./pages/MainPage";
 import TreeOverviewPage from "./pages/TreeOverviewPage";
 
 const SplitPaneNavigation: React.FC = () => {
@@ -23,24 +23,7 @@ const SplitPaneNavigation: React.FC = () => {
 
                 <IonRouterOutlet id="main">
                     <Route exact path="/map">
-
-                        <IonPage>
-                            <IonHeader>
-                                <IonToolbar>
-                                    <IonButtons slot="start">
-                                        <IonMenuButton />
-                                    </IonButtons>
-                                    <IonTitle>Mathislewand</IonTitle>
-                                </IonToolbar>
-                            </IonHeader>
-
-                            <IonContent fullscreen>
-                                
-                                <MainMap />
-
-                            </IonContent>
-                        </IonPage>
-
+                        <MainPage />
                     </Route>
 
                     <Route path="/list/:id" component={TreeOverviewPage} /> 
