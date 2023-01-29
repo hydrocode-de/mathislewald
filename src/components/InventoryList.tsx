@@ -1,9 +1,9 @@
-import { IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonItem, IonList } from "@ionic/react"
+import { IonButton, IonCard, IonCardSubtitle, IonCardTitle, IonIcon, IonList } from "@ionic/react"
 import { arrowForwardOutline, navigateOutline } from 'ionicons/icons'
 import { useHistory } from "react-router"
 import { useData } from "../context/data"
 
-const InventoryList: React.FC<{modalRef:React.RefObject<HTMLIonModalElement>}> = ({ modalRef }) => {
+const InventoryList: React.FC = () => {
     // load the filtered inventory list
     const { filteredInventory } = useData()
 
@@ -12,9 +12,6 @@ const InventoryList: React.FC<{modalRef:React.RefObject<HTMLIonModalElement>}> =
 
     // we need to close the modal on navigate
     const onNavigate = (path: string) => {
-        // if a modelRef is given, close it
-        if (modalRef) modalRef.current?.setCurrentBreakpoint(0)
-        
         // navigate forward
         history.push(path)
     }
