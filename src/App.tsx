@@ -21,7 +21,6 @@ import './theme/variables.css';
 
 // import application wide Navigation
 import Navigation from './Navigation';
-// import Navigation from './SingleNavigation';
 
 setupIonicReact();
 

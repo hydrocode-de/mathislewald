@@ -136,7 +136,7 @@ const InventoryLayer: React.FC = () => {
             </Source>
         ) : null}
         { hovered ? (
-            <IonCard style={{position: 'fixed', zIndex: 99, backgroundTransparency: 0.6, top: '64px', right: 0, maxWidth: '250px'}}>
+            <IonCard style={{position: 'fixed', zIndex: 99, backgroundTransparency: 0.6, top: '64px', left: 0, maxWidth: '250px'}}>
                 <img alt="img" src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.image}`} width="250" />
                 <IonCardHeader>
                     <IonCardTitle>TreeID: {hovered.properties.treeid}</IonCardTitle>
