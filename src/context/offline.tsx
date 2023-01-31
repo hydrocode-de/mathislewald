@@ -55,8 +55,8 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
 
     const updateRemoteChecksums = (): Promise<void> => {
         // reach out to the checksums URL
-        return axios.get<string>(checksumUrl).then(result => {
-            const check: Checksums = JSON.parse(result.data)
+        return axios.get<Checksums>(checksumUrl).then(result => {
+            const check: Checksums = result.data
             setRemoteChecksums(check)
         })
         .then(() => Promise.resolve())
@@ -94,6 +94,15 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         if (!localChecksums || !remoteChecksums) return
 
         // DO THE STUFF HERE
+        
+        // check each of the checksums
+        Object.entries(remoteChecksums).forEach(([key, checksum]) => {
+            if (!localChecksums[key] || localChecksums[key] !== checksum) {
+                console.log(`Updating ${key} (${checksum})`)
+            } else {
+                console.log(`${key} (${checksum}) is up-to-date.`)
+            }
+        })
 
     }, [localChecksums, remoteChecksums])
 
