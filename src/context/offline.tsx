@@ -13,6 +13,7 @@ import cloneDeep from "lodash.clonedeep";
 
 import { InventoryData } from "./data.model";
 import { useSettings } from "./settings";
+import * as wfs from "../util/wfs";
 
 interface Checksums {
     [key: string]: string
@@ -39,7 +40,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     // handle the files
     const [localChecksums, setLocalChecksums] = useState<Checksums | null>(null)
     const [remoteChecksums, setRemoteChecksums] = useState<Checksums | null>(null)
-    const [fileInfos, setFileInfos] = useState<FileInfo[]>([])
+    const [fileInfos, setFileInfos] = useState<FileInfo[] | null>(null)
     
     // load the settings context
     const { geoserverUrl, checksumUrl } = useSettings()
@@ -63,6 +64,56 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         .catch(err => Promise.reject(`[updateReomteChecksums] ${err}`))
     }
 
+    const updateLocalChecksums = async (key: string): Promise<void> => {
+        if (!remoteChecksums) return Promise.reject('No remote checksums loaded')
+        
+        // load the old checksums
+        let old: Checksums = {}
+        if (fileInfos?.map(f => f.name).includes('checksums.json')) {
+            await Filesystem.readFile({path: 'checksums.json', directory: Directory.Data}).then(val => {
+                old = JSON.parse(val.data)
+            })
+        }
+
+        // update
+        old[key] = remoteChecksums[key]
+
+        // write back
+        await Filesystem.writeFile({
+            path: 'checksums.json',
+            directory: Directory.Data,
+            data: JSON.stringify(old)
+        }).then(() => setLocalChecksums(old))
+        .catch(err => Promise.reject(err))
+
+        return Promise.resolve()
+    }
+
+    const downloadInventory = async (): Promise<void> => {
+        await wfs.getInventoryData(geoserverUrl).then(inv => {
+            // set Inventory Data
+            setInventory(inv)
+
+            // save the inventory to file
+            Filesystem.writeFile({
+                path: 'inventory.json',
+                directory: Directory.Data,
+                data: JSON.stringify(inv)
+            })
+        }).then(() => {
+            updateLocalChecksums('inventory')
+        })
+
+        return Promise.resolve()
+    }
+
+    const loadInventory = () => {
+        Filesystem.readFile({path: 'inventory.json', directory: Directory.Data}).then(value => {
+            const inv: InventoryData = JSON.parse(value.data)
+            setInventory(inv)
+        }).catch(err => console.log(`[loadInventory] ${err}`))
+    }
+
     // run a check for data only once
     useEffect(() => {
         // 1. check if the file is there
@@ -80,12 +131,14 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     // search for local checksums
     useEffect(() => {
         // if the localChecksums are already checked, do nothing
-        if (localChecksums) return
+        if (localChecksums || !fileInfos) return
 
         if (fileInfos.map(i => i.name).includes('checksums.json')) {
             Filesystem.readFile({path: 'checksums.json', directory: Directory.Data}).then(value => {
                 setLocalChecksums(JSON.parse(value.data))
             })
+        } else {
+            setLocalChecksums({})
         }
     }, [fileInfos, localChecksums])
 
@@ -94,8 +147,17 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         if (!localChecksums || !remoteChecksums) return
 
         // DO THE STUFF HERE
+        // refresh inventory data
+        if (!inventory) {
+            if (localChecksums.inventory! === remoteChecksums.inventory!) {
+                loadInventory()
+            } else {
+                downloadInventory()
+            }
+        }
         
         // check each of the checksums
+        // DEV ONLY
         Object.entries(remoteChecksums).forEach(([key, checksum]) => {
             if (!localChecksums[key] || localChecksums[key] !== checksum) {
                 console.log(`Updating ${key} (${checksum})`)
@@ -104,7 +166,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             }
         })
 
-    }, [localChecksums, remoteChecksums])
+    }, [localChecksums, remoteChecksums, inventory])
 
     
 
