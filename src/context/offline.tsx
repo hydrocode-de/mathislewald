@@ -6,8 +6,8 @@
  * The online backend sever exposes MD5 checksums for the different data packages, which are stored locally and used to decide on synchronizaiton cycles.
  */
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { Filesystem, Directory, FileInfo } from "@capacitor/filesystem";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { Filesystem, Directory, FileInfo, Encoding } from "@capacitor/filesystem";
 import axios from "axios";
 import cloneDeep from "lodash.clonedeep";
 
@@ -15,16 +15,20 @@ import { InventoryData } from "./data.model";
 import { useSettings } from "./settings";
 import * as wfs from "../util/wfs";
 
+export type OFFLINE_STATUS = 'pending' | 'online' | 'offline'
+
 interface Checksums {
     [key: string]: string
 }
 
 interface OfflineState {
+    status: OFFLINE_STATUS,
     inventory: InventoryData | null;
 }
 
 // initial state
 const initialState: OfflineState = {
+    status: 'pending',
     inventory: null
 }
 
@@ -34,6 +38,8 @@ const OfflineContext = createContext(initialState)
 
 // define the provider
 export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+    // general context information
+    const [status, setStatus] = useState<OFFLINE_STATUS>('pending')
     // create the context state for data
     const [inventory, setInventory] = useState<InventoryData | null>(null)
 
@@ -45,24 +51,28 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     // load the settings context
     const { geoserverUrl, checksumUrl } = useSettings()
 
-    const updateFileList = (): void => {
+    const updateFileList = useCallback((): void => {
         Filesystem.readdir({
             path: '',
             directory: Directory.Data
         }).then(result => {
             setFileInfos(cloneDeep(result.files))
         }).catch(err => console.log(`[updateFileList]: ${err}`))
-    }
+    }, [])
 
-    const updateRemoteChecksums = (): Promise<void> => {
+    const updateRemoteChecksums = useCallback((): Promise<void> => {
         // reach out to the checksums URL
         return axios.get<Checksums>(checksumUrl).then(result => {
             const check: Checksums = result.data
             setRemoteChecksums(check)
+            setStatus('online')
         })
         .then(() => Promise.resolve())
-        .catch(err => Promise.reject(`[updateReomteChecksums] ${err}`))
-    }
+        .catch(err => {
+            Promise.reject(`[updateReomteChecksums] ${err}`)
+            setStatus('offline')
+        })
+    }, [checksumUrl])
 
     const updateLocalChecksums = async (key: string): Promise<void> => {
         if (!remoteChecksums) return Promise.reject('No remote checksums loaded')
@@ -82,7 +92,8 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         await Filesystem.writeFile({
             path: 'checksums.json',
             directory: Directory.Data,
-            data: JSON.stringify(old)
+            data: JSON.stringify(old),
+            encoding: Encoding.UTF8
         }).then(() => setLocalChecksums(old))
         .catch(err => Promise.reject(err))
 
@@ -98,7 +109,8 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             Filesystem.writeFile({
                 path: 'inventory.json',
                 directory: Directory.Data,
-                data: JSON.stringify(inv)
+                data: JSON.stringify(inv),
+                encoding: Encoding.UTF8
             })
         }).then(() => {
             updateLocalChecksums('inventory')
@@ -122,11 +134,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         // 2. reach out to remote checksums
         updateRemoteChecksums()
 
-        // if no -> load from WFS
-        // if yes check checksum
-        // if valid -> read file
-        // if invalid load from WFS
-    }, [])
+    }, [updateFileList, updateRemoteChecksums])
 
     // search for local checksums
     useEffect(() => {
@@ -172,6 +180,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
 
     // build the final context value
     const value = {
+        status,
         inventory
     }
 
