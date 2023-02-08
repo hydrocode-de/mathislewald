@@ -31,12 +31,14 @@ export interface OfflineImage {
 interface OfflineState {
     status: OFFLINE_STATUS,
     inventory: InventoryData | null;
+    getImageData: (name: string) => Promise<string>
 }
 
 // initial state
 const initialState: OfflineState = {
     status: 'pending',
-    inventory: null
+    inventory: null,
+    getImageData: (name: string) => Promise.reject()
 }
 
 // build the context
@@ -60,13 +62,14 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     // load the settings context
     const { serverUrl, geoserverUrl, checksumUrl } = useSettings()
 
-    const updateFileList = useCallback((): void => {
-        Filesystem.readdir({
+    const updateFileList = useCallback((): Promise<void> => {
+        return Filesystem.readdir({
             path: '',
             directory: Directory.Data
         }).then(result => {
             setFileInfos(cloneDeep(result.files))
-        }).catch(err => console.log(`[updateFileList]: ${err}`))
+        }).then(() => Promise.resolve())
+        .catch(err => Promise.reject(`[updateFileList]: ${err}`))
     }, [])
 
     const updateRemoteChecksums = useCallback((): Promise<void> => {
@@ -166,25 +169,27 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         }).catch(err => console.log(`[loadInventory] ${err}`))
     }
 
-    NOT SURE IF THIS IS THE WAY TO GO
-    const getImageUri = (filename: string): Promise<string> => {
-        const files =  fileInfos?.filter(i => i.name === filename)
-        return new Promise((resolve, reject) => {
-            if (!files || files.length === 0) {
-                reject()
-            } else {
-                resolve(files[0].uri)
-            }
+    /**
+     * 
+     */
+    const getImageData = (filename: string): Promise<string> => {
+        // read all images
+        return Filesystem.readFile({
+            path: `/images/${filename}`, 
+            directory: Directory.Data
+        }).then(value => {
+            return value.data
         })
     }
 
     // run a check for data only once
     useEffect(() => {
         // 1. check if the file is there
-        updateFileList()
-
-        // 2. reach out to remote checksums
-        updateRemoteChecksums()
+        updateFileList().then(() => {
+        
+            // 2. reach out to remote checksums
+            updateRemoteChecksums()
+        })
 
     }, [updateFileList, updateRemoteChecksums])
 
@@ -235,14 +240,14 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             }
         })
 
-    }, [localChecksums, remoteChecksums, inventory])
+    }, [localChecksums, remoteChecksums])
 
     
-
     // build the final context value
     const value = {
         status,
-        inventory
+        inventory,
+        getImageData
     }
 
     return <>
