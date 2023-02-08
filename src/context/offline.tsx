@@ -129,17 +129,21 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     const downloadImages = async (): Promise<void> => {
         if (!inventory) return Promise.reject('Inventory not loaded')
         const requests: Promise<void>[] = []
-        const newImages: OfflineImage[] = []
 
+        // DEV !!
+        axios.get(`${geoserverUrl}/img/${inventory.features[0].properties.image}`).then(r => console.log(r))
+        return Promise.resolve()
+        
+        
         // create a new request for each image
-        inventory?.features.forEach(i => {
+        inventory?.features.forEach(img => {
             requests.push(
-                axios.get(`${geoserverUrl}/img/${i.properties.image}`)
+                axios.get(`${geoserverUrl}/img/${img.properties.image}`)
                 .then(res => {
                     Filesystem.writeFile({
-                        path: `images/${i.properties.image}`,
+                        path: `images/${img.properties.image}`,
                         directory: Directory.Data,
-                        data: '',
+                        data: res.data,
                         encoding: Encoding.UTF8
                     })
                 })
@@ -199,6 +203,15 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
                 loadInventory()
             } else {
                 downloadInventory()
+            }
+        }
+
+        // refresh images
+        if (!images) {
+            if (localChecksums.images! === remoteChecksums.images!) {
+                ;
+            } else {
+                downloadImages()
             }
         }
         
