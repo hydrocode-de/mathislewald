@@ -8,7 +8,7 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { Filesystem, Directory, FileInfo, Encoding } from "@capacitor/filesystem";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import cloneDeep from "lodash.clonedeep";
 
 import { InventoryData } from "./data.model";
@@ -19,6 +19,11 @@ export type OFFLINE_STATUS = 'pending' | 'online' | 'offline'
 
 interface Checksums {
     [key: string]: string
+}
+
+export interface OfflineImage {
+    name: string,
+    data: string,
 }
 
 interface OfflineState {
@@ -40,8 +45,10 @@ const OfflineContext = createContext(initialState)
 export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     // general context information
     const [status, setStatus] = useState<OFFLINE_STATUS>('pending')
+    
     // create the context state for data
     const [inventory, setInventory] = useState<InventoryData | null>(null)
+    const [images, setImages] = useState<OfflineImage[] | null>(null)
 
     // handle the files
     const [localChecksums, setLocalChecksums] = useState<Checksums | null>(null)
@@ -117,6 +124,37 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         })
 
         return Promise.resolve()
+    }
+
+    const downloadImages = async (): Promise<void> => {
+        if (!inventory) return Promise.reject('Inventory not loaded')
+        const requests: Promise<void>[] = []
+        const newImages: OfflineImage[] = []
+
+        // create a new request for each image
+        inventory?.features.forEach(i => {
+            requests.push(
+                axios.get(`${geoserverUrl}/img/${i.properties.image}`)
+                .then(res => {
+                    Filesystem.writeFile({
+                        path: `images/${i.properties.image}`,
+                        directory: Directory.Data,
+                        data: '',
+                        encoding: Encoding.UTF8
+                    })
+                })
+            )
+        })
+
+
+
+
+        return axios.all(requests).then(() => {
+            updateLocalChecksums('images')
+            Promise.resolve()
+        })
+        .catch(err => Promise.reject(err))
+        
     }
 
     const loadInventory = () => {
