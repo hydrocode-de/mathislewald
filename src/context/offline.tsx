@@ -10,10 +10,12 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import { Filesystem, Directory, FileInfo, Encoding } from "@capacitor/filesystem";
 import axios, { AxiosResponse } from "axios";
 import cloneDeep from "lodash.clonedeep";
+import { Buffer } from 'buffer'
 
 import { InventoryData } from "./data.model";
 import { useSettings } from "./settings";
 import * as wfs from "../util/wfs";
+
 
 export type OFFLINE_STATUS = 'pending' | 'online' | 'offline'
 
@@ -56,7 +58,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     const [fileInfos, setFileInfos] = useState<FileInfo[] | null>(null)
     
     // load the settings context
-    const { geoserverUrl, checksumUrl } = useSettings()
+    const { serverUrl, geoserverUrl, checksumUrl } = useSettings()
 
     const updateFileList = useCallback((): void => {
         Filesystem.readdir({
@@ -129,29 +131,25 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     const downloadImages = async (): Promise<void> => {
         if (!inventory) return Promise.reject('Inventory not loaded')
         const requests: Promise<void>[] = []
-
-        // DEV !!
-        axios.get(`${geoserverUrl}/img/${inventory.features[0].properties.image}`).then(r => console.log(r))
-        return Promise.resolve()
         
-        
+        // create the images folder
+        if (!fileInfos?.map(i => i.name).includes('images')) {
+            await Filesystem.mkdir({path: '/images', directory: Directory.Data})
+        }
+ 
         // create a new request for each image
         inventory?.features.forEach(img => {
             requests.push(
-                axios.get(`${geoserverUrl}/img/${img.properties.image}`)
+                axios.get<string>(`${serverUrl}/img/${img.properties.image}`, {responseType: 'arraybuffer'})
                 .then(res => {
                     Filesystem.writeFile({
-                        path: `images/${img.properties.image}`,
+                        path: `/images/${img.properties.image}`,
                         directory: Directory.Data,
-                        data: res.data,
-                        encoding: Encoding.UTF8
+                        data: Buffer.from(res.data, 'binary').toString('base64')
                     })
-                })
+                }).catch(err => Promise.reject(err))
             )
         })
-
-
-
 
         return axios.all(requests).then(() => {
             updateLocalChecksums('images')
@@ -166,6 +164,18 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             const inv: InventoryData = JSON.parse(value.data)
             setInventory(inv)
         }).catch(err => console.log(`[loadInventory] ${err}`))
+    }
+
+    NOT SURE IF THIS IS THE WAY TO GO
+    const getImageUri = (filename: string): Promise<string> => {
+        const files =  fileInfos?.filter(i => i.name === filename)
+        return new Promise((resolve, reject) => {
+            if (!files || files.length === 0) {
+                reject()
+            } else {
+                resolve(files[0].uri)
+            }
+        })
     }
 
     // run a check for data only once
