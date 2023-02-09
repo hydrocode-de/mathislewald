@@ -6,12 +6,45 @@ import {
   IonSplitPane,
   IonTitle,
   IonToolbar,
+  IonIcon,
+  IonLabel,
+  IonTabBar,
+  IonTabButton,
+  IonTabs,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
+import { listSharp, map } from "ionicons/icons";
 import DataLayerDrawer from "./components/DataLayerDrawer";
-import MainTabs from "./components/MainTabs";
 import TreeOverviewPage from "./pages/TreeOverviewPage";
+import InventoryListPage from "./pages/InventoryListPage";
+import MapPage from "./pages/MapPage";
+
+const MainTabs: React.FC = () => {
+  return (
+    <IonTabs>
+      <IonRouterOutlet>
+        <Redirect exact from="/tabs" to="/tabs/map" />
+        <Route path="/tabs/map" exact>
+          <MapPage />
+        </Route>
+        <Route exact path="/tabs/list">
+          <InventoryListPage />
+        </Route>
+      </IonRouterOutlet>
+      <IonTabBar slot="bottom">
+        <IonTabButton tab="map" href="/tabs/map">
+          <IonLabel>Map</IonLabel>
+          <IonIcon icon={map}></IonIcon>
+        </IonTabButton>
+        <IonTabButton tab="list" href="/tabs/list">
+          <IonLabel>Map</IonLabel>
+          <IonIcon icon={listSharp}></IonIcon>
+        </IonTabButton>
+      </IonTabBar>
+    </IonTabs>
+  );
+};
 
 const SplitPaneNavigation: React.FC = () => {
   return (
@@ -27,7 +60,6 @@ const SplitPaneNavigation: React.FC = () => {
             <DataLayerDrawer />
           </IonContent>
         </IonMenu>
-
         <IonRouterOutlet id="main">
           <Redirect exact from="/" to="/tabs" />
           <Route path="/tabs">
