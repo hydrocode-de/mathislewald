@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import { SettingsProvider } from './context/settings';
 import { DataProvider } from './context/data';
 import { LayersProvider } from './context/layers';
+import { OfflineProvider } from './context/offline';
 
 
 const container = document.getElementById('root');
@@ -15,11 +16,13 @@ const root = createRoot(container!);
 root.render(
   <React.StrictMode>
     <SettingsProvider>
-      <DataProvider>
-        <LayersProvider>
-          <App />
-        </LayersProvider>
-      </DataProvider>
+      <OfflineProvider>
+        <DataProvider>
+          <LayersProvider>
+            <App />
+          </LayersProvider>
+        </DataProvider>
+      </OfflineProvider>
     </SettingsProvider>
   </React.StrictMode>
 );

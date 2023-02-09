@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Plot from "react-plotly.js"
 import { useData } from "../context/data"
 import { InventoryFeature } from "../context/data.model"
+import { useOffline } from "../context/offline"
 import * as plot from '../util/plot'
 
 interface TreeDetailsProps {
@@ -16,6 +17,7 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
     
     // compnent state to store this feature
     const [feature, setFeature] = useState<InventoryFeature>()
+    const [currentImg, setCurrentImg] = useState<string>()
 
     // state for the plot data
     const [data, setData] = useState<Data[]>([])
@@ -23,6 +25,14 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
 
     // state to set the plot type
     const [plotType, setPlotType] = useState<'hist2d' | 'heights' | 'radius'>('heights')
+
+    // DEV
+    const { status, getImageData } = useOffline()
+    useEffect(() => {
+        if (feature && status !== 'pending') {
+            getImageData(feature.properties.image).then(data => setCurrentImg(data))
+        }
+    }, [feature, status])
 
 
     // load the correct feature, whenever the URL param or inventory updates
@@ -126,8 +136,8 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
                         stereophotogrammetry and LiDAR.</p>
                     </IonLabel>
                 </IonItem>
-
-                <img src={`http://geowwd.uni-freiburg.de/img/${feature?.properties.image}`} alt="a lidar image" />
+                { currentImg ? (<img src={`data:image/png;base64,${currentImg}`}  alt=""/>) : null }
+                {/* <img src={`http://geowwd.uni-freiburg.de/img/${feature?.properties.image}`} alt="a lidar image" /> */}
             </IonCardContent>
         </IonCard>
         </>)

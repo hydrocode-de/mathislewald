@@ -26,7 +26,7 @@ const BaseLayerSource: React.FC = () => {
                     type={l.name === 'dtm' ? 'hillshade' : 'raster'} 
                     source={l.name}  
                     paint={{}} 
-                    beforeId={activeInventoryLayer.length > 0 ? 'inventory' : undefined} 
+                    // beforeId={activeInventoryLayer.length > 0 ? 'inventory' : undefined} 
                     layout={{visibility: activeLayers.includes(l.name) ? 'visible' : 'none'}} />
             </Source>
         )) } 

@@ -10,7 +10,9 @@ export type ACTIVE_DETAIL = 'tree' | 'list' | 'none';
  * 
  */
 interface SettingsState {
+    serverUrl: string
     geoserverUrl: string
+    checksumUrl: string
     activeDetailModal: ACTIVE_DETAIL
     setDetailTo: (detail: ACTIVE_DETAIL) => void
     closeDetail: () => void
@@ -18,7 +20,9 @@ interface SettingsState {
 
 // TODO: add the resource structures Public/Inventory etc
 const initialState: SettingsState = {
+    serverUrl: 'http://geowwd.uni-freiburg.de',
     geoserverUrl: 'http://geowwd.uni-freiburg.de/geoserver',
+    checksumUrl: 'http://geowwd.uni-freiburg.de/assets/checksums.json',
     activeDetailModal: 'none',
     setDetailTo: (detail: ACTIVE_DETAIL) => {},
     closeDetail: () => {}
@@ -29,7 +33,10 @@ const SettingsContext = createContext(initialState);
 
 export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
     // set component state
+    const [serverUrl, setServerUrl] = useState<string>(initialState.serverUrl);
     const [geoserverUrl, setGeoserverUrl] = useState<string>(initialState.geoserverUrl);
+    const [checksumUrl, setChecksumUrl] = useState<string>(initialState.checksumUrl);
+
     const [activeDetailModal, setActiveDetailModal] = useState<ACTIVE_DETAIL>('none')
 
     // implement detail functions
@@ -39,7 +46,9 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
 
     // create the export value
     const value = {
+        serverUrl,
         geoserverUrl,
+        checksumUrl,
         activeDetailModal,
         setDetailTo,
         closeDetail
