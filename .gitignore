@@ -29,3 +29,5 @@ yarn-error.log*
 
 # don't upload env files
 .env
+
+/ios
