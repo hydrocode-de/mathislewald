@@ -29,11 +29,6 @@ const MapPage: React.FC = () => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>Mathislewand</IonTitle>
-          {/* <IonButtons slot="end">
-            <IonButton id="list-modal">
-              <IonIcon icon={listSharp} slot="icon-only" />
-            </IonButton>
-          </IonButtons> */}
         </IonToolbar>
       </IonHeader>
 
