@@ -1,24 +1,20 @@
 import {
-  IonContent,
-  IonHeader,
   IonIcon,
   IonLabel,
-  IonPage,
   IonRouterOutlet,
-  IonTab,
   IonTabBar,
   IonTabButton,
   IonTabs,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 import { listSharp, map } from "ionicons/icons";
 import { Redirect, Route } from "react-router";
-import InventoryListPage from "./InventoryListPage";
+import InventoryListPage from "../pages/InventoryListPage";
 // import { Route } from "workbox-routing";
-import MapPage from "./MapPage";
+import MapPage from "../pages/MapPage";
 
-const MainPage = () => {
+const MainTabs: React.FC = () => {
+  // modal reference
+
   return (
     <IonTabs>
       <IonRouterOutlet>
@@ -44,4 +40,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default MainTabs;

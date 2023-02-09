@@ -8,11 +8,9 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route, Switch } from "react-router";
+import { Redirect, Route } from "react-router";
 import DataLayerDrawer from "./components/DataLayerDrawer";
-import MainMap from "./components/MainMapMaplibre";
-import MainPage from "./pages/MainPage";
-import MapPage from "./pages/MapPage";
+import MainTabs from "./components/MainTabs";
 import TreeOverviewPage from "./pages/TreeOverviewPage";
 
 const SplitPaneNavigation: React.FC = () => {
@@ -31,15 +29,11 @@ const SplitPaneNavigation: React.FC = () => {
         </IonMenu>
 
         <IonRouterOutlet id="main">
-          <Switch>
-            <Redirect exact from="/" to="/tabs" />
-            <Route path="/tabs">
-              {/* <MapPage /> */}
-              {/* <MainMap></MainMap> */}
-              <MainPage></MainPage>
-            </Route>
-            <Route path="/list/:id" component={TreeOverviewPage} />
-          </Switch>
+          <Redirect exact from="/" to="/tabs" />
+          <Route path="/tabs">
+            <MainTabs />
+          </Route>
+          <Route path="/list/:id" component={TreeOverviewPage} />
         </IonRouterOutlet>
       </IonSplitPane>
     </IonReactRouter>

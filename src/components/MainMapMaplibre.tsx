@@ -1,15 +1,11 @@
 import { Style } from "mapbox-gl";
 import maplibregl, { MapLibreEvent } from "maplibre-gl";
 import Map from "react-map-gl";
-import { FullscreenControl } from "react-map-gl";
 
 // load the maplibre CSS styles
 import "maplibre-gl/dist/maplibre-gl.css";
-
 import InventorySource from "./map-components/InventorySource";
 import BaseLayerSource from "./map-components/BaseLayerSource";
-// import { useLayers } from '../context/layers';
-
 const MainMap: React.FC = () => {
   // onload callback handler
   const onLoad = (e: any) => {
@@ -17,8 +13,6 @@ const MainMap: React.FC = () => {
     (e as MapLibreEvent).target.resize();
     setTimeout(() => e.target.resize(), 500);
   };
-
-  // const { activeBaseLayer } = useLayers()
 
   // some hard-coded styles
   const style = {
@@ -50,12 +44,9 @@ const MainMap: React.FC = () => {
       style={{ width: "100%", height: "100%" }}
       onLoad={(m) => onLoad(m)}
       mapStyle={style}
-      // zoom={10}
-      // terrain={activeBaseLayer.includes('dtm') ? {source: 'dtm', exaggeration: 0.001} : undefined}
     >
       <InventorySource />
       <BaseLayerSource />
-      <FullscreenControl position="top-right" />
     </Map>
   );
 };
