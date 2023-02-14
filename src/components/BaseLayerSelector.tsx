@@ -20,7 +20,7 @@ const BaseLayerSelector: React.FC = () => {
     <>
       <IonList>
         <IonListHeader>
-          <IonLabel>Map Layer</IonLabel>
+          <IonLabel>Background Layer</IonLabel>
         </IonListHeader>
         <IonRadioGroup
           allowEmptySelection={true}
@@ -29,10 +29,11 @@ const BaseLayerSelector: React.FC = () => {
               ? layers.setBaseLayerTo([e.detail.value])
               : layers.setBaseLayerTo([])
           }
+          value={layers.activeBaseLayer.toString()}
         >
           {layers.availableBaseLayer.map((l) => (
             <IonItem lines={l.name === "ortho" ? "none" : "inset"} key={l.name}>
-              <IonLabel>{l.title}</IonLabel>
+              <IonLabel>{l.name}</IonLabel>
               <IonRadio slot="end" value={l.name}></IonRadio>
             </IonItem>
           ))}
