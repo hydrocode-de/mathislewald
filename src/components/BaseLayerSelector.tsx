@@ -33,7 +33,7 @@ const BaseLayerSelector: React.FC = () => {
         >
           {layers.availableBaseLayer.map((l) => (
             <IonItem lines={l.name === "ortho" ? "none" : "inset"} key={l.name}>
-              <IonLabel>{l.name}</IonLabel>
+              <IonLabel>{l.title}</IonLabel>
               <IonRadio slot="end" value={l.name}></IonRadio>
             </IonItem>
           ))}
