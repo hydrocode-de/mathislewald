@@ -44,6 +44,11 @@ const MainMap: React.FC = () => {
       style={{ width: "100%", height: "100%" }}
       onLoad={(m) => onLoad(m)}
       mapStyle={style}
+      initialViewState={{
+        longitude: 8.093,
+        latitude: 47.887,
+        zoom: 11,
+      }}
     >
       <InventorySource />
       <BaseLayerSource />
