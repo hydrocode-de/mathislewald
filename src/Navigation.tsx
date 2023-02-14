@@ -11,6 +11,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  IonListHeader,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
@@ -56,7 +57,7 @@ const SplitPaneNavigation: React.FC = () => {
               <IonTitle>Data Layer</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <IonContent>
+          <IonContent color="light">
             <DataLayerDrawer />
           </IonContent>
         </IonMenu>

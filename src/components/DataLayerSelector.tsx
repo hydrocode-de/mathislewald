@@ -1,11 +1,17 @@
 import {
+  IonButton,
   IonCheckbox,
+  IonChip,
+  IonCol,
+  IonGrid,
   IonItem,
   IonLabel,
   IonList,
   IonListHeader,
   IonRadio,
   IonRadioGroup,
+  IonRow,
+  IonTitle,
 } from "@ionic/react";
 import { useLayers } from "../context/layers";
 
@@ -23,12 +29,17 @@ const DataLayerDrawer: React.FC = () => {
 
   return (
     <>
+      <IonTitle class="ion-padding-top">Data</IonTitle>
       <IonList inset>
-        <IonListHeader>
-          <IonLabel>Forest Inventory</IonLabel>
-        </IonListHeader>
+        {/* <IonListHeader> */}
+        {/* <IonLabel>Forest Inventory</IonLabel> */}
+        {/* </IonListHeader> */}
         {layers.availableInventoryLayer.map((l) => (
-          <IonItem key={l.name} onClick={() => toggleInventoryLayer(l.name)}>
+          <IonItem
+            lines="none"
+            key={l.name}
+            onClick={() => toggleInventoryLayer(l.name)}
+          >
             <IonLabel>{l.title}</IonLabel>
             <IonCheckbox
               // slot="end"
@@ -37,6 +48,25 @@ const DataLayerDrawer: React.FC = () => {
           </IonItem>
         ))}
       </IonList>
+      <IonGrid>
+        <IonRow class="ion-align-items-end">
+          <IonCol>
+            <IonTitle class="ion-padding-top">Filter</IonTitle>
+          </IonCol>
+          <IonCol style={{ padding: 0 }}>
+            <IonButton size="small">Add Filter</IonButton>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+      <IonItem lines="none" class="ion-padding">
+        <IonChip>
+          <IonLabel>Radius {">".toString()} 6</IonLabel>
+        </IonChip>
+      </IonItem>
+      <IonTitle class="ion-padding-top">Description</IonTitle>
+      <IonItem class="ion-padding" lines="none">
+        This is the description of the data set
+      </IonItem>
     </>
   );
 };

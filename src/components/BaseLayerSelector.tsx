@@ -18,7 +18,7 @@ const BaseLayerSelector: React.FC = () => {
 
   return (
     <>
-      <IonList>
+      <IonList class="ion-padding">
         <IonListHeader>
           <IonLabel>Background Layer</IonLabel>
         </IonListHeader>
