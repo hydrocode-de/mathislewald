@@ -1,0 +1,8 @@
+.mapButton {
+  position: absolute;
+  right: 5%;
+  top: 10%;
+  z-index: 1;
+  height: 40px;
+  width: 40px;
+}
