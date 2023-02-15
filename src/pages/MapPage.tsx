@@ -2,6 +2,8 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonIcon,
   IonMenuButton,
@@ -43,7 +45,12 @@ const MapPage: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <MapButton />
+        <IonFab slot="fixed" vertical="top" horizontal="end">
+          <IonFabButton style={{ borderRadius: "10px" }} id="open-modal">
+            <IonIcon icon={layers} />
+          </IonFabButton>
+        </IonFab>
+        {/* <MapButton /> */}
         <MainMap />
         {window.innerWidth > 768 ? (
           <BaseLayerPopover />
