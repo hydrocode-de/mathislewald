@@ -32,7 +32,7 @@ const DataLayerDrawer: React.FC = () => {
 
   return (
     <IonContent color="light">
-      <IonListHeader class="ion-padding-top" mode="ios">
+      <IonListHeader mode="ios">
         <IonLabel>Data</IonLabel>
       </IonListHeader>
       <IonList inset>
@@ -48,19 +48,11 @@ const DataLayerDrawer: React.FC = () => {
           </IonItem>
         ))}
       </IonList>
-      <IonGrid class="ion-padding-horizontal">
-        <IonRow>
-          <IonCol>
-            <IonListHeader mode="ios" class="ion-no-padding">
-              <IonLabel>Filter</IonLabel>
-            </IonListHeader>
-          </IonCol>
-          <IonCol class="ion-align-self-end">
-            <IonButton size="small">Add Filter</IonButton>
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-      <IonList inset class="ion-padding-vertical">
+      <IonListHeader mode="ios">
+        <IonLabel>Filter</IonLabel>
+        <IonButton>Add Filter</IonButton>
+      </IonListHeader>
+      <IonList inset>
         <IonItem lines="none">
           <IonChip>
             <IonLabel>Radius {">".toString()} 6</IonLabel>
