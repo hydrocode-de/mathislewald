@@ -51,9 +51,11 @@ const DataLayerDrawer: React.FC = () => {
       <IonGrid>
         <IonRow class="ion-align-items-end">
           <IonCol>
-            <IonTitle class="ion-padding-top">Filter</IonTitle>
+            <IonTitle style={{ paddingLeft: 10 }} class="ion-padding-top">
+              Filter
+            </IonTitle>
           </IonCol>
-          <IonCol style={{ padding: 0 }}>
+          <IonCol style={{ padding: 0 }} class="ion-justify-content-center">
             <IonButton size="small">Add Filter</IonButton>
           </IonCol>
         </IonRow>
