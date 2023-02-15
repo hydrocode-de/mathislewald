@@ -1,8 +1,10 @@
 import {
   IonButton,
+  IonButtons,
   IonCheckbox,
   IonChip,
   IonCol,
+  IonContent,
   IonGrid,
   IonItem,
   IonLabel,
@@ -11,6 +13,7 @@ import {
   IonRadio,
   IonRadioGroup,
   IonRow,
+  IonText,
   IonTitle,
 } from "@ionic/react";
 import { useLayers } from "../context/layers";
@@ -28,48 +31,58 @@ const DataLayerDrawer: React.FC = () => {
   };
 
   return (
-    <>
-      <IonTitle class="ion-padding-top">Data</IonTitle>
+    <IonContent color="light">
+      <IonListHeader class="ion-padding-top" mode="ios">
+        <IonLabel>Data</IonLabel>
+      </IonListHeader>
       <IonList inset>
-        {/* <IonListHeader> */}
-        {/* <IonLabel>Forest Inventory</IonLabel> */}
-        {/* </IonListHeader> */}
         {layers.availableInventoryLayer.map((l) => (
-          <IonItem
-            lines="none"
-            key={l.name}
-            onClick={() => toggleInventoryLayer(l.name)}
-          >
+          <IonItem lines="none">
             <IonLabel>{l.title}</IonLabel>
             <IonCheckbox
+              key={l.name}
               // slot="end"
               checked={layers.activeInventoryLayer.includes(l.name)}
+              onClick={() => toggleInventoryLayer(l.name)}
             />
           </IonItem>
         ))}
       </IonList>
-      <IonGrid>
-        <IonRow class="ion-align-items-end">
+      <IonGrid class="ion-padding-horizontal">
+        <IonRow>
           <IonCol>
-            <IonTitle style={{ paddingLeft: 10 }} class="ion-padding-top">
-              Filter
-            </IonTitle>
+            <IonListHeader mode="ios" class="ion-no-padding">
+              <IonLabel>Filter</IonLabel>
+            </IonListHeader>
           </IonCol>
-          <IonCol style={{ padding: 0 }} class="ion-justify-content-center">
+          <IonCol class="ion-align-self-end">
             <IonButton size="small">Add Filter</IonButton>
           </IonCol>
         </IonRow>
       </IonGrid>
-      <IonItem lines="none" class="ion-padding">
-        <IonChip>
-          <IonLabel>Radius {">".toString()} 6</IonLabel>
-        </IonChip>
-      </IonItem>
-      <IonTitle class="ion-padding-top">Description</IonTitle>
-      <IonItem class="ion-padding" lines="none">
-        This is the description of the data set
-      </IonItem>
-    </>
+      <IonList inset class="ion-padding-vertical">
+        <IonItem lines="none">
+          <IonChip>
+            <IonLabel>Radius {">".toString()} 6</IonLabel>
+          </IonChip>
+          <IonChip>
+            <IonLabel>Radius {">".toString()} 6</IonLabel>
+          </IonChip>
+        </IonItem>
+      </IonList>
+
+      <IonListHeader mode="ios">
+        <IonLabel>Description</IonLabel>
+      </IonListHeader>
+      <IonList inset>
+        <IonItem lines="none" mode="ios">
+          <IonText class="ion-padding-vertical">
+            This is a description of the active data layer. But I need a little
+            bit more text
+          </IonText>
+        </IonItem>
+      </IonList>
+    </IonContent>
   );
 };
 

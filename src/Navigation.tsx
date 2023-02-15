@@ -57,9 +57,7 @@ const SplitPaneNavigation: React.FC = () => {
               <IonTitle>Data Layer</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <IonContent color="light">
-            <DataLayerDrawer />
-          </IonContent>
+          <DataLayerDrawer />
         </IonMenu>
         <IonRouterOutlet id="main">
           <Redirect exact from="/" to="/tabs" />
