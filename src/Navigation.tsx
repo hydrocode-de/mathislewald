@@ -39,7 +39,7 @@ const MainTabs: React.FC = () => {
           <IonIcon icon={map}></IonIcon>
         </IonTabButton>
         <IonTabButton tab="list" href="/tabs/list">
-          <IonLabel>Map</IonLabel>
+          <IonLabel>List</IonLabel>
           <IonIcon icon={listSharp}></IonIcon>
         </IonTabButton>
       </IonTabBar>
