@@ -17,11 +17,11 @@ const BaseLayerSelector: React.FC = () => {
   const layers = useLayers();
 
   return (
-    <>
-      <IonList class="ion-padding">
-        <IonListHeader>
-          <IonLabel>Background Layer</IonLabel>
-        </IonListHeader>
+    <IonContent color="light">
+      <IonListHeader mode="ios">
+        <IonLabel>Base Layer</IonLabel>
+      </IonListHeader>
+      <IonList inset>
         <IonRadioGroup
           allowEmptySelection={true}
           onIonChange={(e) =>
@@ -39,7 +39,15 @@ const BaseLayerSelector: React.FC = () => {
           ))}
         </IonRadioGroup>
       </IonList>
-    </>
+      <IonListHeader mode="ios">
+        <IonLabel>Description</IonLabel>
+      </IonListHeader>
+      <IonList inset>
+        <IonItem lines="none">
+          This is the Description of the base layer
+        </IonItem>
+      </IonList>
+    </IonContent>
   );
 };
 
@@ -47,10 +55,8 @@ export const BaseLayerSheetModal: React.FC<{
   modal: React.RefObject<HTMLIonModalElement>;
 }> = ({ modal }) => {
   return (
-    <IonModal ref={modal} trigger="open-modal" initialBreakpoint={0.5}>
-      <IonContent>
-        <BaseLayerSelector />
-      </IonContent>
+    <IonModal ref={modal} trigger="open-modal" initialBreakpoint={0.7}>
+      <BaseLayerSelector />
     </IonModal>
   );
 };
