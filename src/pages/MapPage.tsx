@@ -10,6 +10,7 @@ import {
   IonModal,
   IonPage,
   IonPopover,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -46,10 +47,28 @@ const MapPage: React.FC = () => {
 
       <IonContent fullscreen>
         <IonFab slot="fixed" vertical="top" horizontal="end">
-          <IonFabButton style={{ borderRadius: "10px" }} id="open-modal">
+          <IonFabButton
+            size="small"
+            style={{ borderRadius: "15px" }}
+            id="open-modal"
+          >
             <IonIcon icon={layers} />
           </IonFabButton>
         </IonFab>
+        {/* <IonSearchbar
+          style={{
+            position: "absolute",
+            zIndex: 4,
+            width: "80%",
+            top: "51px",
+          }}
+          mode="ios"
+          animated={true}
+          placeholder="Filter the data"
+          showCancelButton="focus"
+          cancelButtonText="Add Filter"
+          // onClick={() => console.log("test")}
+        ></IonSearchbar> */}
         {/* <MapButton /> */}
         <MainMap />
         {window.innerWidth > 768 ? (

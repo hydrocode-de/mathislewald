@@ -8,9 +8,11 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonSearchbar,
 } from "@ionic/react";
 import {
   arrowForwardOutline,
+  caretForwardOutline,
   fileTray,
   filterOutline,
   navigateOutline,
@@ -21,6 +23,7 @@ import { useData } from "../context/data";
 const InventoryList: React.FC = () => {
   // load the filtered inventory list
   const { filteredInventory } = useData();
+  console.log(filteredInventory);
 
   // get a history context
   const history = useHistory();
@@ -33,34 +36,42 @@ const InventoryList: React.FC = () => {
 
   return (
     <>
-      <IonListHeader mode="ios">
-        <IonLabel>List View</IonLabel>
-        <IonButton>
-          <IonIcon icon={filterOutline} />
-        </IonButton>
-      </IonListHeader>
       <IonList style={{ overflowY: "scroll", background: "#f4f5f8" }} inset>
+        <IonListHeader mode="ios">
+          <IonLabel>List View</IonLabel>
+          <IonButton>
+            <IonIcon icon={filterOutline} />
+          </IonButton>
+        </IonListHeader>
+        <IonSearchbar
+          mode="ios"
+          animated={true}
+          placeholder="Filter the data"
+          showCancelButton="focus"
+          cancelButtonText="Add Filter"
+          // onClick={() => console.log("test")}
+        ></IonSearchbar>
         {filteredInventory?.features.map((f) => {
           return (
             <IonItem
               button
               lines="inset"
-              onClick={() => onNavigate(`/list/${f.id}`)}
+              onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
             >
               <IonLabel>
-                <h5>TREE ID</h5>
-                <h1>{f.id}</h1>
+                <p>TREE ID</p>
+                <h1>{f.properties.treeid}</h1>
                 <p>
                   <IonIcon icon={navigateOutline} />
                   &nbsp;&nbsp;42m away
                 </p>
               </IonLabel>
-              <IonButton
-                slot="end"
-                //   onClick={() => onNavigate(`/list/${f.id}`)}
-              >
-                <IonIcon icon={arrowForwardOutline} />
-              </IonButton>
+              {/* <IonButton */}
+              {/* slot="end" */}
+              {/* //   onClick={() => onNavigate(`/list/${f.id}`)} */}
+              {/* > */}
+              {/* <IonIcon icon={caretForwardOutline} /> */}
+              {/* </IonButton> */}
             </IonItem>
             // <IonCard
             //   key={f.id}

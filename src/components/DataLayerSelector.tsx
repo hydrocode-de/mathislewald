@@ -13,6 +13,7 @@ import {
   IonRadio,
   IonRadioGroup,
   IonRow,
+  IonSearchbar,
   IonText,
   IonTitle,
 } from "@ionic/react";
@@ -52,6 +53,14 @@ const DataLayerDrawer: React.FC = () => {
         <IonLabel>Filter</IonLabel>
         <IonButton>Add Filter</IonButton>
       </IonListHeader>
+      <IonSearchbar
+        mode="ios"
+        animated={true}
+        placeholder="Filter the data"
+        showCancelButton="focus"
+        cancelButtonText="Add Filter"
+        // onClick={() => console.log("test")}
+      ></IonSearchbar>
       <IonList inset>
         <IonItem lines="none">
           <IonChip>
