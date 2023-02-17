@@ -6,6 +6,7 @@ import {
   IonCol,
   IonContent,
   IonGrid,
+  IonIcon,
   IonItem,
   IonLabel,
   IonList,
@@ -17,7 +18,9 @@ import {
   IonText,
   IonTitle,
 } from "@ionic/react";
+import { closeCircle } from "ionicons/icons";
 import { useLayers } from "../context/layers";
+import FilterBar from "./FilterBar";
 
 const DataLayerDrawer: React.FC = () => {
   // subscribe to the available Inventories
@@ -49,29 +52,6 @@ const DataLayerDrawer: React.FC = () => {
           </IonItem>
         ))}
       </IonList>
-      <IonListHeader mode="ios">
-        <IonLabel>Filter</IonLabel>
-        <IonButton>Add Filter</IonButton>
-      </IonListHeader>
-      <IonSearchbar
-        mode="ios"
-        animated={true}
-        placeholder="Filter the data"
-        showCancelButton="focus"
-        cancelButtonText="Add Filter"
-        // onClick={() => console.log("test")}
-      ></IonSearchbar>
-      <IonList inset>
-        <IonItem lines="none">
-          <IonChip>
-            <IonLabel>Radius {">".toString()} 6</IonLabel>
-          </IonChip>
-          <IonChip>
-            <IonLabel>Radius {">".toString()} 6</IonLabel>
-          </IonChip>
-        </IonItem>
-      </IonList>
-
       <IonListHeader mode="ios">
         <IonLabel>Description</IonLabel>
       </IonListHeader>

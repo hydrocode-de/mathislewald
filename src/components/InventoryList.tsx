@@ -3,11 +3,14 @@ import {
   IonCard,
   IonCardSubtitle,
   IonCardTitle,
+  IonCol,
+  IonGrid,
   IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonListHeader,
+  IonRow,
   IonSearchbar,
 } from "@ionic/react";
 import {
@@ -19,6 +22,7 @@ import {
 } from "ionicons/icons";
 import { useHistory } from "react-router";
 import { useData } from "../context/data";
+import FilterBar from "./FilterBar";
 
 const InventoryList: React.FC = () => {
   // load the filtered inventory list
@@ -36,21 +40,22 @@ const InventoryList: React.FC = () => {
 
   return (
     <>
-      <IonList style={{ overflowY: "scroll", background: "#f4f5f8" }} inset>
+      <IonList style={{ overflowY: "scroll" }}>
         <IonListHeader mode="ios">
           <IonLabel>List View</IonLabel>
-          <IonButton>
-            <IonIcon icon={filterOutline} />
-          </IonButton>
         </IonListHeader>
-        <IonSearchbar
-          mode="ios"
-          animated={true}
-          placeholder="Filter the data"
-          showCancelButton="focus"
-          cancelButtonText="Add Filter"
-          // onClick={() => console.log("test")}
-        ></IonSearchbar>
+        <IonGrid>
+          <IonRow>
+            <IonCol size="8">
+              <FilterBar />
+            </IonCol>
+            <IonCol style={{ paddingTop: "10px" }}>
+              <IonButton fill="outline" class="ion-float-right">
+                <IonIcon icon={filterOutline}></IonIcon>
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
         {filteredInventory?.features.map((f) => {
           return (
             <IonItem
@@ -59,12 +64,12 @@ const InventoryList: React.FC = () => {
               onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
             >
               <IonLabel>
-                <p>TREE ID</p>
-                <h1>{f.properties.treeid}</h1>
                 <p>
+                  &nbsp;42m away
                   <IonIcon icon={navigateOutline} />
-                  &nbsp;&nbsp;42m away
                 </p>
+                {/* <p>TREE ID</p> */}
+                <h1>{f.properties.treeid}</h1>
               </IonLabel>
               {/* <IonButton */}
               {/* slot="end" */}
