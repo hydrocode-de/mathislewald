@@ -18,7 +18,7 @@ const InventoryListPage: React.FC = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Math islewald</IonTitle>
+          <IonTitle>Mathislewald</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent color="light">
