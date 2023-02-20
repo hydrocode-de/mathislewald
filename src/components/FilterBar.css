@@ -1,10 +1,13 @@
 /* Scoped components require higher specificity to customize */
 ion-searchbar.custom {
-  --background: #f4f5f8;
+  /* --background: #f4f5f8; */
+  --background: #fff;
   --color: "black";
   --placeholder-color: 'black'
   --icon-color: #fff;
   --clear-button-color: #fff;
+    /* padding-bottom: 0px; */
+    /* padding-top: 0px; */
 
   --border-radius: 4px;
 }

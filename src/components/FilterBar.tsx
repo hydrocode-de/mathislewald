@@ -2,6 +2,7 @@ import {
   IonChip,
   IonIcon,
   IonItem,
+  IonItemDivider,
   IonLabel,
   IonList,
   IonSearchbar,
@@ -32,10 +33,11 @@ const FilterBar: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const [results, setResults] = useState([...data]);
   const [query, setQuery] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const toggleActive = (activate: boolean) => {
     setIsActive(activate);
-    console.log("set active", activate);
+    // console.log("set active", activate);
   };
   const handleChange = (ev: Event) => {
     let query = "";
@@ -43,6 +45,7 @@ const FilterBar: React.FC = () => {
     if (target) query = target.value!.toLowerCase();
 
     setResults(data.filter((d) => d.toLowerCase().indexOf(query) > -1));
+    setSearchText(query);
   };
 
   const handleAddFilter = (ev: Event) => {
@@ -54,7 +57,6 @@ const FilterBar: React.FC = () => {
   };
 
   const handleCloseQuery = (closeQuery: string) => {
-    console.log("close", closeQuery);
     const newQuery = query.filter((q) => q !== closeQuery);
     setQuery(newQuery);
   };
@@ -63,11 +65,19 @@ const FilterBar: React.FC = () => {
     setQuery([...query, newQuery] as any);
   };
 
+  const handleOnEnter = (ev: React.KeyboardEvent<HTMLIonSearchbarElement>) => {
+    if (ev.key === "Enter") {
+      console.log("enter:", searchText);
+      setQuery([...query, searchText] as any);
+      setSearchText("");
+    }
+  };
+
   return (
     <>
       <div
         style={{
-          background: isActive ? "white" : "transparent",
+          background: isActive ? "#f4f5f8" : "transparent",
           borderRadius: "8px",
         }}
       >
@@ -82,10 +92,13 @@ const FilterBar: React.FC = () => {
           onIonBlur={() => toggleActive(false)}
           onIonChange={(ev) => handleChange(ev)}
           onIonCancel={(ev) => handleAddFilter(ev)}
+          value={searchText}
+          // enterkeyhint="enter"
+          onKeyPress={(ev) => handleOnEnter(ev)}
         ></IonSearchbar>
-        <div style={{ paddingLeft: "10px" }}>
+        <div style={{ paddingLeft: "10px", paddingTop: "0px" }}>
           {query.map((q) => (
-            <IonChip style={{ backgroundColor: "#f4f5f8" }}>
+            <IonChip style={{ backgroundColor: "white" }}>
               <IonLabel>{q}</IonLabel>
               <IonIcon icon={closeCircle} onClick={() => handleCloseQuery(q)} />
             </IonChip>
@@ -93,13 +106,23 @@ const FilterBar: React.FC = () => {
         </div>
         <IonList
           inset
-          class={isActive ? "" : "ion-hide"}
-          //   style={{ position: "absolute" }}
+          class={isActive ? "ion-padding" : "ion-hide"}
+          lines="inset"
+          // color="transparent"
         >
+          {/* <IonItemDivider /> */}
           {results.slice(0, 10).map((q) => (
-            <IonItem lines="none" button onClick={() => handleAddFilterList(q)}>
-              <IonLabel>{q}</IonLabel>
-            </IonItem>
+            <IonChip
+              // color="light"
+              // lines="none"
+              // button
+              onClick={() => handleAddFilterList(q)}
+            >
+              {/* <IonChip>{q}</IonChip> */}
+              {/* <IonLabel>
+                </IonLabel> */}
+              {q}
+            </IonChip>
           ))}
         </IonList>
       </div>
