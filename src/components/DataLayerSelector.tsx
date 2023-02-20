@@ -1,4 +1,5 @@
 import {
+  IonBadge,
   IonButton,
   IonButtons,
   IonCheckbox,
@@ -37,7 +38,10 @@ const DataLayerDrawer: React.FC = () => {
   return (
     <IonContent color="light">
       <IonListHeader mode="ios">
-        <IonLabel>Data</IonLabel>
+        <IonLabel>
+          Data
+          <IonBadge style={{ marginLeft: "10px" }}>67</IonBadge>
+        </IonLabel>
       </IonListHeader>
       <IonList inset>
         {layers.availableInventoryLayer.map((l) => (
@@ -52,6 +56,14 @@ const DataLayerDrawer: React.FC = () => {
           </IonItem>
         ))}
       </IonList>
+      <IonListHeader mode="ios">
+        <IonLabel>
+          Filter
+          <IonBadge style={{ marginLeft: "10px" }}>25</IonBadge>
+        </IonLabel>
+      </IonListHeader>
+      <FilterBar />
+
       <IonListHeader mode="ios">
         <IonLabel>Description</IonLabel>
       </IonListHeader>
