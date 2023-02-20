@@ -1,20 +1,13 @@
 import {
   IonButton,
   IonButtons,
-  IonCol,
   IonContent,
   IonFab,
   IonFabButton,
-  IonGrid,
   IonHeader,
   IonIcon,
-  IonItem,
   IonMenuButton,
-  IonModal,
   IonPage,
-  IonPopover,
-  IonRow,
-  IonSearchbar,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -27,8 +20,6 @@ import {
   BaseLayerSheetModal,
 } from "../components/BaseLayerSelector";
 import "./MapPage.css";
-import FilterBar from "../components/FilterBar";
-import { Capacitor } from "@capacitor/core";
 
 const MapButton: React.FC = () => {
   return (
@@ -52,45 +43,12 @@ const MapPage: React.FC = () => {
       </IonHeader>
 
       <IonContent fullscreen>
-        <IonGrid style={{ position: "absolute", zIndex: 4, width: "100%" }}>
-          <IonRow class="ion-align-items-top">
-            <IonCol
-              size="6"
-              class="ion-float-left"
-              size-md="6"
-              size-xs="9"
-              size-lg="5"
-              size-xl="4"
-            >
-              <FilterBar />
-            </IonCol>
-            <IonCol style={{ paddingTop: "10px" }}>
-              <IonButton
-                id="open-modal"
-                class="ion-float-right"
-                // style={{ width: "40px", height: "40px" }}
-              >
-                <IonIcon icon={layers} />
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-        {/* </div> */}
-        {/* <IonSearchbar
-          style={{
-            position: "absolute",
-            zIndex: 4,
-            width: "80%",
-            top: "51px",
-          }}
-          mode="ios"
-          animated={true}
-          placeholder="Filter the data"
-          showCancelButton="focus"
-          cancelButtonText="Add Filter"
-          // onClick={() => console.log("test")}
-        ></IonSearchbar> */}
-        {/* <MapButton /> */}
+        <IonFab slot="fixed" horizontal="end" vertical="top">
+          <IonFabButton id="open-modal">
+            <IonIcon icon={layers} />
+          </IonFabButton>
+        </IonFab>
+
         <MainMap />
         {window.innerWidth > 768 ? (
           <BaseLayerPopover />
@@ -103,3 +61,44 @@ const MapPage: React.FC = () => {
 };
 
 export default MapPage;
+
+// {/*
+//       <IonGrid style={{ position: "absolute", zIndex: 4, width: "100%" }}>
+//         <IonRow class="ion-align-items-top">
+//           <IonCol
+//             size="6"
+//             class="ion-float-left"
+//             size-md="6"
+//             size-xs="9"
+//             size-lg="5"
+//             size-xl="4"
+//           >
+//             <FilterBar />
+//           </IonCol>
+//           <IonCol style={{ paddingTop: "10px" }}>
+//             <IonButton
+//               id="open-modal"
+//               class="ion-float-right"
+//               // style={{ width: "40px", height: "40px" }}
+//             >
+//               <IonIcon icon={layers} />
+//             </IonButton>
+//           </IonCol>
+//         </IonRow>
+//       </IonGrid> */}
+//       {/* </div> */}
+//       {/* <IonSearchbar
+//         style={{
+//           position: "absolute",
+//           zIndex: 4,
+//           width: "80%",
+//           top: "51px",
+//         }}
+//         mode="ios"
+//         animated={true}
+//         placeholder="Filter the data"
+//         showCancelButton="focus"
+//         cancelButtonText="Add Filter"
+//         // onClick={() => console.log("test")}
+//       ></IonSearchbar> */}
+//       {/* <MapButton /> */}
