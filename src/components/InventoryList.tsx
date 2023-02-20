@@ -40,73 +40,98 @@ const InventoryList: React.FC = () => {
 
   return (
     <>
-      <IonList style={{ overflowY: "scroll" }}>
-        <IonListHeader mode="ios">
-          <IonLabel>List View</IonLabel>
-        </IonListHeader>
-        <IonGrid>
-          <IonRow>
-            <IonCol size="8">
-              <FilterBar />
-            </IonCol>
-            <IonCol style={{ paddingTop: "10px" }}>
-              <IonButton fill="outline" class="ion-float-right">
-                <IonIcon icon={filterOutline}></IonIcon>
-              </IonButton>
-            </IonCol>
-          </IonRow>
+      <IonListHeader mode="ios">
+        <IonLabel>List View</IonLabel>
+        <IonButton class="ion-padding-horizontal">
+          <IonIcon icon={filterOutline} color={"primary"}></IonIcon>
+        </IonButton>
+      </IonListHeader>
+      <IonList
+        // color="light"
+        style={{ overflowY: "scroll" }}
+        // class="ion-padding"
+        inset
+      >
+        <IonGrid fixed>
+          {filteredInventory?.features.map((f) => {
+            return (
+              <IonItem
+                button
+                lines="inset"
+                onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
+              >
+                <IonCol size="6" size-md="4">
+                  <IonLabel>
+                    <p>TREE ID</p>
+                    <h1>{f.properties.treeid}</h1>
+                  </IonLabel>
+                </IonCol>
+                <IonCol size="6" size-md="4">
+                  <IonLabel>
+                    <p>DINSTACE</p>
+                    <p style={{ display: "flex", alignItems: "center" }}>
+                      <IonIcon icon={navigateOutline} />
+                      &nbsp;42m away
+                    </p>
+                  </IonLabel>
+                </IonCol>
+                <IonCol size-md="4">
+                  <IonLabel>
+                    <p>RADIUS</p>
+                    <h1>{f.properties.radius.toFixed(1)}</h1>
+                  </IonLabel>
+                </IonCol>
+              </IonItem>
+            );
+          })}
         </IonGrid>
-        {filteredInventory?.features.map((f) => {
-          return (
-            <IonItem
-              button
-              lines="inset"
-              onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
-            >
-              <IonLabel>
-                <p>
-                  &nbsp;42m away
-                  <IonIcon icon={navigateOutline} />
-                </p>
-                {/* <p>TREE ID</p> */}
-                <h1>{f.properties.treeid}</h1>
-              </IonLabel>
-              {/* <IonButton */}
-              {/* slot="end" */}
-              {/* //   onClick={() => onNavigate(`/list/${f.id}`)} */}
-              {/* > */}
-              {/* <IonIcon icon={caretForwardOutline} /> */}
-              {/* </IonButton> */}
-            </IonItem>
-            // <IonCard
-            //   key={f.id}
-            //   onClick={() => onNavigate(`/list/${f.i`}`)}
-            //   style={{
-            //     marginBottom: "1.3rem",
-            //     padding: "1rem 3rem",
-            //     display: "flex",
-            //     justifyContent: "space-between",
-            //   }}
-            // >
-            //   <div>
-            //     <IonCardSubtitle>TREE ID</IonCardSubtitle>
-            //     <IonCardTitle>{f.id}</IonCardTitle>
-            //     <IonCardSubtitle>
-            //       <IonIcon icon={navigateOutline} />
-            //       &nbsp;&nbsp;42m away
-            //     </IonCardSubtitle>
-            //   </div>
-            //   <div>
-            //     <IonButton size="small">
-            //       <IonIcon icon={arrowForwardOutline} slot="icon-only" />
-            //     </IonButton>
-            //   </div>
-            // </IonCard>
-          );
-        })}
       </IonList>
     </>
   );
 };
 
 export default InventoryList;
+
+{
+  /* <IonButton */
+}
+{
+  /* slot="end" */
+}
+{
+  /* //   onClick={() => onNavigate(`/list/${f.id}`)} */
+}
+{
+  /* > */
+}
+{
+  /* <IonIcon icon={caretForwardOutline} /> */
+}
+{
+  /* </IonButton> */
+}
+
+// <IonCard
+//   key={f.id}
+//   onClick={() => onNavigate(`/list/${f.i`}`)}
+//   style={{
+//     marginBottom: "1.3rem",
+//     padding: "1rem 3rem",
+//     display: "flex",
+//     justifyContent: "space-between",
+//   }}
+// >
+//   <div>
+//     <IonCardSubtitle>TREE ID</IonCardSubtitle>
+//     <IonCardTitle>{f.id}</IonCardTitle>
+//     <IonCardSubtitle>
+//       <IonIcon icon={navigateOutline} />
+//       &nbsp;&nbsp;42m away
+//     </IonCardSubtitle>
+//   </div>
+//   <div>
+//     <IonButton size="small">
+//       <IonIcon icon={arrowForwardOutline} slot="icon-only" />
+//     </IonButton>
+//   </div>
+// </IonCard>
