@@ -11,11 +11,12 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  IonListHeader,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
 import { listSharp, map } from "ionicons/icons";
-import DataLayerDrawer from "./components/DataLayerDrawer";
+import DataLayerDrawer from "./components/DataLayerSelector";
 import TreeOverviewPage from "./pages/TreeOverviewPage";
 import InventoryListPage from "./pages/InventoryListPage";
 import MapPage from "./pages/MapPage";
@@ -38,7 +39,7 @@ const MainTabs: React.FC = () => {
           <IonIcon icon={map}></IonIcon>
         </IonTabButton>
         <IonTabButton tab="list" href="/tabs/list">
-          <IonLabel>Map</IonLabel>
+          <IonLabel>List</IonLabel>
           <IonIcon icon={listSharp}></IonIcon>
         </IonTabButton>
       </IonTabBar>
@@ -56,9 +57,7 @@ const SplitPaneNavigation: React.FC = () => {
               <IonTitle>Data Layer</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <IonContent>
-            <DataLayerDrawer />
-          </IonContent>
+          <DataLayerDrawer />
         </IonMenu>
         <IonRouterOutlet id="main">
           <Redirect exact from="/" to="/tabs" />

@@ -59,7 +59,8 @@ const InventoryLayer: React.FC = () => {
     // zoom to layer
     //console.log(src.bbox)
     map.current?.fitBounds(src.bbox as [number, number, number, number], {
-      padding: 90,
+      padding: 50,
+      duration: 3000,
     });
     //map.current.fitBounds([8.0878, 47.8843, 8.0891, 47.8852], {padding: 50})
 

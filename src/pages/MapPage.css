@@ -1,0 +1,12 @@
+.mapButton {
+  position: absolute;
+  right: 3%;
+  top: 9%;
+  z-index: 1;
+  height: 40px;
+  width: 40px;
+}
+
+ion-fab-button {
+  --border-radius: 15px;
+}

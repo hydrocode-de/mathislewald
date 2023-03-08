@@ -15,7 +15,7 @@ const MainMap: React.FC = () => {
   };
 
   // some hard-coded styles
-  const style = {
+  const stamenStyle = {
     version: 8,
     sources: {
       terrainSource: {
@@ -38,12 +38,39 @@ const MainMap: React.FC = () => {
     ],
   } as Style;
 
+  const osmStyle = {
+    version: 8,
+    sources: {
+      osm: {
+        type: "raster",
+        tiles: ["https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"],
+        tileSize: 256,
+        attribution: "&copy; OpenStreetMap Contributors",
+        maxzoom: 19,
+      },
+    },
+    layers: [
+      {
+        id: "osm",
+        type: "raster",
+        source: "osm",
+      },
+    ],
+  } as Style;
+
   return (
     <Map
       mapLib={maplibregl}
       style={{ width: "100%", height: "100%" }}
       onLoad={(m) => onLoad(m)}
-      mapStyle={style}
+      mapStyle={osmStyle}
+      initialViewState={{
+        longitude: 8.088652,
+        latitude: 47.88443,
+        zoom: 15,
+        // pitch: 52,
+        // 47.884438269626294, 8.088652498339387
+      }}
     >
       <InventorySource />
       <BaseLayerSource />

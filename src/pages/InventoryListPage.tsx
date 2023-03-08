@@ -21,7 +21,7 @@ const InventoryListPage: React.FC = () => {
           <IonTitle>Mathislewald</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent color="light">
         <InventoryList></InventoryList>
       </IonContent>
     </IonPage>
