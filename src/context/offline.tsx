@@ -155,8 +155,8 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         })
 
         return axios.all(requests).then(() => {
-            updateLocalChecksums('images')
-            Promise.resolve()
+            updateLocalChecksums('images').then(() => Promise.resolve())
+            
         })
         .catch(err => Promise.reject(err))
         
