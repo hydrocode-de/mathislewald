@@ -67,12 +67,14 @@ export const BaseLayerPopover: React.FC = () => {
       trigger="open-modal"
       triggerAction="click"
       reference="trigger"
-      side="left"
+      side="bottom"
       arrow={true}
       showBackdrop={false}
-      style={{ "--offset-x": "-10px" }}
+      style={{ "--offset-y": "10px" }}
     >
+      {/* <div style={{ height: "100vh" }}> */}
       <BaseLayerSelector />
+      {/* </div> */}
     </IonPopover>
   );
 };
