@@ -1,4 +1,4 @@
-import { IonBackButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonItem, IonPage, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonSpinner, IonTitle, IonToolbar } from "@ionic/react"
 import { RouteComponentProps } from "react-router"
 
 import TreeDetails from "../components/TreeDetails"
