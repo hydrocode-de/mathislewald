@@ -20,9 +20,9 @@ interface SettingsState {
 
 // TODO: add the resource structures Public/Inventory etc
 const initialState: SettingsState = {
-    serverUrl: 'http://geowwd.uni-freiburg.de',
-    geoserverUrl: 'http://geowwd.uni-freiburg.de/geoserver',
-    checksumUrl: 'http://geowwd.uni-freiburg.de/assets/checksums.json',
+    serverUrl: 'https://geowwd.uni-freiburg.de',
+    geoserverUrl: 'https://geowwd.uni-freiburg.de/geoserver',
+    checksumUrl: 'https://geowwd.uni-freiburg.de/assets/checksums.json',
     activeDetailModal: 'none',
     setDetailTo: (detail: ACTIVE_DETAIL) => {},
     closeDetail: () => {}
