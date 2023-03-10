@@ -9,6 +9,7 @@ import {
 } from "@ionic/react";
 import { closeCircle } from "ionicons/icons";
 import React, { useState } from "react";
+import { useData } from "../context/data";
 import "./FilterBar.css";
 
 const GenerateQueryCombination = () => {
@@ -29,11 +30,13 @@ const GenerateQueryCombination = () => {
 
 const FilterBar: React.FC = () => {
   const data = GenerateQueryCombination();
-
   const [isActive, setIsActive] = useState(false);
   const [results, setResults] = useState([...data]);
-  const [query, setQuery] = useState([]);
+  // const [query, setQuery] = useState([]);
   const [searchText, setSearchText] = useState("");
+
+  const { addFilterQuery, closeFilterQuery, filterQuery } = useData();
+  // console.log("dataContext", dataContext);
 
   const toggleActive = (activate: boolean) => {
     setIsActive(activate);
@@ -52,23 +55,28 @@ const FilterBar: React.FC = () => {
     let newQuery = "";
     const target = ev.target as HTMLIonSearchbarElement;
     if (target) newQuery = target.value!.toLowerCase();
-    setQuery([...query, newQuery] as any);
-    console.log("query", query);
+    addFilterQuery(newQuery);
+    // setQuery([...query, newQuery] as any);
+    console.log("add query", newQuery);
+    // console.log("FilterQuery", filterQuery);
   };
 
   const handleCloseQuery = (closeQuery: string) => {
-    const newQuery = query.filter((q) => q !== closeQuery);
-    setQuery(newQuery);
+    closeFilterQuery(closeQuery);
+    // const newQuery = query.filter((q) => q !== closeQuery);
+    // setQuery(newQuery);
   };
 
   const handleAddFilterList = (newQuery: string) => {
-    setQuery([...query, newQuery] as any);
+    // setQuery([...query, newQuery] as any);
+    addFilterQuery(newQuery);
   };
 
   const handleOnEnter = (ev: React.KeyboardEvent<HTMLIonSearchbarElement>) => {
     if (ev.key === "Enter") {
       console.log("enter:", searchText);
-      setQuery([...query, searchText] as any);
+      // setQuery([...query, searchText] as any);
+      addFilterQuery(searchText);
       setSearchText("");
     }
   };
@@ -97,12 +105,16 @@ const FilterBar: React.FC = () => {
           onKeyPress={(ev) => handleOnEnter(ev)}
         ></IonSearchbar>
         <div style={{ paddingLeft: "10px", paddingTop: "0px" }}>
-          {query.map((q) => (
-            <IonChip style={{ backgroundColor: "white" }}>
-              <IonLabel>{q}</IonLabel>
-              <IonIcon icon={closeCircle} onClick={() => handleCloseQuery(q)} />
-            </IonChip>
-          ))}
+          {filterQuery &&
+            filterQuery.map((q) => (
+              <IonChip style={{ backgroundColor: "white" }}>
+                <IonLabel>{q}</IonLabel>
+                <IonIcon
+                  icon={closeCircle}
+                  onClick={() => handleCloseQuery(q)}
+                />
+              </IonChip>
+            ))}
         </div>
         <IonList
           inset
