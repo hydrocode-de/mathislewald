@@ -7,11 +7,13 @@ import {
   IonGrid,
   IonIcon,
   IonItem,
+  IonItemDivider,
   IonLabel,
   IonList,
   IonListHeader,
   IonRow,
   IonSearchbar,
+  IonText,
 } from "@ionic/react";
 import {
   arrowForwardOutline,
@@ -20,17 +22,24 @@ import {
   filterOutline,
   navigateOutline,
 } from "ionicons/icons";
+import { useState } from "react";
 import { useHistory } from "react-router";
 import { useData } from "../context/data";
 import FilterBar from "./FilterBar";
 
 const InventoryList: React.FC = () => {
+  const [hovered, setHovered] = useState(0);
   // load the filtered inventory list
   const { filteredInventory } = useData();
   console.log(filteredInventory);
 
   // get a history context
   const history = useHistory();
+
+  const handleOnHover = (id: number) => {
+    setHovered(id);
+    console.log(id);
+  };
 
   // we need to close the modal on navigate
   const onNavigate = (path: string) => {
@@ -46,46 +55,42 @@ const InventoryList: React.FC = () => {
           <IonIcon icon={filterOutline} color={"primary"}></IonIcon>
         </IonButton>
       </IonListHeader>
-      <IonList
-        // color="light"
-        style={{ overflowY: "scroll" }}
-        // class="ion-padding"
-        inset
-      >
-        <IonGrid fixed>
-          {filteredInventory?.features.map((f) => {
-            return (
-              <IonItem
-                button
-                lines="inset"
-                onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
-              >
-                <IonCol size="6" size-md="4">
-                  <IonLabel>
-                    <p>TREE ID</p>
-                    <h1>{f.properties.treeid}</h1>
-                  </IonLabel>
+
+      <IonGrid>
+        {filteredInventory?.features.map((f) => {
+          return (
+            <IonCard
+            // onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
+            >
+              <IonRow class="ion-padding ion-align-items-center">
+                <IonCol>
+                  <IonCardSubtitle>TREE ID</IonCardSubtitle>
+                  <IonCardTitle>{f.properties.treeid}</IonCardTitle>
                 </IonCol>
-                <IonCol size="6" size-md="4">
-                  <IonLabel>
-                    <p>DINSTACE</p>
-                    <p style={{ display: "flex", alignItems: "center" }}>
-                      <IonIcon icon={navigateOutline} />
-                      &nbsp;42m away
-                    </p>
-                  </IonLabel>
+                <IonCol class="ion-text-center">
+                  <IonCardSubtitle>DINSTANCE</IonCardSubtitle>
+                  <IonCardTitle>
+                    <IonIcon icon={navigateOutline} size="small" />
+                    &nbsp;42m
+                  </IonCardTitle>
                 </IonCol>
-                <IonCol size-md="4">
-                  <IonLabel>
-                    <p>RADIUS</p>
-                    <h1>{f.properties.radius.toFixed(1)}</h1>
-                  </IonLabel>
+                <IonCol class="ion-text-center ion-hide-sm-down">
+                  <IonCardSubtitle>RADIUS</IonCardSubtitle>
+                  <IonCardTitle>{f.properties.radius.toFixed(1)}</IonCardTitle>
                 </IonCol>
-              </IonItem>
-            );
-          })}
-        </IonGrid>
-      </IonList>
+                <IonCol class="ion-text-end">
+                  <IonButton
+                    // fill="outline"
+                    onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
+                  >
+                    <IonIcon icon={arrowForwardOutline} slot="icon-only" />
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonCard>
+          );
+        })}
+      </IonGrid>
     </>
   );
 };

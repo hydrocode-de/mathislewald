@@ -4,13 +4,17 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonCardSubtitle,
   IonCardTitle,
+  IonCol,
+  IonGrid,
   IonHeader,
   IonItem,
   IonLabel,
   IonListHeader,
   IonNote,
   IonPage,
+  IonRow,
   IonSegment,
   IonSegmentButton,
   IonText,
@@ -30,6 +34,34 @@ interface TreeDetailsProps {
   treeID: number;
 }
 
+const TreeOverviewItem: React.FC<{
+  name: string;
+  value: string;
+  description: string;
+}> = ({ name, value, description }) => {
+  return (
+    <IonItem lines="none" class="ion-no-padding">
+      <IonGrid>
+        <IonRow>
+          <IonCol class="ion-text-left ion-align-self-end">
+            <IonLabel>{name}</IonLabel>
+          </IonCol>
+          <IonCol class="ion-text-right ion-align-self-end">
+            <IonLabel>
+              <h1>{value}m</h1>
+            </IonLabel>
+          </IonCol>
+        </IonRow>
+        <IonRow>
+          <IonCol style={{ paddingTop: "0" }} class="ion-padding-vertical">
+            <IonNote>{description}</IonNote>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+    </IonItem>
+  );
+};
+
 const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
   // load all inventory data
   const { filteredInventory, allInventory } = useData();
@@ -46,6 +78,11 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
   const [plotType, setPlotType] = useState<"hist2d" | "heights" | "radius">(
     "heights"
   );
+  const plotTypeName = {
+    hist2d: "Height vs Radius (2D Histogram)",
+    heights: "Height Histogram",
+    radius: "Radius Histogram",
+  };
 
   // DEV
   const { status, getImageData } = useOffline();
@@ -103,45 +140,36 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
           <IonCardTitle>Overview</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
-          <IonItem lines="none">
-            <IonLabel>TreeID</IonLabel>
-            <IonLabel class="ion-text-end">
-              <h1>{feature?.properties.treeid}</h1>
-            </IonLabel>
-          </IonItem>
-
-          <IonItem lines="none" class="ion-padding-bottom">
-            <div style={{ width: "70%" }}>
-              <IonLabel>Radius</IonLabel>
-              <IonNote slot="helper">Half of the trunk diameter.</IonNote>
+          {feature && (
+            <div>
+              <TreeOverviewItem
+                name="TreeID"
+                value={feature!.properties.treeid.toString()}
+                description="Unique ID of the tree"
+              />
+              <TreeOverviewItem
+                name="Radius"
+                value={feature!.properties.radius.toFixed(2)}
+                description="Radius of a Tree"
+              />
+              <TreeOverviewItem
+                name="Height"
+                value={feature!.properties.height.toFixed(1)}
+                description="Measured individual tree height using a combination of
+                stereophotogrammetry and LiDAR."
+              />
             </div>
-            {/* <IonLabel>Radius</IonLabel> */}
-
-            <IonLabel class="ion-text-end">
-              <h1>{feature?.properties.radius.toFixed(2)}m</h1>
-            </IonLabel>
-          </IonItem>
-
-          <IonItem lines="none">
-            <div style={{ width: "70%" }}>
-              <IonLabel>Height</IonLabel>
-              <IonNote class="ion-padding-bottom">
-                Measured using a combination of stereophotogrammetry and LiDAR.
-              </IonNote>
-            </div>
-            <IonLabel class="ion-text-end">
-              <h1> {feature?.properties.height.toFixed(1)}m</h1>
-            </IonLabel>
-          </IonItem>
+          )}
         </IonCardContent>
       </IonCard>
-      {/* <IonListHeader>Charts</IonListHeader> */}
-
       <IonCard>
         <IonCardHeader>
           <IonCardTitle>Charts</IonCardTitle>
         </IonCardHeader>
         <IonCardContent class="ion-no-padding">
+          <IonLabel class="ion-text-center">
+            <IonCardSubtitle>{plotTypeName[plotType]}</IonCardSubtitle>
+          </IonLabel>
           <div style={{ paddingTop: "3vh" }}>
             <Plot
               data={data}
