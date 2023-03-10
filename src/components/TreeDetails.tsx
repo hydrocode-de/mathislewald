@@ -140,22 +140,26 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
           <IonCardTitle>Overview</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
-          <TreeOverviewItem
-            name="TreeID"
-            value={feature!.properties.treeid.toString()}
-            description="Unique ID of the tree"
-          />
-          <TreeOverviewItem
-            name="Radius"
-            value={feature!.properties.radius.toFixed(2)}
-            description="Radius of a Tree"
-          />
-          <TreeOverviewItem
-            name="Height"
-            value={feature!.properties.height.toFixed(1)}
-            description="Measured individual tree height using a combination of
+          {feature && (
+            <div>
+              <TreeOverviewItem
+                name="TreeID"
+                value={feature!.properties.treeid.toString()}
+                description="Unique ID of the tree"
+              />
+              <TreeOverviewItem
+                name="Radius"
+                value={feature!.properties.radius.toFixed(2)}
+                description="Radius of a Tree"
+              />
+              <TreeOverviewItem
+                name="Height"
+                value={feature!.properties.height.toFixed(1)}
+                description="Measured individual tree height using a combination of
                 stereophotogrammetry and LiDAR."
-          />
+              />
+            </div>
+          )}
         </IonCardContent>
       </IonCard>
       <IonCard>
