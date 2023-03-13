@@ -8,19 +8,22 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { Filesystem, Directory, FileInfo, Encoding } from "@capacitor/filesystem";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import cloneDeep from "lodash.clonedeep";
 import { Buffer } from 'buffer'
 
 import { InventoryData } from "./data.model";
 import { useSettings } from "./settings";
 import * as wfs from "../util/wfs";
+import * as wms from "../util/wms";
 
 
 export type OFFLINE_STATUS = 'pending' | 'online' | 'offline'
 
 interface Checksums {
-    [key: string]: string
+    inventory?: string,
+    images?: string,
+    baselayer?: string
 }
 
 export interface OfflineImage {
@@ -86,7 +89,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         })
     }, [checksumUrl])
 
-    const updateLocalChecksums = async (key: string): Promise<void> => {
+    const updateLocalChecksums = async (key: keyof Checksums): Promise<void> => {
         if (!remoteChecksums) return Promise.reject('No remote checksums loaded')
         
         // load the old checksums
@@ -114,14 +117,25 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
 
     const downloadInventory = async (): Promise<void> => {
         await wfs.getInventoryData(geoserverUrl).then(inv => {
+            // transform inventory data
+            const parsedInv = cloneDeep({...inv, features: inv.features.map(f => {
+                return {
+                    ...f,
+                    properties: {
+                        ...f.properties,
+                        images: (f.properties.image as string).split(';').filter(img => img !== '')
+                    }
+                }
+            })})
+
             // set Inventory Data
-            setInventory(inv)
+            setInventory(parsedInv)
 
             // save the inventory to file
             Filesystem.writeFile({
                 path: 'inventory.json',
                 directory: Directory.Data,
-                data: JSON.stringify(inv),
+                data: JSON.stringify(parsedInv),
                 encoding: Encoding.UTF8
             })
         }).then(() => {
@@ -141,12 +155,12 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         }
  
         // create a new request for each image
-        inventory?.features.forEach(img => {
+        inventory?.features.flatMap(f => f.properties.images).forEach(img => {
             requests.push(
-                axios.get<string>(`${serverUrl}/img/${img.properties.image}`, {responseType: 'arraybuffer'})
+                axios.get<string>(`${serverUrl}/img/${img}`, {responseType: 'arraybuffer'})
                 .then(res => {
                     Filesystem.writeFile({
-                        path: `/images/${img.properties.image}`,
+                        path: `/images/${img}`,
                         directory: Directory.Data,
                         data: Buffer.from(res.data, 'binary').toString('base64')
                     })
@@ -160,6 +174,30 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         })
         .catch(err => Promise.reject(err))
         
+    }
+
+    const downloadBaselayer = async (): Promise<void> => {
+        const infos = []
+
+        // before removing existing data, download the info from geoserver
+        await wms.getBaseLayers(serverUrl)
+            .then(layers => {
+                layers.forEach(layer => {
+                    wms.getBaseLayersImg(serverUrl, layer.name, layer.bbox, {width: 1024, height: 1024})
+                    infos.push(layer)
+                }
+            )})
+            .catch(err => Promise.reject(err))
+
+        
+        // if baselayers already exists, delete it
+        if (fileInfos?.map(i => i.name).includes('baselayers')) {
+            await Filesystem.rmdir({path: '/baselayers', directory: Directory.Data})
+        }
+
+        // create the folder again
+        await Filesystem.mkdir({path: '/baselayers', directory: Directory.Data})
+    
     }
 
     const loadInventory = () => {
@@ -232,17 +270,19 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         
         // check each of the checksums
         // DEV ONLY
-        Object.entries(remoteChecksums).forEach(([key, checksum]) => {
-            if (!localChecksums[key] || localChecksums[key] !== checksum) {
-                console.log(`Updating ${key} (${checksum})`)
-            } else {
-                console.log(`${key} (${checksum}) is up-to-date.`)
-            }
-        })
+        // Object.entries(remoteChecksums).forEach(([key, checksum]) => {
+        //     if (!localChecksums[key] || localChecksums[key] !== checksum) {
+        //         console.log(`Updating ${key} (${checksum})`)
+        //     } else {
+        //         console.log(`${key} (${checksum}) is up-to-date.`)
+        //     }
+        // })
 
     }, [localChecksums, remoteChecksums])
 
-    
+    // dev
+    //downloadBaselayer()
+
     // build the final context value
     const value = {
         status,
