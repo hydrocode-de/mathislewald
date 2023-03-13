@@ -34,8 +34,9 @@ export interface OfflineImage {
 interface OfflineState {
     status: OFFLINE_STATUS,
     inventory: InventoryData | null;
-    baselayers: wms.GroundLayerType[] | null;
+    baselayers: wms.BaseLayerData[] | null;
     getImageData: (name: string) => Promise<string>
+    getBaselayer: (name: string) => Promise<string>
 }
 
 // initial state
@@ -43,7 +44,8 @@ const initialState: OfflineState = {
     status: 'pending',
     inventory: null,
     baselayers: null,
-    getImageData: (name: string) => Promise.reject()
+    getImageData: (name: string) => Promise.reject(),
+    getBaselayer: (name: string) => Promise.reject()
 }
 
 // build the context
@@ -58,7 +60,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     // create the context state for data
     const [inventory, setInventory] = useState<InventoryData | null>(null)
     const [images, setImages] = useState<OfflineImage[] | null>(null)
-    const [baselayers, setBaseLayers] = useState<wms.GroundLayerType[] | null>(null)
+    const [baselayers, setBaseLayers] = useState<wms.BaseLayerData[] | null>(null)
 
     // handle the files
     const [localChecksums, setLocalChecksums] = useState<Checksums | null>(null)
@@ -185,11 +187,12 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         
         const infos = await Promise.all(layers.map(layer => {
             // load the image as base64
-                return wms.getBaseLayersImg(geoserverUrl, layer.name, layer.bbox, {width: 1024, height: 1024}).then(buf => {
+            const opts = {type: 'png', width: 2048, height: 2048}
+                return wms.getBaseLayersImg(geoserverUrl, layer.name, layer.bbox, opts).then(buf => {
                     return {
                         ...layer,
                         data: buf,
-                        opt: {type: 'jpeg', width: 1024, height: 1024}
+                        opt: opts
                     }
                 })
         }))
@@ -235,13 +238,22 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         // read the files
         const layers = await Promise.all(names.map(name => {
             return Filesystem.readFile({path: `/baselayers/${name}`, directory: Directory.Data}).then(res => {
-                const {data, ...info} = JSON.parse(res.data)
-                return info as wms.GroundLayerType
+                // const {data, ...info} = JSON.parse(res.data)
+                // return info as wms.GroundLayerType
+                return JSON.parse(res.data) as wms.BaseLayerData
             })
         }))
 
         // set the baselayers
         setBaseLayers(layers)
+    }
+
+    const getBaselayer = (name: string) => {
+        return Filesystem.readFile({path: `/baselayers/${name}.json`, directory: Directory.Data})
+        .then(file => {
+            const {data, ...info} = JSON.parse(file.data)
+            return data as string
+        })
     }
 
     /**
@@ -340,7 +352,8 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         status,
         inventory,
         baselayers,
-        getImageData
+        getImageData,
+        getBaselayer
     }
 
     return <>
