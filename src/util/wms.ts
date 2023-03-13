@@ -17,6 +17,11 @@ export interface GroundLayerType {
   abstract?: string;
 }
 
+export interface BaseLayerData extends GroundLayerType {
+  data: string,
+  opt: {type: string, width?: number, height?: number}
+}
+
 interface GetCapabilitiesResponse {
   WMS_Capabilities: {
     Capability: {
@@ -103,10 +108,10 @@ export const getBaseLayersImg = async (baseUrl: string, layerName: string, bbox:
   const box = `${bbox.west},${bbox.south},${bbox.east},${bbox.north}`
   
   // set the other params
-  const mime = `image/${opts.type || 'jpeg'}`
+  const mime = `image/${opts.type || 'png'}`
   const size = `height=${opts.height || 256}&width=${opts.width || 256}`
   // get base layer uri
-  const uri = `${baseUrl}/Baselayer/wms?service=WMS&version=1.1.1&request=getMap&layers=Baselayer:${layerName}&bbox=${box}&srs=EPSG:32632&transparent=true&format=${mime}&${size}`
+  const uri = `${baseUrl}/Baselayer/wms?service=WMS&version=1.1.1&request=getMap&layers=Baselayer:${layerName}&transparent=true&bbox=${box}&srs=EPSG:4326&transparent=true&format=${mime}&${size}`
 
   return new Promise((resolve, reject) => {
     axios.get<string>(uri, {responseType: 'arraybuffer'}).then(response => {
