@@ -51,7 +51,7 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
   const { status, getImageData } = useOffline();
   useEffect(() => {
     if (feature && status !== "pending") {
-      getImageData(feature.properties.image).then((data) =>
+      getImageData(feature.properties.images[0]).then((data) =>
         setCurrentImg(data)
       );
     }
