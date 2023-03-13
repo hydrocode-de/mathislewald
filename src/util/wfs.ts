@@ -81,7 +81,7 @@ export const getInventories = (baseUrl: string): Promise<FeatureType[]> => {
 }
 
 
-export const getInventoryData = (baseUrl: string, layerName: string ='inventory-2022'):Promise<InventoryData> => {
+export const getInventoryData = (baseUrl: string, layerName: string ='inventory-2023'):Promise<InventoryData> => {
     return new Promise((resolve, reject) => {
         // build the parameters
         const params = {
@@ -90,7 +90,7 @@ export const getInventoryData = (baseUrl: string, layerName: string ='inventory-
             request: 'GetFeature',
             typeName: `Inventory:${layerName}`,
             outputFormat: 'application/json',
-            srsName: 'EPSG:4326'
+//            srsName: 'EPSG:4326'
         }
 
         // get the url
