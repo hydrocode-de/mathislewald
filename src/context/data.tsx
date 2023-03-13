@@ -10,11 +10,11 @@
  */
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { InventoryData } from "./data.model";
-import { useSettings } from "./settings";
 import cloneDeep from "lodash.clonedeep";
 
-import * as wfs from '../util/wfs';
+import { useOffline } from "./offline";
+import { InventoryData } from "./data.model";
+
 
 // model the data types
 interface DataState {
@@ -42,20 +42,17 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     // create state for synchronization
     const [synced, setSynced] = useState<boolean>(false)
 
-    // use the Settings context
-    const { geoserverUrl } = useSettings()
+    // use the offline context
+    const { inventory } = useOffline()
 
-    // create effect to load data
-    // TODO: change to sync with offline store
+    // copy over inventory data
     useEffect(() => {
-        // run only if settings loaded
-        if (geoserverUrl) {
-            // TODO: we do not handle layer names so far
-            wfs.getInventoryData(geoserverUrl)
-            .then(invData => setAllInventory(invData))
-            .catch(error => console.log(error))
+        if (inventory) {
+            setAllInventory(inventory)
+        } else {
+            setAllInventory(undefined)
         }
-    }, [geoserverUrl])
+    }, [inventory])
 
     // re-filter inventory when allInventory changes
     useEffect(() => {

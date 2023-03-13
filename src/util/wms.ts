@@ -1,11 +1,18 @@
 import axios from "axios";
 import { XMLParser } from "fast-xml-parser";
 
+export interface BBox {
+  south: number;
+  north: number;
+  east: number;
+  west: number
+}
+
 export interface GroundLayerType {
   name: string;
   title: string;
   keywords: [];
-  bbox: { south: number; north: number; east: number; west: number };
+  bbox: BBox;
   abstract?: string;
 }
 
@@ -83,3 +90,24 @@ export const getBaseLayersUri = (
 ): string => {
   return `${baseUrl}/Baselayer/wms?service=WMS&version=1.1.1&request=getMap&layers=Baselayer:${layerName}&bbox={bbox-epsg-3857}&srs=EPSG:3857&transparent=true&format=image/png&width=256&height=256`;
 };
+
+export interface BaseLayerImgOpt {
+  width?: number,
+  height?: number,
+  type?: string
+}
+
+export const getBaseLayersImg = async (baseUrl: string, layerName: string, bbox: BBox, opts: BaseLayerImgOpt ={}): Promise<void> => {
+  // set the box
+  const box = `${bbox.west},${bbox.south},${bbox.east},${bbox.north}`
+  
+  // set the other params
+  const mime = `image/${opts.type || 'jpeg'}`
+  const size = `height=${opts.height || 256}&width=${opts.width || 256}`
+  // get base layer uri
+  const uri = `${baseUrl}/Baselayer/wms?service=WMS&version=1.1.1&request=getMap&layers=Baselayer:${layerName}&bbox=${box}&srs=EPSG:32632&transparent=true&format=${mime}&${size}`
+
+  await axios.get(uri).then(val => console.log(val))
+
+  Promise.resolve()
+}

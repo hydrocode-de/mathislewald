@@ -88,7 +88,7 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
   const { status, getImageData } = useOffline();
   useEffect(() => {
     if (feature && status !== "pending") {
-      getImageData(feature.properties.image).then((data) =>
+      getImageData(feature.properties.images[0]).then((data) =>
         setCurrentImg(data)
       );
     }
@@ -98,7 +98,7 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
   useEffect(() => {
     if (filteredInventory?.features) {
       const f = filteredInventory.features.find(
-        (f) => f.properties.treeid === treeID
+        (f) => Number(f.properties.treeid) === treeID
       );
       setFeature(f);
     }

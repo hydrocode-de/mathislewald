@@ -15,6 +15,7 @@ import {
   IonLabel,
 } from "@ionic/react";
 import { useHistory } from "react-router";
+import { useOffline } from "../../context/offline";
 
 const InventoryLayer: React.FC = () => {
   // component state
@@ -22,12 +23,15 @@ const InventoryLayer: React.FC = () => {
 
   // store selected and hovered features for effects
   const [hovered, setHovered] = useState<InventoryFeature>();
+  const [currentImg, setCurrentImg] = useState<string | null>(null);
 
   // make the paint a state property
   const [paint, setPaint] = useState<CirclePaint>({});
 
   // load needed contexts
   const { filteredInventory } = useData();
+  const { getImageData } = useOffline();
+
   const layers = useLayers();
   const map = useMap();
   const history = useHistory();
@@ -91,6 +95,12 @@ const InventoryLayer: React.FC = () => {
       if (e.features && e.features.length > 0) {
         // TODO: implement this as component state and use useEffect to trigger maplibre state
         setHovered((e.features as any)[0]);
+
+        // set the preview Image
+        getImageData(JSON.parse((e.features as any)[0].properties.images)[0])
+        .then(val => setCurrentImg(`data:image/png;base64,${val}`))
+        
+
         map.current?.setFeatureState(
           { source: "inventory", id: e.features[0].id },
           { hover: true }
@@ -104,6 +114,7 @@ const InventoryLayer: React.FC = () => {
     // mouseLeave
     map.current.on("mouseleave", "inventory", (e: MapLayerMouseEvent) => {
       setHovered(undefined);
+      setCurrentImg(null)
       // disable hover state for all features, not matter what
       src?.features.forEach((f) => {
         map.current?.setFeatureState(
@@ -185,7 +196,8 @@ const InventoryLayer: React.FC = () => {
         >
           <img
             alt="img"
-            src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.image}`}
+            //src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.images[0]}`}
+            src={currentImg ? currentImg : ''}
             width="250"
           />
           <IonCardHeader>
