@@ -1,5 +1,6 @@
 import axios from "axios";
 import { XMLParser } from "fast-xml-parser";
+import { Buffer } from "buffer";
 
 export interface BBox {
   south: number;
@@ -97,7 +98,7 @@ export interface BaseLayerImgOpt {
   type?: string
 }
 
-export const getBaseLayersImg = async (baseUrl: string, layerName: string, bbox: BBox, opts: BaseLayerImgOpt ={}): Promise<void> => {
+export const getBaseLayersImg = async (baseUrl: string, layerName: string, bbox: BBox, opts: BaseLayerImgOpt ={}): Promise<string> => {
   // set the box
   const box = `${bbox.west},${bbox.south},${bbox.east},${bbox.north}`
   
@@ -107,7 +108,13 @@ export const getBaseLayersImg = async (baseUrl: string, layerName: string, bbox:
   // get base layer uri
   const uri = `${baseUrl}/Baselayer/wms?service=WMS&version=1.1.1&request=getMap&layers=Baselayer:${layerName}&bbox=${box}&srs=EPSG:32632&transparent=true&format=${mime}&${size}`
 
-  await axios.get(uri).then(val => console.log(val))
+  return new Promise((resolve, reject) => {
+    axios.get<string>(uri, {responseType: 'arraybuffer'}).then(response => {
+      // create the buffer
+      const buffer = Buffer.from(response.data, 'binary').toString('base64')
+      resolve(buffer)
+    }).catch(error => reject(error))
+  })
 
-  Promise.resolve()
+
 }
