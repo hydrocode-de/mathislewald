@@ -1,4 +1,6 @@
 import {
+  IonButton,
+  IonButtons,
   IonCol,
   IonContent,
   IonGrid,
@@ -80,7 +82,10 @@ const RangeFilter: React.FC = () => {
               </IonLabel>
             </IonRange>
           </IonCol>
-        </IonRow>{" "}
+        </IonRow>
+        <IonRow class="ion-justify-content-end">
+          <IonButton class="ion-margin-top">Add Filter</IonButton>
+        </IonRow>
       </IonGrid>
     </IonList>
   );
