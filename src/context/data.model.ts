@@ -5,7 +5,7 @@ export interface InventoryProperties {
     treeid: number;
     radius: number;
     height: number;
-    image: string;
+    images: string[];
     [key: string]: any;
 }
 
