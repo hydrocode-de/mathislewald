@@ -1,8 +1,8 @@
-/**
- * Utility functions to build the correct queryies for the
- */
+import { kml } from "@tmcw/togeojson";
+import bbox from "@turf/bbox";
 import axios from 'axios';
 import { XMLParser } from 'fast-xml-parser'
+import cloneDeep from "lodash.clonedeep";
 import { InventoryData } from '../context/data.model';
 
 // fast-XML parsed interface in JSON
@@ -89,17 +89,30 @@ export const getInventoryData = (baseUrl: string, layerName: string ='inventory-
             version: '1.0.0',
             request: 'GetFeature',
             typeName: `Inventory:${layerName}`,
-            outputFormat: 'application/json',
+            outputFormat: 'kml'
+//            outputFormat: 'application/json',
 //            srsName: 'EPSG:4326'
         }
-
+        
         // get the url
         const url = getInventoryUrl(baseUrl)
 
         // reach out to the server
-        axios.get<InventoryData>(url, {params: params})
-        .then(response => resolve(response.data))
-        .catch(error => reject(error))
-
+        // axios.get<InventoryData>(url, {params: params})
+        // .then(response => resolve(response.data))
+        // .catch(error => reject(error))
+        axios.get<string>(url, {params: params}).then(
+            response => {
+                // parse the KML
+                const parser = new DOMParser()
+                const xml = parser.parseFromString(response.data, 'text/xml')
+                const data = kml(xml)
+                
+                // add the bounding box
+                const geojson = cloneDeep({...data, bbox: bbox(data)})
+                resolve(geojson as InventoryData)
+            }
+        )
+        
     })
 }

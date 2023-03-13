@@ -61,7 +61,7 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
   useEffect(() => {
     if (filteredInventory?.features) {
       const f = filteredInventory.features.find(
-        (f) => f.properties.treeid === treeID
+        (f) => Number(f.properties.treeid) === treeID
       );
       setFeature(f);
     }
