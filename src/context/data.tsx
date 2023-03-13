@@ -84,10 +84,12 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     if (allInventory) {
       // TODO build the filter here
       console.log("return filterQuery:", filterQuery);
+      console.log("return allInventory:", allInventory);
       const inv = {
         type: "FeatureCollection",
         bbox: allInventory?.bbox, // TODO after filter, update this
-        features: [...cloneDeep(allInventory.features.filter((f) => true))],
+        // features: [...cloneDeep(allInventory.features.filter((f) => true))],
+        features: [...cloneDeep(allInventory.features)],
       } as InventoryData;
       setFilteredInventory(inv);
       setSynced(true);
