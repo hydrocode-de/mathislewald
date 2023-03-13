@@ -45,7 +45,7 @@ const DataLayerDrawer: React.FC = () => {
       </IonListHeader>
       <IonList inset>
         {layers.availableInventoryLayer.map((l) => (
-          <IonItem lines="none">
+          <IonItem lines="none" key={l.name}>
             <IonLabel>{l.title}</IonLabel>
             <IonCheckbox
               key={l.name}

@@ -113,6 +113,7 @@ const FilterBar: React.FC = () => {
           {/* <IonItemDivider /> */}
           {results.slice(0, 10).map((q) => (
             <IonChip
+              key={q}
               // color="light"
               // lines="none"
               // button
