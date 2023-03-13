@@ -22,6 +22,7 @@ import {
 import { closeCircle } from "ionicons/icons";
 import { useLayers } from "../context/layers";
 import FilterBar from "./FilterBar";
+import RangeFilter from "./RangeFilter";
 
 const DataLayerDrawer: React.FC = () => {
   // subscribe to the available Inventories
@@ -62,7 +63,7 @@ const DataLayerDrawer: React.FC = () => {
           <IonBadge style={{ marginLeft: "10px" }}>25</IonBadge>
         </IonLabel>
       </IonListHeader>
-      <FilterBar />
+      <RangeFilter />
 
       <IonListHeader mode="ios">
         <IonLabel>Description</IonLabel>
