@@ -1,6 +1,8 @@
 import {
+  IonButton,
   IonCheckbox,
   IonContent,
+  IonImg,
   IonItem,
   IonLabel,
   IonList,
@@ -11,6 +13,68 @@ import {
   IonRadioGroup,
 } from "@ionic/react";
 import { useLayers } from "../context/layers";
+
+const BaseLayerVisualSelector: React.FC = () => {
+  return (
+    <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <IonButton
+          class="ion-no-padding"
+          style={{
+            height: 100,
+            width: 100,
+            borderColor: "lightblue",
+            borderWidth: 4,
+            borderStyle: "solid",
+            borderRadius: 8,
+          }}
+        >
+          <IonImg
+            style={{ height: 100, opacity: 0.6 }}
+            src="assets/img.png"
+          ></IonImg>
+        </IonButton>
+        <IonLabel>Satellite</IonLabel>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <IonButton class="ion-no-padding" style={{ height: 100, width: 100 }}>
+          <IonImg
+            style={{ height: 100, opacity: 0.6 }}
+            src="assets/img.png"
+          ></IonImg>
+        </IonButton>
+        <IonLabel>Satellite</IonLabel>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <IonButton class="ion-no-padding" style={{ height: 100, width: 100 }}>
+          <IonImg
+            style={{ height: 100, opacity: 0.6 }}
+            src="assets/img.png"
+          ></IonImg>
+        </IonButton>
+        <IonLabel>Satellite</IonLabel>
+      </div>
+    </div>
+  );
+};
 
 const BaseLayerSelector: React.FC = () => {
   // subscribe to the available Inventories
@@ -73,7 +137,8 @@ export const BaseLayerPopover: React.FC = () => {
       style={{ "--offset-y": "10px" }}
     >
       {/* <div style={{ height: "100vh" }}> */}
-      <BaseLayerSelector />
+      {/* <BaseLayerSelector /> */}
+      <BaseLayerVisualSelector />
       {/* </div> */}
     </IonPopover>
   );
