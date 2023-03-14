@@ -3,6 +3,7 @@ import { useSettings } from "./settings";
 
 import * as wfs from '../util/wfs';
 import * as wms from '../util/wms';
+import { useOffline } from "./offline";
 
 interface LayersState {
     availableInventoryLayer: wfs.FeatureType[];
@@ -66,6 +67,14 @@ export const LayersProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     
     // load available layers
     const { geoserverUrl } = useSettings()
+    const { baselayers } = useOffline()
+
+    // listen to changes in the offline context
+    useEffect(() => {
+        if (baselayers) {
+            setAvailableBaseLayer(baselayers)
+        }
+    }, [baselayers])
 
     // listen to changes on the geoserverUrl
     // TODO, this needs to be replaced by the offline service
@@ -80,14 +89,6 @@ export const LayersProvider: React.FC<React.PropsWithChildren> = ({ children }) 
                 setActiveInventoryLayer([ iv.length > 0 ? iv[0].name : '' ])
             })
             //.catch(err => console.log(err))
-            
-            wms.getBaseLayers(geoserverUrl)
-            .then(bl => {
-                // console.log(bl)
-                setAvailableBaseLayer(bl)
-                setActiveBaseLayer([])
-            })
-            .catch(err => console.log(err))
         }
     }, [geoserverUrl])
 

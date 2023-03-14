@@ -34,14 +34,18 @@ export interface OfflineImage {
 interface OfflineState {
     status: OFFLINE_STATUS,
     inventory: InventoryData | null;
+    baselayers: wms.BaseLayerData[] | null;
     getImageData: (name: string) => Promise<string>
+    getBaselayer: (name: string) => Promise<string>
 }
 
 // initial state
 const initialState: OfflineState = {
     status: 'pending',
     inventory: null,
-    getImageData: (name: string) => Promise.reject()
+    baselayers: null,
+    getImageData: (name: string) => Promise.reject(),
+    getBaselayer: (name: string) => Promise.reject()
 }
 
 // build the context
@@ -56,6 +60,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     // create the context state for data
     const [inventory, setInventory] = useState<InventoryData | null>(null)
     const [images, setImages] = useState<OfflineImage[] | null>(null)
+    const [baselayers, setBaseLayers] = useState<wms.BaseLayerData[] | null>(null)
 
     // handle the files
     const [localChecksums, setLocalChecksums] = useState<Checksums | null>(null)
@@ -177,26 +182,40 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     }
 
     const downloadBaselayer = async (): Promise<void> => {
-        const infos = []
-
         // before removing existing data, download the info from geoserver
-        await wms.getBaseLayers(serverUrl)
-            .then(layers => {
-                layers.forEach(layer => {
-                    wms.getBaseLayersImg(serverUrl, layer.name, layer.bbox, {width: 1024, height: 1024})
-                    infos.push(layer)
-                }
-            )})
-            .catch(err => Promise.reject(err))
-
+        const layers = await wms.getBaseLayers(geoserverUrl)
         
+        const infos = await Promise.all(layers.map(layer => {
+            // load the image as base64
+            const opts = {type: 'png', width: 2048, height: 2048}
+                return wms.getBaseLayersImg(geoserverUrl, layer.name, layer.bbox, opts).then(buf => {
+                    return {
+                        ...layer,
+                        data: buf,
+                        opt: opts
+                    }
+                })
+        }))
+
         // if baselayers already exists, delete it
         if (fileInfos?.map(i => i.name).includes('baselayers')) {
-            await Filesystem.rmdir({path: '/baselayers', directory: Directory.Data})
+            await Filesystem.rmdir({path: '/baselayers', directory: Directory.Data, recursive: true})
         }
-
+        
         // create the folder again
         await Filesystem.mkdir({path: '/baselayers', directory: Directory.Data})
+
+        // create all the files
+        await Promise.all(infos.map(info => {
+            return Filesystem.writeFile({
+                path: `/baselayers/${info.name}.json`,
+                directory: Directory.Data,
+                data: JSON.stringify(info),
+                encoding: Encoding.UTF8
+            })
+        })).then(() => {
+            updateLocalChecksums('baselayer')
+        })
     
     }
 
@@ -205,6 +224,36 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             const inv: InventoryData = JSON.parse(value.data)
             setInventory(inv)
         }).catch(err => console.log(`[loadInventory] ${err}`))
+    }
+
+    const loadBaselayerInfo = async () => {
+        // get the available groundlayer names
+        const names = await Filesystem.readdir({
+            path: '/baselayers',
+            directory: Directory.Data
+        }).then(files => {
+            return files.files.map(f => f.name)
+        })
+
+        // read the files
+        const layers = await Promise.all(names.map(name => {
+            return Filesystem.readFile({path: `/baselayers/${name}`, directory: Directory.Data}).then(res => {
+                // const {data, ...info} = JSON.parse(res.data)
+                // return info as wms.GroundLayerType
+                return JSON.parse(res.data) as wms.BaseLayerData
+            })
+        }))
+
+        // set the baselayers
+        setBaseLayers(layers)
+    }
+
+    const getBaselayer = (name: string) => {
+        return Filesystem.readFile({path: `/baselayers/${name}.json`, directory: Directory.Data})
+        .then(file => {
+            const {data, ...info} = JSON.parse(file.data)
+            return data as string
+        })
     }
 
     /**
@@ -267,6 +316,16 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
                 downloadImages()
             }
         }
+
+        if (!baselayers) {
+            if (localChecksums.baselayer! === remoteChecksums.baselayer!) {
+                console.log('loading baselayer')
+                loadBaselayerInfo()
+            } else {
+                console.log('downloading baselayer')
+                downloadBaselayer()
+            }
+        }
         
         // check each of the checksums
         // DEV ONLY
@@ -280,14 +339,21 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
 
     }, [localChecksums, remoteChecksums])
 
-    // dev
-    //downloadBaselayer()
+    // DEVELOPMENT ONLY!!!
+    // useEffect(() => {
+    //     if (fileInfos && fileInfos.length > 0) {
+    //         downloadBaselayer()
+    //     }
+    // }, [fileInfos])
+    
 
     // build the final context value
     const value = {
         status,
         inventory,
-        getImageData
+        baselayers,
+        getImageData,
+        getBaselayer
     }
 
     return <>
