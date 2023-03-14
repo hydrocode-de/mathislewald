@@ -62,9 +62,9 @@ const RangeFilter: React.FC = () => {
                 upper: Object(radius).upper,
               }}
               pin={true}
-              min={0}
-              max={100}
-              pinFormatter={(value: number) => `${value.toFixed(2)}%`}
+              min={(inventoryStats?.data?.radiusMin as number) * 100}
+              max={(inventoryStats?.data?.radiusMax as number) * 100}
+              pinFormatter={(value: number) => `${value.toFixed(0)}cm`}
               class="ion-no-padding"
               onIonChange={({ detail }) => {
                 if (detail.value) {
@@ -74,16 +74,10 @@ const RangeFilter: React.FC = () => {
               }}
             >
               <IonLabel color="medium" slot="start">
-                {inventoryStats &&
-                  ((inventoryStats?.data?.radiusMin as number) * 100).toFixed(
-                    0
-                  )}
+                {((inventoryStats?.data?.radiusMin as number) * 100).toFixed(0)}
               </IonLabel>
               <IonLabel color="medium" slot="end">
-                {inventoryStats &&
-                  ((inventoryStats?.data?.radiusMax as number) * 100).toFixed(
-                    0
-                  )}
+                {((inventoryStats?.data?.radiusMax as number) * 100).toFixed(0)}
               </IonLabel>
             </IonRange>
           </IonCol>
@@ -97,7 +91,7 @@ const RangeFilter: React.FC = () => {
               dualKnobs={true}
               value={{ lower: 10, upper: 50 }}
               pin={true}
-              pinFormatter={(value: number) => `${value.toFixed(2)}%`}
+              pinFormatter={(value: number) => `${value.toFixed(0)}%`}
               class="ion-no-padding"
             >
               <IonLabel color="medium" slot="start">
