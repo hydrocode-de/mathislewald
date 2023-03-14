@@ -14,9 +14,18 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import React from "react";
+import { RangeValue } from "@ionic/core";
+import React, { useState } from "react";
+import { useData } from "../context/data";
+
+// interface RangeChangeEventDetail {
+//   value: RangeValue;
+// }
 
 const RangeFilter: React.FC = () => {
+  const [radius, setRadius] = useState<RangeValue>({ lower: 0, upper: 100 });
+  const { filterValues, setFilterValues, inventoryStats } = useData();
+
   return (
     <IonList inset class="ion-padding">
       <IonGrid class="ion-no-padding">
@@ -43,21 +52,38 @@ const RangeFilter: React.FC = () => {
         </IonRow>
         <IonRow class="ion-align-items-center">
           <IonCol size="3">
-            <IonLabel class="ion-no-padding">BHD</IonLabel>
+            <IonLabel class="ion-no-padding">Radius</IonLabel>
           </IonCol>
           <IonCol>
             <IonRange
               dualKnobs={true}
-              value={{ lower: 10, upper: 50 }}
+              value={{
+                lower: Object(radius).lower,
+                upper: Object(radius).upper,
+              }}
               pin={true}
-              pinFormatter={(value: number) => `${value}%`}
+              min={0}
+              max={100}
+              pinFormatter={(value: number) => `${value.toFixed(2)}%`}
               class="ion-no-padding"
+              onIonChange={({ detail }) => {
+                if (detail.value) {
+                  console.log("e.detail.value:", Object(detail.value));
+                  setRadius(detail.value);
+                }
+              }}
             >
               <IonLabel color="medium" slot="start">
-                13
+                {inventoryStats &&
+                  ((inventoryStats?.data?.radiusMin as number) * 100).toFixed(
+                    0
+                  )}
               </IonLabel>
               <IonLabel color="medium" slot="end">
-                10
+                {inventoryStats &&
+                  ((inventoryStats?.data?.radiusMax as number) * 100).toFixed(
+                    0
+                  )}
               </IonLabel>
             </IonRange>
           </IonCol>
@@ -71,7 +97,7 @@ const RangeFilter: React.FC = () => {
               dualKnobs={true}
               value={{ lower: 10, upper: 50 }}
               pin={true}
-              pinFormatter={(value: number) => `${value}%`}
+              pinFormatter={(value: number) => `${value.toFixed(2)}%`}
               class="ion-no-padding"
             >
               <IonLabel color="medium" slot="start">
@@ -84,7 +110,28 @@ const RangeFilter: React.FC = () => {
           </IonCol>
         </IonRow>
         <IonRow class="ion-justify-content-end">
-          <IonButton class="ion-margin-top">Add Filter</IonButton>
+          <IonButton
+            disabled={
+              JSON.stringify(filterValues) ===
+              JSON.stringify({
+                radius: {
+                  lower: Object(radius).lower,
+                  upper: Object(radius).upper,
+                },
+              })
+            }
+            onClick={() => {
+              setFilterValues({
+                radius: {
+                  lower: Object(radius).lower,
+                  upper: Object(radius).upper,
+                },
+              });
+            }}
+            class="ion-margin-top"
+          >
+            Add Filter
+          </IonButton>
         </IonRow>
       </IonGrid>
     </IonList>
