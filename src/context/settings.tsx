@@ -16,6 +16,7 @@ interface SettingsState {
     activeDetailModal: ACTIVE_DETAIL
     setDetailTo: (detail: ACTIVE_DETAIL) => void
     closeDetail: () => void
+    changeBaseUrl: (newUrl: string) => void
 }
 
 // TODO: add the resource structures Public/Inventory etc
@@ -25,7 +26,8 @@ const initialState: SettingsState = {
     checksumUrl: 'http://geowwd.uni-freiburg.de/assets/checksums.json',
     activeDetailModal: 'none',
     setDetailTo: (detail: ACTIVE_DETAIL) => {},
-    closeDetail: () => {}
+    closeDetail: () => {},
+    changeBaseUrl: (newUrl: string) => {},
 }
 
 // create the Settings Context
@@ -44,6 +46,12 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
 
     const closeDetail = () => setActiveDetailModal('none')
 
+    const changeBaseUrl = (newUrl: string) => {
+        setServerUrl(newUrl)
+        setGeoserverUrl(`${newUrl}/geoserver`)
+        setChecksumUrl(`${newUrl}/assets/checksums.json`)
+    }
+
     // create the export value
     const value = {
         serverUrl,
@@ -51,7 +59,8 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
         checksumUrl,
         activeDetailModal,
         setDetailTo,
-        closeDetail
+        closeDetail,
+        changeBaseUrl
     }
 
     return <>
