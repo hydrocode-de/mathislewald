@@ -35,6 +35,8 @@ interface OfflineState {
     status: OFFLINE_STATUS,
     inventory: InventoryData | null;
     baselayers: wms.BaseLayerData[] | null;
+    localChecksums: Checksums | null;
+    remoteChecksums: Checksums | null;
     getImageData: (name: string) => Promise<string>
     getBaselayer: (name: string) => Promise<string>
 }
@@ -44,6 +46,8 @@ const initialState: OfflineState = {
     status: 'pending',
     inventory: null,
     baselayers: null,
+    localChecksums: null,
+    remoteChecksums: null,
     getImageData: (name: string) => Promise.reject(),
     getBaselayer: (name: string) => Promise.reject()
 }
@@ -256,9 +260,6 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         })
     }
 
-    /**
-     * 
-     */
     const getImageData = (filename: string): Promise<string> => {
         // read all images
         return Filesystem.readFile({
@@ -326,32 +327,15 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
                 downloadBaselayer()
             }
         }
-        
-        // check each of the checksums
-        // DEV ONLY
-        // Object.entries(remoteChecksums).forEach(([key, checksum]) => {
-        //     if (!localChecksums[key] || localChecksums[key] !== checksum) {
-        //         console.log(`Updating ${key} (${checksum})`)
-        //     } else {
-        //         console.log(`${key} (${checksum}) is up-to-date.`)
-        //     }
-        // })
-
-    }, [localChecksums, remoteChecksums])
-
-    // DEVELOPMENT ONLY!!!
-    // useEffect(() => {
-    //     if (fileInfos && fileInfos.length > 0) {
-    //         downloadBaselayer()
-    //     }
-    // }, [fileInfos])
-    
+    }, [localChecksums, remoteChecksums])    
 
     // build the final context value
     const value = {
         status,
         inventory,
         baselayers,
+        localChecksums,
+        remoteChecksums,
         getImageData,
         getBaselayer
     }
