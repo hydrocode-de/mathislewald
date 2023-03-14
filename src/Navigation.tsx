@@ -20,6 +20,7 @@ import DataLayerDrawer from "./components/DataLayerSelector";
 import TreeOverviewPage from "./pages/TreeOverviewPage";
 import InventoryListPage from "./pages/InventoryListPage";
 import MapPage from "./pages/MapPage";
+import SettingsPage from "./pages/SettingsPage";
 
 const MainTabs: React.FC = () => {
   return (
@@ -65,6 +66,9 @@ const SplitPaneNavigation: React.FC = () => {
             <MainTabs />
           </Route>
           <Route path="/list/:id" component={TreeOverviewPage} />
+          <Route exact path="/settings">
+            <SettingsPage />
+          </Route>
         </IonRouterOutlet>
       </IonSplitPane>
     </IonReactRouter>
