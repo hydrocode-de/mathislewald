@@ -14,6 +14,7 @@ interface SettingsState {
     geoserverUrl: string
     checksumUrl: string
     activeDetailModal: ACTIVE_DETAIL
+    
     setDetailTo: (detail: ACTIVE_DETAIL) => void
     closeDetail: () => void
     changeBaseUrl: (newUrl: string) => void

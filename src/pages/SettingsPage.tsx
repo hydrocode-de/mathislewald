@@ -79,7 +79,7 @@ const SettingsPage: React.FC = () => {
                         </IonList>
                     </IonAccordion>
 
-                    <IonAccordion value="local">
+                    <IonAccordion value="local" disabled>
                         <IonItem slot="header"><IonLabel>Local data cache</IonLabel></IonItem>
                     </IonAccordion>
 
