@@ -1,28 +1,17 @@
-import { IonAccordion, IonAccordionGroup, IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
-import { checkmark, close } from "ionicons/icons"
+import { useState } from "react"
 
-import { useEffect, useState } from "react"
+import { IonAccordion, IonAccordionGroup, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
+import { checkmark, close } from "ionicons/icons"
 
 import { useOffline } from "../context/offline"
 import pack from '../../package.json';
 import { useSettings } from "../context/settings";
 
 const SettingsPage: React.FC = () => {
-    const [imgs, setImgs] = useState<string[]>([])
-    
-
     // load offline context
-    const { baselayers, getBaselayer, localChecksums, remoteChecksums, status } = useOffline()
+    const { baselayers, localChecksums, remoteChecksums, status } = useOffline()
     const settings = useSettings()
     const [newUrl, setNewUrl] = useState<string>(settings.serverUrl)
-
-    useEffect(() => {
-        if (baselayers) {
-            Promise.all(baselayers.map(l => {
-                return getBaselayer(l.name)
-            })).then(sources => setImgs(sources))
-        }
-    }, [baselayers])
 
     return (
         <IonPage>
@@ -79,8 +68,36 @@ const SettingsPage: React.FC = () => {
                         </IonList>
                     </IonAccordion>
 
-                    <IonAccordion value="local" disabled>
-                        <IonItem slot="header"><IonLabel>Local data cache</IonLabel></IonItem>
+                    <IonAccordion value="local">
+                        <IonItem slot="header" color="light"><IonLabel>Local baselayers cache</IonLabel></IonItem>
+                        <div slot="content">
+                            <IonGrid>
+                                <IonRow>
+                                    { baselayers?.map(layer => (
+                                        <IonCol size="12" sizeMd="6" sizeLg="4">
+                                            <IonCard color="light">
+                                                <img src={`data:image/${layer.opt.type};base64,${layer.data}`} alt="thumbnail" />
+                                                <IonCardHeader>
+                                                    <IonCardTitle>{layer.title}</IonCardTitle>
+                                                </IonCardHeader>
+                                                <IonCardContent>
+                                                    { layer.abstract }
+                                                    <IonList>
+                                                        { Object.entries(layer.opt).map(([key, value]) => (
+                                                            <IonItem lines="none">
+                                                                <IonLabel slot="start">{ key }</IonLabel>
+                                                                <IonLabel><code>{ value }</code></IonLabel>
+                                                            </IonItem>
+                                                        )) }
+                                                    </IonList>
+                                                </IonCardContent>
+                                            </IonCard>
+                                        </IonCol>
+                                    )) }
+                                </IonRow>
+                            </IonGrid>
+                            <IonButton color="danger" fill="solid" expand="full" disabled>CLEAR baselayer cache</IonButton>
+                        </div>
                     </IonAccordion>
 
                 </IonAccordionGroup>
