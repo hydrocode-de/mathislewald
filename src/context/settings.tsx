@@ -14,10 +14,12 @@ interface SettingsState {
     geoserverUrl: string
     checksumUrl: string
     activeDetailModal: ACTIVE_DETAIL
-    
+    positionEnabled: boolean
     setDetailTo: (detail: ACTIVE_DETAIL) => void
     closeDetail: () => void
     changeBaseUrl: (newUrl: string) => void
+    activatePosition: () => void
+    deactivatePosition: () => void
 }
 
 // TODO: add the resource structures Public/Inventory etc
@@ -26,9 +28,12 @@ const initialState: SettingsState = {
     geoserverUrl: 'http://geowwd.uni-freiburg.de/geoserver',
     checksumUrl: 'http://geowwd.uni-freiburg.de/assets/checksums.json',
     activeDetailModal: 'none',
+    positionEnabled: false,
     setDetailTo: (detail: ACTIVE_DETAIL) => {},
     closeDetail: () => {},
     changeBaseUrl: (newUrl: string) => {},
+    activatePosition: () => {},
+    deactivatePosition: () => {}
 }
 
 // create the Settings Context
@@ -42,6 +47,9 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
 
     const [activeDetailModal, setActiveDetailModal] = useState<ACTIVE_DETAIL>('none')
 
+    // position state management
+    const [positionEnabled, setPositionEnabled] = useState<boolean>(false)
+
     // implement detail functions
     const setDetailTo = (detail: ACTIVE_DETAIL) => setActiveDetailModal(detail)
 
@@ -53,15 +61,26 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
         setChecksumUrl(`${newUrl}/assets/checksums.json`)
     }
 
+    const activatePosition = () => {
+        setPositionEnabled(true)
+    }
+
+    const deactivatePosition = () => {
+        setPositionEnabled(true)
+    }
+
     // create the export value
     const value = {
         serverUrl,
         geoserverUrl,
         checksumUrl,
         activeDetailModal,
+        positionEnabled,
         setDetailTo,
         closeDetail,
-        changeBaseUrl
+        changeBaseUrl,
+        activatePosition,
+        deactivatePosition
     }
 
     return <>

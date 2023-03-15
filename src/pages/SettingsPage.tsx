@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { IonAccordion, IonAccordionGroup, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
+import { IonAccordion, IonAccordionGroup, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToggle, IonToolbar } from "@ionic/react"
 import { checkmark, close } from "ionicons/icons"
 
 import { useOffline } from "../context/offline"
@@ -74,7 +74,7 @@ const SettingsPage: React.FC = () => {
                             <IonGrid>
                                 <IonRow>
                                     { baselayers?.map(layer => (
-                                        <IonCol size="12" sizeMd="6" sizeLg="4">
+                                        <IonCol size="12" sizeMd="6" sizeLg="4" key={layer.name}>
                                             <IonCard color="light">
                                                 <img src={`data:image/${layer.opt.type};base64,${layer.data}`} alt="thumbnail" />
                                                 <IonCardHeader>
@@ -84,7 +84,7 @@ const SettingsPage: React.FC = () => {
                                                     { layer.abstract }
                                                     <IonList>
                                                         { Object.entries(layer.opt).map(([key, value]) => (
-                                                            <IonItem lines="none">
+                                                            <IonItem lines="none" key={key}>
                                                                 <IonLabel slot="start">{ key }</IonLabel>
                                                                 <IonLabel><code>{ value }</code></IonLabel>
                                                             </IonItem>
@@ -98,6 +98,16 @@ const SettingsPage: React.FC = () => {
                             </IonGrid>
                             <IonButton color="danger" fill="solid" expand="full" disabled>CLEAR baselayer cache</IonButton>
                         </div>
+                    </IonAccordion>
+
+                    <IonAccordion value="position">
+                        <IonItem slot="header" color="light">Device position</IonItem>
+                        <IonList slot="content">
+                            <IonItem lines="none" onClick={() => settings.positionEnabled ? settings.deactivatePosition() : settings.activatePosition() } style={{curser: 'pointer'}}>
+                                <IonLabel slot="start">enable GPS positioning</IonLabel>
+                                <IonToggle checked={settings.positionEnabled} color={settings.positionEnabled ? 'success' : 'danger'} enableOnOffLabels slot="end" mode="ios" />
+                            </IonItem>
+                        </IonList>
                     </IonAccordion>
 
                 </IonAccordionGroup>
