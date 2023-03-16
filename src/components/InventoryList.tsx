@@ -6,29 +6,22 @@ import {
   IonCol,
   IonGrid,
   IonIcon,
-  IonItem,
-  IonItemDivider,
   IonLabel,
-  IonList,
   IonListHeader,
   IonRow,
-  IonSearchbar,
-  IonText,
 } from "@ionic/react";
 import {
   arrowForwardOutline,
-  caretForwardOutline,
-  fileTray,
   filterOutline,
   navigateOutline,
 } from "ionicons/icons";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { useData } from "../context/data";
-import FilterBar from "./FilterBar";
 
 const InventoryList: React.FC = () => {
   const [hovered, setHovered] = useState(0);
+
   // load the filtered inventory list
   const { filteredInventory } = useData();
   console.log(filteredInventory);
