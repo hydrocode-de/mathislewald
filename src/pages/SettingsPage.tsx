@@ -107,6 +107,12 @@ const SettingsPage: React.FC = () => {
                                 <IonLabel slot="start">enable GPS positioning</IonLabel>
                                 <IonToggle checked={settings.positionEnabled} color={settings.positionEnabled ? 'success' : 'danger'} enableOnOffLabels slot="end" mode="ios" />
                             </IonItem>
+                            <IonItem lines="none">
+                                <IonLabel slot="start">Last position</IonLabel>
+                                { settings.position ? (
+                                    <IonLabel>Lon: {settings.position.coords.longitude}  Lat: {settings.position.coords.latitude}</IonLabel>
+                                ) : (<IonLabel><i>no GPS, or not activated</i></IonLabel>)}
+                            </IonItem>
                         </IonList>
                     </IonAccordion>
 

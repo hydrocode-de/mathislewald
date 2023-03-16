@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react"
+import { Geolocation, Position } from "@capacitor/geolocation"
 
 
 export type ACTIVE_DETAIL = 'tree' | 'list' | 'none';
@@ -15,6 +16,7 @@ interface SettingsState {
     checksumUrl: string
     activeDetailModal: ACTIVE_DETAIL
     positionEnabled: boolean
+    position: Position | null
     setDetailTo: (detail: ACTIVE_DETAIL) => void
     closeDetail: () => void
     changeBaseUrl: (newUrl: string) => void
@@ -29,6 +31,7 @@ const initialState: SettingsState = {
     checksumUrl: 'http://geowwd.uni-freiburg.de/assets/checksums.json',
     activeDetailModal: 'none',
     positionEnabled: false,
+    position: null,
     setDetailTo: (detail: ACTIVE_DETAIL) => {},
     closeDetail: () => {},
     changeBaseUrl: (newUrl: string) => {},
@@ -49,6 +52,8 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
 
     // position state management
     const [positionEnabled, setPositionEnabled] = useState<boolean>(false)
+    const [positionWatchId, setPositionWatchId] = useState<string | null>(null)
+    const [position, setPosition] = useState<Position | null>(null)
 
     // implement detail functions
     const setDetailTo = (detail: ACTIVE_DETAIL) => setActiveDetailModal(detail)
@@ -62,11 +67,22 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
     }
 
     const activatePosition = () => {
-        setPositionEnabled(true)
+        Geolocation.watchPosition({enableHighAccuracy: true}, pos => {
+            if (pos) setPosition(pos)
+        }).then(watchId => {
+            setPositionWatchId(watchId)
+            setPositionEnabled(true)
+        })
     }
 
     const deactivatePosition = () => {
-        setPositionEnabled(true)
+        if (positionWatchId) {
+            Geolocation.clearWatch({id: positionWatchId}).then(() => {
+                setPositionWatchId(null)
+                setPosition(null)
+                setPositionEnabled(false)
+            })
+        }
     }
 
     // create the export value
@@ -76,6 +92,7 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
         checksumUrl,
         activeDetailModal,
         positionEnabled,
+        position,
         setDetailTo,
         closeDetail,
         changeBaseUrl,
