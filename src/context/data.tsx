@@ -25,7 +25,7 @@ interface Count {
 interface DataState {
     allInventory: InventoryData | null;
     filteredInventory: InventoryData | null;
-    inventoryCount: Count,
+    inventoryCount: Count,                      // count inventory here to keep UI code cleaner
     synced: boolean;
 }
 
