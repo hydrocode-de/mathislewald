@@ -25,7 +25,9 @@ interface LayersState {
     setInventoryLayerTo: (layers: string[]) => void;
     setBaseLayerTo: (layers: string[]) => void;
     setDataLayerTo: (layers: string[]) => void;
-    
+
+    // interactions with layers
+    flyToFeature: (name: string) => void;
 }
 
 // initial state
@@ -44,7 +46,8 @@ const initialState: LayersState = {
     deactivateDataLayer: (layer: string) => {},
     setInventoryLayerTo: (layers: string[]) => {},
     setBaseLayerTo: (layers: string[]) => {},
-    setDataLayerTo: (layers: string[]) => {}
+    setDataLayerTo: (layers: string[]) => {},
+    flyToFeature: (name: string) => {}
 
 }
 
@@ -171,7 +174,8 @@ export const LayersProvider: React.FC<React.PropsWithChildren> = ({ children }) 
         deactivateBaseLayer,
         setInventoryLayerTo,
         setDataLayerTo,
-        setBaseLayerTo
+        setBaseLayerTo,
+        flyToFeature: initialState.flyToFeature
     }
 
     return <>
