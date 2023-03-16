@@ -34,7 +34,7 @@ const UserLocationSource: React.FC = () => {
                 properties: {}
             })
         } else {
-            setUserPos(undefined)
+            setUserPos({type: 'Feature', geometry: {type: 'Point', coordinates: []}, properties: {}})
         }
     }, [position])
 
