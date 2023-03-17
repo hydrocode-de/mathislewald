@@ -14,17 +14,23 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { RangeValue } from "@ionic/core";
+// import { RangeValue } from "@ionic/core";
 import React, { useState } from "react";
 import { useData } from "../context/data";
+import { isEqual } from "lodash";
 
 // interface RangeChangeEventDetail {
 //   value: RangeValue;
 // }
 
+interface RangeValue {
+  lower: number;
+  upper: number;
+}
+
 const RangeFilter: React.FC = () => {
-  const [radius, setRadius] = useState<RangeValue>({ lower: 0, upper: 100 });
   const { filterValues, setFilterValues, inventoryStats } = useData();
+  const [radius, setRadius] = useState<RangeValue>({ ...filterValues.radius });
 
   return (
     <IonList inset class="ion-padding">
@@ -57,10 +63,7 @@ const RangeFilter: React.FC = () => {
           <IonCol>
             <IonRange
               dualKnobs={true}
-              value={{
-                lower: Object(radius).lower,
-                upper: Object(radius).upper,
-              }}
+              value={radius}
               pin={true}
               min={(inventoryStats?.data?.radiusMin as number) * 100}
               max={(inventoryStats?.data?.radiusMax as number) * 100}
@@ -69,7 +72,7 @@ const RangeFilter: React.FC = () => {
               onIonChange={({ detail }) => {
                 if (detail.value) {
                   console.log("e.detail.value:", Object(detail.value));
-                  setRadius(detail.value);
+                  setRadius(detail.value as RangeValue);
                 }
               }}
             >
@@ -84,14 +87,15 @@ const RangeFilter: React.FC = () => {
         </IonRow>
         <IonRow class="ion-align-items-center">
           <IonCol size="3">
-            <IonLabel class="ion-no-padding">ID</IonLabel>
+            <IonLabel class="ion-no-padding">Distance</IonLabel>
           </IonCol>
           <IonCol class="ion-align-items-center">
             <IonRange
-              dualKnobs={true}
-              value={{ lower: 10, upper: 50 }}
+              //   dualKnobs={true}
+              disabled
+              value={10}
               pin={true}
-              pinFormatter={(value: number) => `${value.toFixed(0)}%`}
+              pinFormatter={(value: number) => `${value.toFixed(0)}m`}
               class="ion-no-padding"
             >
               <IonLabel color="medium" slot="start">
@@ -105,22 +109,9 @@ const RangeFilter: React.FC = () => {
         </IonRow>
         <IonRow class="ion-justify-content-end">
           <IonButton
-            disabled={
-              JSON.stringify(filterValues) ===
-              JSON.stringify({
-                radius: {
-                  lower: Object(radius).lower,
-                  upper: Object(radius).upper,
-                },
-              })
-            }
+            disabled={isEqual(filterValues.radius, radius)}
             onClick={() => {
-              setFilterValues({
-                radius: {
-                  lower: Object(radius).lower,
-                  upper: Object(radius).upper,
-                },
-              });
+              setFilterValues({ radius });
             }}
             class="ion-margin-top"
           >
