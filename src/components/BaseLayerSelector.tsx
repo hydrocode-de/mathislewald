@@ -38,7 +38,7 @@ const BaseLayerVisualSelector: React.FC = () => {
   // console.log("BaseLayerVisualSelector: ", layers.activateBaseLayer);
 
   return (
-    <IonGrid>
+    <IonGrid fixed>
       <IonRow>
         <IonCol>
           <div
@@ -244,15 +244,16 @@ export const BaseLayerPopover: React.FC = () => {
       trigger="open-modal"
       triggerAction="click"
       reference="trigger"
-      side="bottom"
+      side="top"
       arrow={true}
       showBackdrop={false}
-      style={{ "--offset-y": "10px" }}
+      style={{ "--offset-y": "-10px" }}
     >
-      {/* <div style={{ height: "100vh" }}> */}
-      {/* <BaseLayerSelector /> */}
-      <BaseLayerVisualSelector />
-      {/* </div> */}
+      <div style={{ height: "100vh" }}>
+        {/* <BaseLayerSelector /> */}
+
+        <BaseLayerVisualSelector />
+      </div>
     </IonPopover>
   );
 };
