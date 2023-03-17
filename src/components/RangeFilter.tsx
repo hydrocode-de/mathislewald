@@ -92,7 +92,7 @@ const RangeFilter: React.FC = () => {
         </IonRow>
         <IonRow class="ion-align-items-center">
           <IonCol size="3">
-            <IonLabel class="ion-no-padding">Distance</IonLabel>
+            <IonLabel class="ion-no-padding">Dist.</IonLabel>
           </IonCol>
           <IonCol class="ion-align-items-center">
             <IonRange
