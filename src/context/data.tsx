@@ -17,14 +17,16 @@ import { InventoryData } from "./data.model";
 
 interface FilterValues {
   radius: { lower: number; upper: number };
+  height: { lower: number; upper: number };
 }
 // model for
 interface InventoryDataStats {
   data:
     | {
-        totalTrees: number;
         radiusMax: number;
         radiusMin: number;
+        heightMax: number;
+        heightMin: number;
       }
     | undefined;
 }
@@ -44,7 +46,10 @@ const initialState: DataState = {
   allInventory: null,
   filteredInventory: null,
   synced: false,
-  filterValues: { radius: { lower: 10, upper: 90 } },
+  filterValues: {
+    radius: { lower: 10, upper: 90 },
+    height: { lower: 10, upper: 90 },
+  },
   setFilterValues: (value: FilterValues) => {},
   inventoryStats: null,
 };
@@ -63,7 +68,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   // create state for synchronization
   const [synced, setSynced] = useState<boolean>(false);
   const [filterValues, setFilterValues] = useState<FilterValues>({
-    radius: { lower: 10, upper: 90 },
+    radius: { lower: 0, upper: 90 },
+    height: { lower: 0, upper: 90 },
   });
 
   // use the offline context
@@ -75,12 +81,17 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       setAllInventory(inventory);
       setInventoryStats({
         data: {
-          totalTrees: inventory.features.length,
           radiusMax: Math.max(
             ...inventory.features.map((f) => f.properties.radius)
           ),
           radiusMin: Math.min(
             ...inventory.features.map((f) => f.properties.radius)
+          ),
+          heightMax: Math.max(
+            ...inventory.features.map((f) => f.properties.height)
+          ),
+          heightMin: Math.min(
+            ...inventory.features.map((f) => f.properties.height)
           ),
         },
       });
@@ -103,7 +114,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
             allInventory.features.filter(
               (f) =>
                 f.properties.radius > filterValues.radius.lower / 100 &&
-                f.properties.radius < filterValues.radius.upper / 100
+                f.properties.radius < filterValues.radius.upper / 100 &&
+                f.properties.height > filterValues.height.lower &&
+                f.properties.height < filterValues.height.upper
             )
           ),
         ],

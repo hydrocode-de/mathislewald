@@ -31,6 +31,7 @@ interface RangeValue {
 const RangeFilter: React.FC = () => {
   const { filterValues, setFilterValues, inventoryStats } = useData();
   const [radius, setRadius] = useState<RangeValue>({ ...filterValues.radius });
+  const [height, setHeight] = useState<RangeValue>({ ...filterValues.height });
 
   return (
     <IonList inset class="ion-padding">
@@ -42,16 +43,24 @@ const RangeFilter: React.FC = () => {
           <IonCol>
             <IonRange
               dualKnobs={true}
-              value={{ lower: 10, upper: 90 }}
+              value={height}
               pin={true}
-              pinFormatter={(value: number) => `${value}%`}
+              min={inventoryStats?.data?.heightMin as number}
+              max={inventoryStats?.data?.heightMax as number}
+              onIonChange={({ detail }) => {
+                if (detail.value) {
+                  console.log("e.detail.value:", Object(detail.value));
+                  setHeight(detail.value as RangeValue);
+                }
+              }}
+              pinFormatter={(value: number) => `${value.toFixed(0)}m`}
               class="ion-no-padding"
             >
               <IonLabel color="medium" slot="start">
-                10
+                {inventoryStats?.data?.heightMin.toFixed(0)}
               </IonLabel>
               <IonLabel color="medium" slot="end">
-                10
+                {inventoryStats?.data?.heightMax.toFixed(0)}
               </IonLabel>
             </IonRange>
           </IonCol>
@@ -99,19 +108,25 @@ const RangeFilter: React.FC = () => {
               class="ion-no-padding"
             >
               <IonLabel color="medium" slot="start">
-                10
+                0
               </IonLabel>
               <IonLabel color="medium" slot="end">
-                11
+                100
               </IonLabel>
             </IonRange>
           </IonCol>
         </IonRow>
         <IonRow class="ion-justify-content-end">
           <IonButton
-            disabled={isEqual(filterValues.radius, radius)}
+            disabled={
+              isEqual(filterValues.radius, radius) &&
+              isEqual(filterValues.height, height)
+            }
             onClick={() => {
-              setFilterValues({ radius });
+              setFilterValues({
+                radius: { ...radius },
+                height: { ...height },
+              });
             }}
             class="ion-margin-top"
           >
