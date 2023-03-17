@@ -11,7 +11,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { layers } from "ionicons/icons";
+import { layers, map, settings } from "ionicons/icons";
 import { useRef } from "react";
 
 import MainMap from "../components/MainMapMaplibre";
@@ -36,7 +36,14 @@ const MapPage: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonMenuButton />
+            <IonMenuButton>
+              <IonIcon icon={layers} color="primary" />
+            </IonMenuButton>
+          </IonButtons>
+          <IonButtons slot="end">
+            <IonButton>
+              <IonIcon icon={settings} color="primary" />
+            </IonButton>
           </IonButtons>
           <IonTitle>Mathislewald</IonTitle>
         </IonToolbar>
@@ -45,7 +52,7 @@ const MapPage: React.FC = () => {
       <IonContent fullscreen>
         <IonFab slot="fixed" horizontal="end" vertical="top">
           <IonFabButton id="open-modal">
-            <IonIcon icon={layers} />
+            <IonIcon icon={map} />
           </IonFabButton>
         </IonFab>
 
