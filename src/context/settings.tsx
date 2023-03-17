@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react"
+import { Geolocation, Position } from "@capacitor/geolocation"
 
 
 export type ACTIVE_DETAIL = 'tree' | 'list' | 'none';
@@ -14,8 +15,13 @@ interface SettingsState {
     geoserverUrl: string
     checksumUrl: string
     activeDetailModal: ACTIVE_DETAIL
+    positionEnabled: boolean
+    position: Position | null
     setDetailTo: (detail: ACTIVE_DETAIL) => void
     closeDetail: () => void
+    changeBaseUrl: (newUrl: string) => void
+    activatePosition: () => void
+    deactivatePosition: () => void
 }
 
 // TODO: add the resource structures Public/Inventory etc
@@ -24,8 +30,13 @@ const initialState: SettingsState = {
     geoserverUrl: 'http://geowwd.uni-freiburg.de/geoserver',
     checksumUrl: 'http://geowwd.uni-freiburg.de/assets/checksums.json',
     activeDetailModal: 'none',
+    positionEnabled: false,
+    position: null,
     setDetailTo: (detail: ACTIVE_DETAIL) => {},
-    closeDetail: () => {}
+    closeDetail: () => {},
+    changeBaseUrl: (newUrl: string) => {},
+    activatePosition: () => {},
+    deactivatePosition: () => {}
 }
 
 // create the Settings Context
@@ -39,10 +50,40 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
 
     const [activeDetailModal, setActiveDetailModal] = useState<ACTIVE_DETAIL>('none')
 
+    // position state management
+    const [positionEnabled, setPositionEnabled] = useState<boolean>(false)
+    const [positionWatchId, setPositionWatchId] = useState<string | null>(null)
+    const [position, setPosition] = useState<Position | null>(null)
+
     // implement detail functions
     const setDetailTo = (detail: ACTIVE_DETAIL) => setActiveDetailModal(detail)
 
     const closeDetail = () => setActiveDetailModal('none')
+
+    const changeBaseUrl = (newUrl: string) => {
+        setServerUrl(newUrl)
+        setGeoserverUrl(`${newUrl}/geoserver`)
+        setChecksumUrl(`${newUrl}/assets/checksums.json`)
+    }
+
+    const activatePosition = () => {
+        Geolocation.watchPosition({enableHighAccuracy: true}, pos => {
+            if (pos) setPosition(pos)
+        }).then(watchId => {
+            setPositionWatchId(watchId)
+            setPositionEnabled(true)
+        })
+    }
+
+    const deactivatePosition = () => {
+        if (positionWatchId) {
+            Geolocation.clearWatch({id: positionWatchId}).then(() => {
+                setPositionWatchId(null)
+                setPosition(null)
+                setPositionEnabled(false)
+            })
+        }
+    }
 
     // create the export value
     const value = {
@@ -50,8 +91,13 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
         geoserverUrl,
         checksumUrl,
         activeDetailModal,
+        positionEnabled,
+        position,
         setDetailTo,
-        closeDetail
+        closeDetail,
+        changeBaseUrl,
+        activatePosition,
+        deactivatePosition
     }
 
     return <>
