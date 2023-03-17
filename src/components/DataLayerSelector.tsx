@@ -43,7 +43,7 @@ const DataLayerDrawer: React.FC = () => {
         {layers.availableInventoryLayer.map((l) => (
           <IonItem lines="none" key={l.name}>
             <IonLabel>{l.title}</IonLabel>
-            <IonButton slot="start" fill="clear" disabled={!layers.activeInventoryLayer.includes(l.name)}>
+            <IonButton slot="start" fill="clear" disabled={!layers.activeInventoryLayer.includes(l.name)} onClick={() => layers.flyToFeature('inventory')}>
               <IonIcon icon={scanOutline} slot="icon-only" />
             </IonButton>
             <IonToggle
