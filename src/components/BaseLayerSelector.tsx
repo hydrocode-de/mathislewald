@@ -56,8 +56,8 @@ const BaseLayerVisualSelector: React.FC = () => {
                 layers.setBaseLayerTo([""]);
               }}
               style={{
-                height: 100,
-                width: 100,
+                height: 150,
+                width: 150,
                 padding: isHoverOSM ? 2 : 0,
                 borderColor: "lightgreen",
                 borderWidth: 4,
@@ -66,7 +66,7 @@ const BaseLayerVisualSelector: React.FC = () => {
               }}
             >
               <IonImg
-                style={{ height: 100, opacity: 0.6 }}
+                style={{ height: 150, opacity: 0.6 }}
                 src="assets/openstreetmap.png"
               ></IonImg>
             </IonButton>
@@ -88,13 +88,13 @@ const BaseLayerVisualSelector: React.FC = () => {
               onClick={() => {
                 layers.setBaseLayerTo(["density"]);
               }}
-              style={{ height: 100, width: 100 }}
+              style={{ height: 150, width: 150 }}
             >
               <IonImg
                 src="assets/density.png"
                 style={{
-                  height: 100,
-                  width: 100,
+                  height: 150,
+                  width: 150,
                   padding: isHoverDens ? 2 : 0,
                   borderColor: "lightgreen",
                   borderWidth: 4,
@@ -124,12 +124,12 @@ const BaseLayerVisualSelector: React.FC = () => {
               onClick={() => {
                 layers.setBaseLayerTo(["dtm"]);
               }}
-              style={{ height: 100, width: 100 }}
+              style={{ height: 150, width: 150 }}
             >
               <IonImg
                 style={{
-                  height: 100,
-                  width: 100,
+                  height: 150,
+                  width: 150,
                   padding: isHoverDTM ? 2 : 0,
                   borderColor: "lightgreen",
                   borderWidth: 4,
@@ -157,13 +157,13 @@ const BaseLayerVisualSelector: React.FC = () => {
               onClick={() => {
                 layers.setBaseLayerTo(["ortho"]);
               }}
-              style={{ height: 100, width: 100 }}
+              style={{ height: 150, width: 150 }}
             >
               <IonImg
                 src="assets/ortho.png"
                 style={{
-                  height: 100,
-                  width: 100,
+                  height: 150,
+                  width: 150,
                   padding: isHoverOrtho ? 2 : 0,
                   borderColor: "lightgreen",
                   borderWidth: 4,
@@ -224,7 +224,7 @@ export const BaseLayerSheetModal: React.FC<{
   modal: React.RefObject<HTMLIonModalElement>;
 }> = ({ modal }) => {
   return (
-    <IonModal ref={modal} trigger="open-modal" initialBreakpoint={0.4}>
+    <IonModal ref={modal} trigger="open-modal" initialBreakpoint={0.6}>
       <IonToolbar>
         <IonTitle>Map Selection</IonTitle>
         <IonButtons slot="end">
