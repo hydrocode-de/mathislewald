@@ -67,6 +67,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
 
   // create state for synchronization
   const [synced, setSynced] = useState<boolean>(false);
+  //TODO: Use real values instread.
   const [filterValues, setFilterValues] = useState<FilterValues>({
     radius: { lower: 0, upper: 90 },
     height: { lower: 0, upper: 90 },
