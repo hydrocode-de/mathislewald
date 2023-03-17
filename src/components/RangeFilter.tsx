@@ -14,14 +14,10 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-// import { RangeValue } from "@ionic/core";
+
 import React, { useState } from "react";
 import { useData } from "../context/data";
 import { isEqual } from "lodash";
-
-// interface RangeChangeEventDetail {
-//   value: RangeValue;
-// }
 
 interface RangeValue {
   lower: number;
@@ -49,7 +45,7 @@ const RangeFilter: React.FC = () => {
               max={inventoryStats?.data?.heightMax as number}
               onIonChange={({ detail }) => {
                 if (detail.value) {
-                  console.log("e.detail.value:", Object(detail.value));
+                  // console.log("e.detail.value:", Object(detail.value));
                   setHeight(detail.value as RangeValue);
                 }
               }}
@@ -80,7 +76,7 @@ const RangeFilter: React.FC = () => {
               class="ion-no-padding"
               onIonChange={({ detail }) => {
                 if (detail.value) {
-                  console.log("e.detail.value:", Object(detail.value));
+                  // console.log("e.detail.value:", Object(detail.value));
                   setRadius(detail.value as RangeValue);
                 }
               }}
