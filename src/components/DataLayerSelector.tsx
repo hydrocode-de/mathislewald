@@ -1,7 +1,8 @@
 import {
   IonBadge,
-  IonCheckbox,
+  IonButton,
   IonContent,
+  IonIcon,
   IonItem,
   IonLabel,
   IonList,
