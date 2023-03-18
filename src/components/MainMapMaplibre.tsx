@@ -6,6 +6,7 @@ import Map from "react-map-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import InventorySource from "./map-components/InventorySource";
 import BaseLayerSource from "./map-components/BaseLayerSource";
+import UserLocationSource from "./map-components/UserLocationSource";
 const MainMap: React.FC = () => {
   // onload callback handler
   const onLoad = (e: any) => {
@@ -74,6 +75,7 @@ const MainMap: React.FC = () => {
     >
       <InventorySource />
       <BaseLayerSource />
+      <UserLocationSource />
     </Map>
   );
 };
