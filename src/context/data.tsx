@@ -11,6 +11,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import cloneDeep from "lodash.clonedeep";
+import bbox from "@turf/bbox";
 
 import { useOffline } from "./offline";
 import { InventoryData } from "./data.model";
@@ -165,12 +166,12 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   // re-filter inventory when allInventory changes
   useEffect(() => {
     if (allInventory) {
-      console.log("allInventory:", allInventory);
-      console.log("filterValues:", filterValues);
+//      console.log("allInventory:", allInventory);
+//      console.log("filterValues:", filterValues);
+      
       // TODO build the filter here
       const inv = {
         type: "FeatureCollection",
-        bbox: allInventory?.bbox, // TODO after filter, update this
         features: [
           ...cloneDeep(
             allInventory.features.filter(
@@ -183,7 +184,12 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
           ),
         ],
       } as InventoryData;
+
+      // update the bounding box
+      inv.bbox = bbox(inv)
       setFilteredInventory(inv);
+      
+      // set the counts as state for performance reasons
       setInventoryCount({
         total: allInventory.features.length,
         filtered: inv.features.length,
@@ -193,7 +199,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       setFilteredInventory(undefined);
       setInventoryCount({ total: 0, filtered: 0 });
     }
-    console.log("filteredInventory:", filteredInventory);
+//    console.log("filteredInventory:", filteredInventory);
   }, [allInventory, filterValues]);
 
   // create the final value
