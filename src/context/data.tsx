@@ -16,10 +16,16 @@ import { useOffline } from "./offline";
 import { InventoryData } from "./data.model";
 
 
+interface Count {
+    total: number,
+    filtered: number
+}
+
 // model the data types
 interface DataState {
     allInventory: InventoryData | null;
     filteredInventory: InventoryData | null;
+    inventoryCount: Count,                      // count inventory here to keep UI code cleaner
     synced: boolean;
 }
 
@@ -27,6 +33,7 @@ interface DataState {
 const initialState: DataState = {
     allInventory: null,
     filteredInventory: null,
+    inventoryCount: {total: 0, filtered: 0},
     synced: false
 }
 
@@ -38,6 +45,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     // create internal state of the provider
     const [allInventory, setAllInventory] = useState<InventoryData>()
     const [filteredInventory, setFilteredInventory] = useState<InventoryData>()
+    const [inventoryCount, setInventoryCount] = useState<Count>(initialState.inventoryCount)
 
     // create state for synchronization
     const [synced, setSynced] = useState<boolean>(false)
@@ -49,8 +57,10 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     useEffect(() => {
         if (inventory) {
             setAllInventory(inventory)
+            setInventoryCount({total: inventory.features.length, filtered: inventory.features.length})
         } else {
             setAllInventory(undefined)
+            setInventoryCount({total: 0, filtered: 0})
         }
     }, [inventory])
 
@@ -63,10 +73,14 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
                 bbox: allInventory?.bbox,  // TODO after filter, update this
                 features: [...cloneDeep(allInventory.features.filter(f => true))]
             } as InventoryData
+
+            // set States
             setFilteredInventory(inv)
+            setInventoryCount({total: allInventory.features.length, filtered: inv.features.length})
             setSynced(true)
         } else {
             setFilteredInventory(undefined)
+            setInventoryCount({total: 0, filtered: 0})
         }
     }, [allInventory])
 
@@ -74,6 +88,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     const value = {
         allInventory: allInventory || null,
         filteredInventory: filteredInventory || null,
+        inventoryCount,
         synced
     }
 
