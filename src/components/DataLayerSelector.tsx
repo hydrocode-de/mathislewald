@@ -15,6 +15,7 @@ import { scanOutline } from "ionicons/icons";
 import { useData } from "../context/data";
 import { useLayers } from "../context/layers";
 import FilterBar from "./FilterBar";
+import RangeFilter from "./RangeFilter";
 
 const DataLayerDrawer: React.FC = () => {
   // subscribe to the available Inventories
@@ -61,7 +62,7 @@ const DataLayerDrawer: React.FC = () => {
           <IonBadge style={{ marginLeft: "10px" }}>{ inventoryCount.filtered }</IonBadge>
         </IonLabel>
       </IonListHeader>
-      <FilterBar />
+      <RangeFilter />
 
       <IonListHeader mode="ios">
         <IonLabel>Description</IonLabel>

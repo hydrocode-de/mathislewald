@@ -1,11 +1,11 @@
 /**
  * Data context
- * 
+ *
  * This context loads the data into the application.
  * In the final version, it will synchronize the data to localstorage and
  * then load from the localstorage to this context.
- * 
- * The application will only subscribe to this context in order to implement 
+ *
+ * The application will only subscribe to this context in order to implement
  * future changes to the data model
  */
 
@@ -15,91 +15,206 @@ import cloneDeep from "lodash.clonedeep";
 import { useOffline } from "./offline";
 import { InventoryData } from "./data.model";
 
+interface FilterValues {
+  radius: { lower: number; upper: number };
+  height: { lower: number; upper: number };
+}
+// model for
+interface InventoryDataStats {
+  data:
+    | {
+        radiusMax: number;
+        radiusMin: number;
+        heightMax: number;
+        heightMin: number;
+      }
+    | undefined;
+}
 
 interface Count {
-    total: number,
-    filtered: number
+  total: number;
+  filtered: number;
 }
 
 // model the data types
 interface DataState {
-    allInventory: InventoryData | null;
-    filteredInventory: InventoryData | null;
-    inventoryCount: Count,                      // count inventory here to keep UI code cleaner
-    synced: boolean;
+  allInventory: InventoryData | null;
+  filteredInventory: InventoryData | null;
+  inventoryCount: Count;
+  synced: boolean;
+  filterValues: FilterValues;
+  setFilterValues: (value: FilterValues) => void;
+  inventoryStats: InventoryDataStats | null;
 }
 
 // initial empty state
 const initialState: DataState = {
-    allInventory: null,
-    filteredInventory: null,
-    inventoryCount: {total: 0, filtered: 0},
-    synced: false
-}
+  allInventory: null,
+  filteredInventory: null,
+  inventoryCount: { total: 0, filtered: 0 },
+  synced: false,
+  filterValues: {
+    radius: { lower: 10, upper: 90 },
+    height: { lower: 10, upper: 90 },
+  },
+  setFilterValues: (value: FilterValues) => {},
+  inventoryStats: null,
+};
 
 // build the context
-const DataContext = createContext(initialState)
+const DataContext = createContext(initialState);
 
+export const DataProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
+  // create internal state of the provider
+  const [allInventory, setAllInventory] = useState<InventoryData>();
+  const [filteredInventory, setFilteredInventory] = useState<InventoryData>();
+  const [inventoryStats, setInventoryStats] = useState<InventoryDataStats>();
+  const [inventoryCount, setInventoryCount] = useState<Count>(
+    initialState.inventoryCount
+  );
 
-export const DataProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-    // create internal state of the provider
-    const [allInventory, setAllInventory] = useState<InventoryData>()
-    const [filteredInventory, setFilteredInventory] = useState<InventoryData>()
-    const [inventoryCount, setInventoryCount] = useState<Count>(initialState.inventoryCount)
+  // create state for synchronization
+  const [synced, setSynced] = useState<boolean>(false);
+  //TODO: Use real values instread.
+  const [filterValues, setFilterValues] = useState<FilterValues>({
+    radius: { lower: 0, upper: 90 },
+    height: { lower: 0, upper: 90 },
+  });
 
-    // create state for synchronization
-    const [synced, setSynced] = useState<boolean>(false)
+  // use the offline context
+  const { inventory } = useOffline();
 
-    // use the offline context
-    const { inventory } = useOffline()
+  // copy over inventory data
+  useEffect(() => {
+    if (inventory) {
+      setAllInventory(inventory);
+      setInventoryStats({
+        data: {
+          radiusMax: Math.max(
+            ...inventory.features.map((f) => f.properties.radius)
+          ),
+          radiusMin: Math.min(
+            ...inventory.features.map((f) => f.properties.radius)
+          ),
+          heightMax: Math.max(
+            ...inventory.features.map((f) => f.properties.height)
+          ),
+          heightMin: Math.min(
+            ...inventory.features.map((f) => f.properties.height)
+          ),
+        },
+      });
 
-    // copy over inventory data
-    useEffect(() => {
-        if (inventory) {
-            setAllInventory(inventory)
-            setInventoryCount({total: inventory.features.length, filtered: inventory.features.length})
-        } else {
-            setAllInventory(undefined)
-            setInventoryCount({total: 0, filtered: 0})
-        }
-    }, [inventory])
-
-    // re-filter inventory when allInventory changes
-    useEffect(() => {
-        if (allInventory) {
-            // TODO build the filter here
-            const inv = {
-                type: 'FeatureCollection',
-                bbox: allInventory?.bbox,  // TODO after filter, update this
-                features: [...cloneDeep(allInventory.features.filter(f => true))]
-            } as InventoryData
-
-            // set States
-            setFilteredInventory(inv)
-            setInventoryCount({total: allInventory.features.length, filtered: inv.features.length})
-            setSynced(true)
-        } else {
-            setFilteredInventory(undefined)
-            setInventoryCount({total: 0, filtered: 0})
-        }
-    }, [allInventory])
-
-    // create the final value
-    const value = {
-        allInventory: allInventory || null,
-        filteredInventory: filteredInventory || null,
-        inventoryCount,
-        synced
+      setInventoryCount({
+        total: inventory.features.length,
+        filtered: inventory.features.length,
+      });
+    } else {
+      setAllInventory(undefined);
+      setInventoryCount({ total: 0, filtered: 0 });
     }
+  }, [inventory]);
 
-    return <>
-        <DataContext.Provider value={value}>
-            { children }
-        </DataContext.Provider>
+  // use the offline context
+
+  // copy over inventory data
+  // useEffect(() => {
+  //   if (inventory) {
+  //     setAllInventory(inventory);
+  //     setInventoryCount({
+  //       total: inventory.features.length,
+  //       filtered: inventory.features.length,
+  //     });
+  //   } else {
+  //     setAllInventory(undefined);
+  //     setInventoryCount({ total: 0, filtered: 0 });
+  //   }
+  // }, [inventory]);
+
+  // re-filter inventory when allInventory changes
+  //   useEffect(() => {
+  //       if (allInventory) {
+  //           // TODO build the filter here
+  //           const inv = {
+  //               type: 'FeatureCollection',
+  //               bbox: allInventory?.bbox,  // TODO after filter, update this
+  //               features: [...cloneDeep(allInventory.features.filter(f => true))]
+  //           } as InventoryData
+
+  //           // set States
+  //           setFilteredInventory(inv)
+  //           setInventoryCount({total: allInventory.features.length, filtered: inv.features.length})
+  //           setSynced(true)
+  //       } else {
+  //           setFilteredInventory(undefined)
+  //           setInventoryCount({total: 0, filtered: 0})
+  //       }
+  //   }, [allInventory])
+
+  //   // create the final value
+  //   const value = {
+  //       allInventory: allInventory || null,
+  //       filteredInventory: filteredInventory || null,
+  //       inventoryCount,
+  //       synced
+  //   }
+  // }, [inventory]);
+
+  // re-filter inventory when allInventory changes
+  useEffect(() => {
+    if (allInventory) {
+      console.log("allInventory:", allInventory);
+      console.log("filterValues:", filterValues);
+      // TODO build the filter here
+      const inv = {
+        type: "FeatureCollection",
+        bbox: allInventory?.bbox, // TODO after filter, update this
+        features: [
+          ...cloneDeep(
+            allInventory.features.filter(
+              (f) =>
+                f.properties.radius > filterValues.radius.lower / 100 &&
+                f.properties.radius < filterValues.radius.upper / 100 &&
+                f.properties.height > filterValues.height.lower &&
+                f.properties.height < filterValues.height.upper
+            )
+          ),
+        ],
+      } as InventoryData;
+      setFilteredInventory(inv);
+      setInventoryCount({
+        total: allInventory.features.length,
+        filtered: inv.features.length,
+      });
+      setSynced(true);
+    } else {
+      setFilteredInventory(undefined);
+      setInventoryCount({ total: 0, filtered: 0 });
+    }
+    console.log("filteredInventory:", filteredInventory);
+  }, [allInventory, filterValues]);
+
+  // create the final value
+  const value = {
+    allInventory: allInventory || null,
+    filteredInventory: filteredInventory || null,
+    inventoryCount,
+    synced,
+    filterValues: filterValues,
+    setFilterValues: setFilterValues,
+    inventoryStats: inventoryStats || null,
+  };
+
+  return (
+    <>
+      <DataContext.Provider value={value}>{children}</DataContext.Provider>
     </>
-}
+  );
+};
 
 // create a hook for easier data access
 export const useData = () => {
-    return useContext(DataContext);
-}
+  return useContext(DataContext);
+};
