@@ -11,7 +11,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { layers, map, settings } from "ionicons/icons";
+import { layers, map, settings, settingsOutline } from "ionicons/icons";
 import { useRef } from "react";
 
 import MainMap from "../components/MainMapMaplibre";
@@ -41,8 +41,8 @@ const MapPage: React.FC = () => {
             </IonMenuButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton>
-              <IonIcon icon={settings} color="primary" />
+            <IonButton routerLink="/settings" routerDirection="forward">
+              <IonIcon icon={settingsOutline} color="primary" />
             </IonButton>
           </IonButtons>
           <IonTitle>Mathislewald</IonTitle>
