@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { IonAccordion, IonAccordionGroup, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonTitle, IonToggle, IonToolbar } from "@ionic/react"
+import { IonAccordion, IonAccordionGroup, IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonRow, IonSpinner, IonTitle, IonToggle, IonToolbar } from "@ionic/react"
 import { checkmark, close } from "ionicons/icons"
 
 import { useOffline } from "../context/offline"
@@ -29,7 +29,7 @@ const SettingsPage: React.FC = () => {
                 <IonAccordionGroup>
                     
                     <IonAccordion value="info">
-                        <IonItem slot="header" color="light"><IonLabel>Application infos</IonLabel></IonItem>
+                        <IonItem slot="header" color="light"><IonLabel>Application settings</IonLabel></IonItem>
                         <IonList slot="content">
                             <IonItem lines="none">
                                 <IonLabel slot="start">Application version</IonLabel>
@@ -38,6 +38,7 @@ const SettingsPage: React.FC = () => {
                             <IonItem lines="none">
                                 <IonLabel slot="start">Backend status</IonLabel>
                                 <IonLabel><code>{ status }</code></IonLabel>
+                                { status === 'downloading' ? <IonSpinner name="dots" slot="end" /> : <IonIcon icon={status === 'online' ? checkmark : close} slot="end" /> }
                             </IonItem>
                             <IonItem lines="none">
                                 <IonLabel slot="start">Backend URL</IonLabel>

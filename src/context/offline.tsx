@@ -18,7 +18,7 @@ import * as wfs from "../util/wfs";
 import * as wms from "../util/wms";
 
 
-export type OFFLINE_STATUS = 'pending' | 'online' | 'offline'
+export type OFFLINE_STATUS = 'pending' | 'downloading' | 'online' | 'offline'
 
 interface Checksums {
     inventory?: string,
@@ -63,7 +63,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     
     // create the context state for data
     const [inventory, setInventory] = useState<InventoryData | null>(null)
-    const [images, setImages] = useState<OfflineImage[] | null>(null)
+    const [images, _] = useState<OfflineImage[] | null>(null)
     const [baselayers, setBaseLayers] = useState<wms.BaseLayerData[] | null>(null)
 
     // handle the files
@@ -270,6 +270,8 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         })
     }
 
+    const refreshOfflineData = (identifier: string) => {}
+
     // run a check for data only once
     useEffect(() => {
         // 1. check if the file is there
@@ -300,12 +302,13 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         if (!localChecksums || !remoteChecksums) return
 
         // DO THE STUFF HERE
+        const downloadPromises: Promise<void>[] = []
         // refresh inventory data
         if (!inventory) {
             if (localChecksums.inventory! === remoteChecksums.inventory!) {
                 loadInventory()
             } else {
-                downloadInventory()
+                downloadPromises.push(downloadInventory())
             }
         }
 
@@ -314,7 +317,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             if (localChecksums.images! === remoteChecksums.images!) {
                 ;
             } else {
-                downloadImages()
+                downloadPromises.push(downloadImages())
             }
         }
 
@@ -324,8 +327,16 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
                 loadBaselayerInfo()
             } else {
                 console.log('downloading baselayer')
-                downloadBaselayer()
+                downloadPromises.push(downloadBaselayer())
             }
+        }
+
+        // status handling - if there is at least one promise in the queue, then set status to downloading
+        if (downloadPromises.length > 0) {
+            setStatus('downloading')
+            
+            // wait until all are finished
+            Promise.all(downloadPromises).then(() => setStatus('online'))
         }
     }, [localChecksums, remoteChecksums])    
 
