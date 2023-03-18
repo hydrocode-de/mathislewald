@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useSettings } from "./settings";
+import { Subject } from "rxjs"
 
+import { useSettings } from "./settings";
 import * as wfs from '../util/wfs';
 import * as wms from '../util/wms';
 import { useOffline } from "./offline";
@@ -25,7 +26,10 @@ interface LayersState {
     setInventoryLayerTo: (layers: string[]) => void;
     setBaseLayerTo: (layers: string[]) => void;
     setDataLayerTo: (layers: string[]) => void;
-    
+
+    // interactions with layers
+    flyToFeature: (name: string) => void;
+    flyHandler: Subject<string>
 }
 
 // initial state
@@ -44,8 +48,9 @@ const initialState: LayersState = {
     deactivateDataLayer: (layer: string) => {},
     setInventoryLayerTo: (layers: string[]) => {},
     setBaseLayerTo: (layers: string[]) => {},
-    setDataLayerTo: (layers: string[]) => {}
-
+    setDataLayerTo: (layers: string[]) => {},
+    flyToFeature: (name: string) => {},
+    flyHandler: new Subject()
 }
 
 // build the context
@@ -64,10 +69,11 @@ export const LayersProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     const [availableDataLayer, setAvailableDataLayer] = useState<wfs.FeatureType[]>([])
     const [availableBaseLayer, setAvailableBaseLayer] = useState<wms.GroundLayerType[]>([])
 
-    
     // load available layers
     const { geoserverUrl } = useSettings()
     const { baselayers } = useOffline()
+
+    const [flyHandler, _] = useState<Subject<string>>(new Subject())
 
     // listen to changes in the offline context
     useEffect(() => {
@@ -155,6 +161,10 @@ export const LayersProvider: React.FC<React.PropsWithChildren> = ({ children }) 
         setActiveBaseLayer([...layers])
     }
 
+    const flyToFeature = (name: string) => {
+        flyHandler.next(name)
+    }
+
     // create the final value
     const value = {
         availableInventoryLayer,
@@ -171,7 +181,9 @@ export const LayersProvider: React.FC<React.PropsWithChildren> = ({ children }) 
         deactivateBaseLayer,
         setInventoryLayerTo,
         setDataLayerTo,
-        setBaseLayerTo
+        setBaseLayerTo,
+        flyToFeature,
+        flyHandler
     }
 
     return <>

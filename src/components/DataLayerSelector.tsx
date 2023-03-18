@@ -7,7 +7,10 @@ import {
   IonList,
   IonListHeader,
   IonText,
+  IonToggle,
 } from "@ionic/react";
+import { scanOutline } from "ionicons/icons";
+
 import { useData } from "../context/data";
 import { useLayers } from "../context/layers";
 import FilterBar from "./FilterBar";
@@ -39,9 +42,12 @@ const DataLayerDrawer: React.FC = () => {
         {layers.availableInventoryLayer.map((l) => (
           <IonItem lines="none" key={l.name}>
             <IonLabel>{l.title}</IonLabel>
-            <IonCheckbox
+            <IonButton slot="start" fill="clear" disabled={!layers.activeInventoryLayer.includes(l.name)} onClick={() => layers.flyToFeature('inventory')}>
+              <IonIcon icon={scanOutline} slot="icon-only" />
+            </IonButton>
+            <IonToggle
               key={l.name}
-              // slot="end"
+              slot="end"
               checked={layers.activeInventoryLayer.includes(l.name)}
               onClick={() => toggleInventoryLayer(l.name)}
             />
