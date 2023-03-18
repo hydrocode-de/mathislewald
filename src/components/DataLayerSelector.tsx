@@ -1,31 +1,23 @@
 import {
   IonBadge,
-  IonButton,
-  IonButtons,
   IonCheckbox,
-  IonChip,
-  IonCol,
   IonContent,
-  IonGrid,
-  IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonListHeader,
-  IonRadio,
-  IonRadioGroup,
-  IonRow,
-  IonSearchbar,
   IonText,
-  IonTitle,
 } from "@ionic/react";
-import { closeCircle } from "ionicons/icons";
+import { useData } from "../context/data";
 import { useLayers } from "../context/layers";
 import FilterBar from "./FilterBar";
 
 const DataLayerDrawer: React.FC = () => {
   // subscribe to the available Inventories
   const layers = useLayers();
+
+  // get the current filter state for badges
+  const { inventoryCount } = useData()
 
   const toggleInventoryLayer = (name: string) => {
     if (layers.activeInventoryLayer.includes(name)) {
@@ -40,7 +32,7 @@ const DataLayerDrawer: React.FC = () => {
       <IonListHeader mode="ios">
         <IonLabel>
           Data
-          <IonBadge style={{ marginLeft: "10px" }}>67</IonBadge>
+          <IonBadge style={{ marginLeft: "10px" }}>{ inventoryCount.total }</IonBadge>
         </IonLabel>
       </IonListHeader>
       <IonList inset>
@@ -59,7 +51,7 @@ const DataLayerDrawer: React.FC = () => {
       <IonListHeader mode="ios">
         <IonLabel>
           Filter
-          <IonBadge style={{ marginLeft: "10px" }}>25</IonBadge>
+          <IonBadge style={{ marginLeft: "10px" }}>{ inventoryCount.filtered }</IonBadge>
         </IonLabel>
       </IonListHeader>
       <FilterBar />
