@@ -20,8 +20,8 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 // import application wide Navigation
-import Navigation from './Navigation';
-import MobileNavigation from './Navigation';
+import DesktopNavigation from './DesktopNavigation';
+import MobileNavigation from './DesktopNavigation';
 import { useSettings } from './context/settings';
 
 setupIonicReact();
@@ -46,7 +46,7 @@ const App: React.FC = () => {
   // return MobileNavigation if the screenSize is smaller than md
   return (
   <IonApp>
-    { screenSize?.width < 768 ? <MobileNavigation /> : <Navigation /> }
+    { screenSize?.width < 768 ? <MobileNavigation /> : <DesktopNavigation /> }
   </IonApp>
 )};
 
