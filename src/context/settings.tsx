@@ -17,6 +17,7 @@ interface SettingsState {
     activeDetailModal: ACTIVE_DETAIL
     positionEnabled: boolean
     position: Position | null
+    screenSize: {width: number, height: number} | undefined
     setDetailTo: (detail: ACTIVE_DETAIL) => void
     closeDetail: () => void
     changeBaseUrl: (newUrl: string) => void
@@ -32,6 +33,7 @@ const initialState: SettingsState = {
     activeDetailModal: 'none',
     positionEnabled: false,
     position: null,
+    screenSize: {width: 0, height: 0},
     setDetailTo: (detail: ACTIVE_DETAIL) => {},
     closeDetail: () => {},
     changeBaseUrl: (newUrl: string) => {},
@@ -54,6 +56,9 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
     const [positionEnabled, setPositionEnabled] = useState<boolean>(false)
     const [positionWatchId, setPositionWatchId] = useState<string | null>(null)
     const [position, setPosition] = useState<Position | null>(null)
+
+    // add state for managing screenSize
+    const [screenSize, setScreenSize] = useState<{width: number, height: number} | undefined>(undefined)
 
     // implement detail functions
     const setDetailTo = (detail: ACTIVE_DETAIL) => setActiveDetailModal(detail)
@@ -85,6 +90,19 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
         }
     }
 
+    // effect for listening to screen size changes
+    React.useEffect(() => {
+        const updateScreenSize = () => {
+            setScreenSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            })
+        }
+        window.addEventListener('resize', updateScreenSize)
+        updateScreenSize()
+        return () => window.removeEventListener('resize', updateScreenSize)
+    }, [])
+
     // create the export value
     const value = {
         serverUrl,
@@ -93,6 +111,7 @@ export const SettingsProvider: React.FC<React.PropsWithChildren> = ({ children }
         activeDetailModal,
         positionEnabled,
         position,
+        screenSize,
         setDetailTo,
         closeDetail,
         changeBaseUrl,
