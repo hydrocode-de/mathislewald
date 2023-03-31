@@ -250,8 +250,6 @@ export const BaseLayerPopover: React.FC = () => {
       style={{ "--offset-y": "-10px" }}
     >
       <div style={{ height: "100vh" }}>
-        {/* <BaseLayerSelector /> */}
-
         <BaseLayerVisualSelector />
       </div>
     </IonPopover>
