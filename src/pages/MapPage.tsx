@@ -11,7 +11,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { layers, map, settings, settingsOutline } from "ionicons/icons";
+import { layers, listSharp, map, settingsOutline } from "ionicons/icons";
 import { useRef } from "react";
 
 import MainMap from "../components/MainMapMaplibre";
@@ -21,13 +21,13 @@ import {
 } from "../components/BaseLayerSelector";
 import "./MapPage.css";
 
-const MapButton: React.FC = () => {
-  return (
-    <IonButton id="open-modal" className="mapButton" size="small">
-      <IonIcon icon={layers} />
-    </IonButton>
-  );
-};
+// const MapButton: React.FC = () => {
+//   return (
+//     <IonButton id="open-modal" className="mapButton" size="small">
+//       <IonIcon icon={layers} />
+//     </IonButton>
+//   );
+// };
 
 const MapPage: React.FC = () => {
   const modal = useRef<HTMLIonModalElement>(null);
@@ -48,11 +48,15 @@ const MapPage: React.FC = () => {
           <IonTitle>Mathislewald</IonTitle>
         </IonToolbar>
       </IonHeader>
-
       <IonContent fullscreen>
         <IonFab slot="fixed" horizontal="end" vertical="top">
           <IonFabButton id="open-modal">
             <IonIcon icon={map} />
+          </IonFabButton>
+        </IonFab>
+        <IonFab slot="fixed" horizontal="end" vertical="bottom">
+          <IonFabButton routerLink="/list" routerDirection="none">
+            <IonIcon icon={listSharp} />
           </IonFabButton>
         </IonFab>
 
