@@ -1,6 +1,9 @@
 import {
   IonButton,
   IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
   IonCol,
   IonContent,
   IonFab,
@@ -13,6 +16,7 @@ import {
   IonMenuToggle,
   IonPage,
   IonPopover,
+  IonRouterOutlet,
   IonRow,
   IonTitle,
   IonToolbar,
@@ -22,10 +26,14 @@ import React from "react";
 import InventoryList from "../components/InventoryList";
 import MainMap from "../components/MainMapMaplibre";
 import { BaseLayerPopover } from "../components/BaseLayerSelector";
+import { Route, RouteComponentProps } from "react-router";
+import TreeOverviewPage from "./TreeOverviewPage";
+import TreeDetails from "../components/TreeDetails";
 
 // import "./DesktopPage.css";
 
-const DesktopPage: React.FC = () => {
+const DesktopPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }) => {
+  console.log(match)
   return (
     <IonPage>
       <IonHeader>
@@ -47,15 +55,31 @@ const DesktopPage: React.FC = () => {
         <IonGrid class="ion-no-padding">
           <IonRow>
             <IonCol size="3">
-              <div style={{ height: "100vh" }}>
-                <IonContent>
+              <div style={{ height: "100vh", overflowY: 'auto' }}>
+                {/* <IonContent> */}
                   <InventoryList />
-                </IonContent>
+                {/* </IonContent> */}
               </div>
             </IonCol>
             <IonCol>
               <MainMap />
               <BaseLayerPopover />
+
+              {match.url.startsWith('/list/') ? (
+                <IonCard style={{position: 'absolute', top: 0, width: '33vw', maxWidth: '400px', height: '85vh', zIndex: 999, overflowY: 'auto'}}>
+                  <IonCardHeader>
+                    <IonToolbar>
+                    <IonButtons slot="end">
+                      <IonButton routerLink="/" routerDirection="root">CLOSE</IonButton>
+                    </IonButtons>
+                    </IonToolbar>
+                  </IonCardHeader>
+                  <IonCardContent>
+                    <TreeDetails treeID={Number(match.params.id)} />
+                  </IonCardContent>
+                </IonCard>
+                ) : null}
+              
             </IonCol>
           </IonRow>
         </IonGrid>
