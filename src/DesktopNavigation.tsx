@@ -27,12 +27,17 @@ const MobileNavigation: React.FC = () => {
   console.log("Running Desktop Navigation");
   return (
     <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/" component={DesktopPage} />
-        <Route path="/list/:id" component={DesktopPage} />
-      </IonRouterOutlet>
+      <DesktopPage />
     </IonReactRouter>
-  );
+  )
+  // return (
+  //   <IonReactRouter>
+  //     <IonRouterOutlet>
+  //       <Route path="/" component={DesktopPage} />
+  //       {/* <Route path="/list/:id" component={DesktopPage} /> */}
+  //     </IonRouterOutlet>
+  //   </IonReactRouter>
+  // );
 };
 
 export default MobileNavigation;
