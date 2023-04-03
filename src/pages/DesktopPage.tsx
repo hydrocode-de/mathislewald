@@ -1,4 +1,5 @@
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
@@ -26,14 +27,12 @@ import React from "react";
 import InventoryList from "../components/InventoryList";
 import MainMap from "../components/MainMapMaplibre";
 import { BaseLayerPopover } from "../components/BaseLayerSelector";
-import { Route, RouteComponentProps } from "react-router";
-import TreeOverviewPage from "./TreeOverviewPage";
+import { Route, RouteComponentProps, Switch } from "react-router";
 import TreeDetails from "../components/TreeDetails";
+import Settings from "../components/Settings";
 
-// import "./DesktopPage.css";
 
-const DesktopPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }) => {
-  console.log(match)
+const DesktopPage: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
@@ -56,29 +55,55 @@ const DesktopPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }) => 
           <IonRow>
             <IonCol size="3">
               <div style={{ height: "100vh", overflowY: 'auto' }}>
-                {/* <IonContent> */}
                   <InventoryList />
-                {/* </IonContent> */}
               </div>
             </IonCol>
             <IonCol>
               <MainMap />
               <BaseLayerPopover />
 
-              {match.url.startsWith('/list/') ? (
-                <IonCard style={{position: 'absolute', top: 0, width: '33vw', maxWidth: '400px', height: '85vh', zIndex: 999, overflowY: 'auto'}}>
-                  <IonCardHeader>
-                    <IonToolbar>
-                    <IonButtons slot="end">
-                      <IonButton routerLink="/" routerDirection="root">CLOSE</IonButton>
-                    </IonButtons>
-                    </IonToolbar>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <TreeDetails treeID={Number(match.params.id)} />
-                  </IonCardContent>
-                </IonCard>
-                ) : null}
+              
+              <Switch>
+                { /* Tree detail card  */ }
+                <Route exact path="/list/:id" render={props => (
+                  <IonCard style={{position: 'absolute', top: 0, width: '33vw', maxWidth: '400px', height: '90%', zIndex: 999, overflowY: 'auto'}}>
+                    <IonCardHeader>
+                      <IonToolbar>
+                        <IonButtons slot="start">
+                          <IonBackButton />
+                        </IonButtons>
+                        <IonButtons slot="end">
+                          <IonButton routerLink="/" routerDirection="root">CLOSE</IonButton>
+                        </IonButtons>
+                      </IonToolbar>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <TreeDetails treeID={Number(props.match.params.id)} />
+                    </IonCardContent>
+                  </IonCard>
+                )} />
+
+                {/* Settings card */}
+                <Route exact path="/settings">
+                  <IonCard style={{position: 'absolute', top: 0, left: 0, width: '90%', maxWidth: '90%', height: '90%', zIndex: 999}}>
+                    <IonCardHeader>
+                      <IonToolbar>
+                        <IonButtons slot="end">
+                          <IonButton routerLink="/" routerDirection="root">CLOSE</IonButton>
+                        </IonButtons>
+                      </IonToolbar>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <Settings />
+                    </IonCardContent>
+                  </IonCard>
+                </Route>
+
+                <Route path="/">
+                  <></>
+                </Route>
+              </Switch>
+                
               
             </IonCol>
           </IonRow>
