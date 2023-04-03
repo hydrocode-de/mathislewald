@@ -27,14 +27,10 @@ import InventoryList from "../components/InventoryList";
 import MainMap from "../components/MainMapMaplibre";
 import { BaseLayerPopover } from "../components/BaseLayerSelector";
 import { Route, RouteComponentProps, Switch } from "react-router";
-import TreeOverviewPage from "./TreeOverviewPage";
 import TreeDetails from "../components/TreeDetails";
 
-// import "./DesktopPage.css";
 
-//const DesktopPage: React.FC<RouteComponentProps<{id: string}>> = ({ match }) => {
 const DesktopPage: React.FC = () => {
-  //console.log(match)
   return (
     <IonPage>
       <IonHeader>
@@ -57,16 +53,13 @@ const DesktopPage: React.FC = () => {
           <IonRow>
             <IonCol size="3">
               <div style={{ height: "100vh", overflowY: 'auto' }}>
-                {/* <IonContent> */}
                   <InventoryList />
-                {/* </IonContent> */}
               </div>
             </IonCol>
             <IonCol>
               <MainMap />
               <BaseLayerPopover />
 
-              {/* {match.url.startsWith('/list/') ? ( */}
               
                 <Switch>
                 <Route exact path="/list/:id" render={props => (
@@ -89,7 +82,6 @@ const DesktopPage: React.FC = () => {
                 </Route>
                 </Switch>
                 
-                {/* ) : null} */}
               
             </IonCol>
           </IonRow>
