@@ -1,4 +1,5 @@
 import {
+  IonBackButton,
   IonButton,
   IonButtons,
   IonCard,
@@ -28,6 +29,7 @@ import MainMap from "../components/MainMapMaplibre";
 import { BaseLayerPopover } from "../components/BaseLayerSelector";
 import { Route, RouteComponentProps, Switch } from "react-router";
 import TreeDetails from "../components/TreeDetails";
+import Settings from "../components/Settings";
 
 
 const DesktopPage: React.FC = () => {
@@ -61,14 +63,18 @@ const DesktopPage: React.FC = () => {
               <BaseLayerPopover />
 
               
-                <Switch>
+              <Switch>
+                { /* Tree detail card  */ }
                 <Route exact path="/list/:id" render={props => (
-                  <IonCard style={{position: 'absolute', top: 0, width: '33vw', maxWidth: '400px', height: '85vh', zIndex: 999, overflowY: 'auto'}}>
+                  <IonCard style={{position: 'absolute', top: 0, width: '33vw', maxWidth: '400px', height: '90%', zIndex: 999, overflowY: 'auto'}}>
                     <IonCardHeader>
                       <IonToolbar>
-                      <IonButtons slot="end">
-                        <IonButton routerLink="/" routerDirection="root">CLOSE</IonButton>
-                      </IonButtons>
+                        <IonButtons slot="start">
+                          <IonBackButton />
+                        </IonButtons>
+                        <IonButtons slot="end">
+                          <IonButton routerLink="/" routerDirection="root">CLOSE</IonButton>
+                        </IonButtons>
                       </IonToolbar>
                     </IonCardHeader>
                     <IonCardContent>
@@ -77,10 +83,26 @@ const DesktopPage: React.FC = () => {
                   </IonCard>
                 )} />
 
+                {/* Settings card */}
+                <Route exact path="/settings">
+                  <IonCard style={{position: 'absolute', top: 0, left: 0, width: '90%', maxWidth: '90%', height: '90%', zIndex: 999}}>
+                    <IonCardHeader>
+                      <IonToolbar>
+                        <IonButtons slot="end">
+                          <IonButton routerLink="/" routerDirection="root">CLOSE</IonButton>
+                        </IonButtons>
+                      </IonToolbar>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <Settings />
+                    </IonCardContent>
+                  </IonCard>
+                </Route>
+
                 <Route path="/">
                   <></>
                 </Route>
-                </Switch>
+              </Switch>
                 
               
             </IonCol>
