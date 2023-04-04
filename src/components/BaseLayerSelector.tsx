@@ -12,6 +12,7 @@ import {
   IonList,
   IonListHeader,
   IonModal,
+  IonNote,
   IonPopover,
   IonRadio,
   IonRadioGroup,
@@ -24,160 +25,53 @@ import { close, layers } from "ionicons/icons";
 import { useState } from "react";
 import { useLayers } from "../context/layers";
 // import "./BaseLayerSelector.css";
+import MapSelectionButton from "./MapSelectionButton";
 
 const BaseLayerVisualSelector: React.FC = () => {
-  const [isHoverOSM, setIsHoverOSM] = useState(false);
-  const [isHoverDTM, setIsHoverDTM] = useState(false);
-  const [isHoverDens, setIsHoverDesn] = useState(false);
-  const [isHoverOrtho, setIsHoverOrtho] = useState(false);
-  const layers = useLayers();
-
-  const isActiveBaseLayer = (name: string) => {
-    return layers.activeBaseLayer.toString() === name;
-  };
-  // console.log("BaseLayerVisualSelector: ", layers.activateBaseLayer);
-
   return (
-    <IonGrid fixed>
+    <IonGrid>
       <IonRow>
         <IonCol>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <IonButton
-              class="ion-no-padding"
-              onMouseOver={() => setIsHoverOSM(true)}
-              onMouseLeave={() => setIsHoverOSM(false)}
-              onClick={() => {
-                layers.setBaseLayerTo([""]);
-              }}
-              style={{
-                height: 150,
-                width: 150,
-                padding: isHoverOSM ? 2 : 0,
-                borderColor: "lightgreen",
-                borderWidth: 4,
-                borderStyle: isActiveBaseLayer("") ? "solid" : "none",
-                borderRadius: isActiveBaseLayer("") ? 8 : 0,
-              }}
-            >
-              <IonImg
-                style={{ height: 150, opacity: 0.6 }}
-                src="assets/openstreetmap.png"
-              ></IonImg>
-            </IonButton>
-            <IonLabel>OSM</IonLabel>
-          </div>
+          <MapSelectionButton
+            name=""
+            src="assets/openstreetmap.png"
+            titel="OSM"
+            height={100}
+            width={100}
+          />
         </IonCol>
         <IonCol>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <IonButton
-              class="ion-no-padding"
-              onMouseOver={() => setIsHoverDesn(true)}
-              onMouseLeave={() => setIsHoverDesn(false)}
-              onClick={() => {
-                layers.setBaseLayerTo(["density"]);
-              }}
-              style={{ height: 150, width: 150 }}
-            >
-              <IonImg
-                src="assets/density.png"
-                style={{
-                  height: 150,
-                  width: 150,
-                  padding: isHoverDens ? 2 : 0,
-                  borderColor: "lightgreen",
-                  borderWidth: 4,
-                  borderStyle: isActiveBaseLayer("density") ? "solid" : "none",
-                  borderRadius: isActiveBaseLayer("density") ? 8 : 0,
-                }}
-              ></IonImg>
-            </IonButton>
-            <IonLabel>Density</IonLabel>
-          </div>
+          <MapSelectionButton
+            name="density"
+            src="assets/density.png"
+            titel="Density"
+            height={100}
+            width={100}
+          />
         </IonCol>
       </IonRow>
 
       <IonRow>
         <IonCol>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <IonButton
-              class="ion-no-padding"
-              onMouseOver={() => setIsHoverDTM(true)}
-              onMouseLeave={() => setIsHoverDTM(false)}
-              onClick={() => {
-                layers.setBaseLayerTo(["dtm"]);
-              }}
-              style={{ height: 150, width: 150 }}
-            >
-              <IonImg
-                style={{
-                  height: 150,
-                  width: 150,
-                  padding: isHoverDTM ? 2 : 0,
-                  borderColor: "lightgreen",
-                  borderWidth: 4,
-                  borderStyle: isActiveBaseLayer("dtm") ? "solid" : "none",
-                  borderRadius: isActiveBaseLayer("dtm") ? 8 : 0,
-                }}
-                src="assets/dem.png"
-              ></IonImg>
-            </IonButton>
-            <IonLabel>DTM</IonLabel>
-          </div>
+          <MapSelectionButton
+            name="dtm"
+            src="assets/dtm.png"
+            titel="DTM"
+            height={100}
+            width={100}
+          />
         </IonCol>
         <IonCol>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <IonButton
-              class="ion-no-padding"
-              onMouseOver={() => setIsHoverOrtho(true)}
-              onMouseLeave={() => setIsHoverOrtho(false)}
-              onClick={() => {
-                layers.setBaseLayerTo(["ortho"]);
-              }}
-              style={{ height: 150, width: 150 }}
-            >
-              <IonImg
-                src="assets/ortho.png"
-                style={{
-                  height: 150,
-                  width: 150,
-                  padding: isHoverOrtho ? 2 : 0,
-                  borderColor: "lightgreen",
-                  borderWidth: 4,
-                  borderStyle: isActiveBaseLayer("ortho") ? "solid" : "none",
-                  borderRadius: isActiveBaseLayer("ortho") ? 8 : 0,
-                }}
-              ></IonImg>
-            </IonButton>
-            <IonLabel>Ortho</IonLabel>
-          </div>
+          <MapSelectionButton
+            name="ortho"
+            src="assets/ortho.png"
+            titel="Ortho"
+            height={100}
+            width={100}
+          />
         </IonCol>
       </IonRow>
     </IonGrid>
-    // </div>
   );
 };
 
@@ -244,12 +138,12 @@ export const BaseLayerPopover: React.FC = () => {
       trigger="open-modal"
       triggerAction="click"
       reference="trigger"
-      side="top"
+      side="left"
       arrow={true}
       showBackdrop={false}
-      style={{ "--offset-y": "-10px" }}
+      style={{ "--offset-x": "-20px" }}
     >
-      <div style={{ height: "100vh" }}>
+      <div>
         <BaseLayerVisualSelector />
       </div>
     </IonPopover>

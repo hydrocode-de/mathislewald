@@ -73,7 +73,7 @@ const InventoryList: React.FC = () => {
 
   return (
     <IonList>
-      <IonListHeader mode="ios">
+      <IonListHeader>
         <IonLabel>List View</IonLabel>
         <IonButton class="ion-padding-horizontal">
           <IonIcon icon={filterOutline} color={"primary"}></IonIcon>
