@@ -8,6 +8,9 @@ import InventorySource from "./map-components/InventorySource";
 import BaseLayerSource from "./map-components/BaseLayerSource";
 import UserLocationSource from "./map-components/UserLocationSource";
 import LayerInteraction from "./map-components/LayerInteraction";
+import { IonButton, IonIcon, IonLabel } from "@ionic/react";
+import { bookmarks, chevronDownOutline, options } from "ionicons/icons";
+import MapSelectionButton from "./MapSelectionButton";
 const MainMap: React.FC = () => {
   // onload callback handler
   const onLoad = (e: any) => {
@@ -59,7 +62,6 @@ const MainMap: React.FC = () => {
       },
     ],
   } as Style;
-
   return (
     <Map
       mapLib={maplibregl}
@@ -74,6 +76,45 @@ const MainMap: React.FC = () => {
         // 47.884438269626294, 8.088652498339387
       }}
     >
+      <div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: 20,
+            left: 20,
+          }}
+        >
+          <MapSelectionButton
+            name="osm"
+            titel="osm"
+            src="assets/openstreetmap.png"
+            height={100}
+            width={100}
+          />
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 99,
+            padding: 10,
+            paddingLeft: 6,
+          }}
+        >
+          <IonButton color={"light"}>
+            <IonLabel>Height</IonLabel>
+            <IonIcon icon={chevronDownOutline} />
+          </IonButton>
+          <IonButton color={"light"} id="open-filterbar-popover">
+            {/* <IonIcon icon={options} /> */}
+            <IonLabel>Filter</IonLabel>
+            <IonIcon icon={chevronDownOutline} />
+          </IonButton>
+          <IonButton color={"light"}>
+            <IonLabel>Selection</IonLabel>
+            <IonIcon icon={bookmarks}></IonIcon>
+          </IonButton>
+        </div>
+      </div>
       <InventorySource />
       <BaseLayerSource />
       <UserLocationSource />

@@ -49,11 +49,11 @@ const MapPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonFab slot="fixed" horizontal="end" vertical="top">
+        {/* <IonFab slot="fixed" horizontal="end" vertical="top">
           <IonFabButton id="open-modal">
             <IonIcon icon={map} />
           </IonFabButton>
-        </IonFab>
+        </IonFab> */}
         <IonFab slot="fixed" horizontal="end" vertical="bottom">
           <IonFabButton routerLink="/list" routerDirection="none">
             <IonIcon icon={listSharp} />
@@ -61,11 +61,7 @@ const MapPage: React.FC = () => {
         </IonFab>
 
         <MainMap />
-        {window.innerWidth > 768 ? (
-          <BaseLayerPopover />
-        ) : (
-          <BaseLayerSheetModal modal={modal}></BaseLayerSheetModal>
-        )}
+        <BaseLayerSheetModal modal={modal}></BaseLayerSheetModal>
       </IonContent>
     </IonPage>
   );

@@ -56,45 +56,19 @@ const DesktopPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonFab slot="fixed" horizontal="end" vertical="top">
+        {/* <IonFab slot="fixed" horizontal="end" vertical="top">
           <IonFabButton id="open-modal">
             <IonIcon icon={map} />
           </IonFabButton>
-        </IonFab>
+        </IonFab> */}
         <IonGrid class="ion-no-padding">
           <IonRow>
             <IonCol sizeMd="4" sizeXl="3">
-              <div style={{ height: "100vh", overflowY: "auto" }}>
+              <div style={{ height: "95vh", overflowY: "auto" }}>
                 <InventoryList />
               </div>
             </IonCol>
             <IonCol>
-              <div
-                style={{
-                  position: "absolute",
-                  zIndex: 99,
-                  padding: 10,
-                  paddingLeft: 20,
-                }}
-              >
-                <IonButton color={"light"}>
-                  <IonLabel>Height</IonLabel>
-                  <IonIcon icon={chevronDownOutline} />
-                </IonButton>
-                <IonButton
-                  color={"light"}
-                  id="open-filterbar-popover"
-                  class="ion-padding-horizontal"
-                >
-                  <IonIcon icon={options} />
-                  <IonLabel>Filter</IonLabel>
-                  <IonIcon icon={chevronDownOutline} />
-                </IonButton>
-                <IonButton color={"light"}>
-                  <IonLabel>Selection</IonLabel>
-                  <IonIcon icon={bookmarks}></IonIcon>
-                </IonButton>
-              </div>
               <MainMap />
               <BaseLayerPopover />
               <FilterBarPopover />
