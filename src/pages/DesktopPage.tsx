@@ -40,6 +40,7 @@ import { BaseLayerPopover } from "../components/BaseLayerSelector";
 import { Route, RouteComponentProps, Switch } from "react-router";
 import TreeDetails from "../components/TreeDetails";
 import Settings from "../components/Settings";
+import FilterBarPopover from "../components/FilterBarPopover";
 
 const DesktopPage: React.FC = () => {
   return (
@@ -76,22 +77,27 @@ const DesktopPage: React.FC = () => {
                   paddingLeft: 20,
                 }}
               >
-                <IonButton>
+                <IonButton color={"light"}>
                   <IonLabel>Height</IonLabel>
                   <IonIcon icon={chevronDownOutline} />
                 </IonButton>
-                <IonButton class="ion-padding-horizontal">
+                <IonButton
+                  color={"light"}
+                  id="open-filterbar-popover"
+                  class="ion-padding-horizontal"
+                >
                   <IonIcon icon={options} />
                   <IonLabel>Filter</IonLabel>
                   <IonIcon icon={chevronDownOutline} />
                 </IonButton>
-                <IonButton>
+                <IonButton color={"light"}>
                   <IonLabel>Selection</IonLabel>
                   <IonIcon icon={bookmarks}></IonIcon>
                 </IonButton>
               </div>
               <MainMap />
               <BaseLayerPopover />
+              <FilterBarPopover />
 
               <Switch>
                 {/* Tree detail card  */}
@@ -102,7 +108,8 @@ const DesktopPage: React.FC = () => {
                     <IonCard
                       style={{
                         position: "absolute",
-                        top: 0,
+                        top: 60,
+                        left: 12,
                         width: "33vw",
                         maxWidth: "400px",
                         height: "90%",

@@ -6,8 +6,10 @@ import {
   IonGrid,
   IonHeader,
   IonItem,
+  IonItemDivider,
   IonLabel,
   IonList,
+  IonListHeader,
   IonPage,
   IonRange,
   IonRow,
@@ -31,9 +33,12 @@ const RangeFilter: React.FC = () => {
 
   return (
     <IonList inset class="ion-padding">
+      <IonTitle class="ion-no-padding ion-padding-bottom">
+        <IonLabel>Filter</IonLabel>
+      </IonTitle>
       <IonGrid class="ion-no-padding">
         <IonRow class="ion-align-items-center">
-          <IonCol size="3">
+          <IonCol size="4">
             <IonLabel>Height</IonLabel>
           </IonCol>
           <IonCol>
@@ -62,7 +67,7 @@ const RangeFilter: React.FC = () => {
           </IonCol>
         </IonRow>
         <IonRow class="ion-align-items-center">
-          <IonCol size="3">
+          <IonCol size="4">
             <IonLabel class="ion-no-padding">Radius</IonLabel>
           </IonCol>
           <IonCol>
@@ -91,8 +96,8 @@ const RangeFilter: React.FC = () => {
           </IonCol>
         </IonRow>
         <IonRow class="ion-align-items-center">
-          <IonCol size="3">
-            <IonLabel class="ion-no-padding">Dist.</IonLabel>
+          <IonCol size="4">
+            <IonLabel class="ion-no-padding">Distance</IonLabel>
           </IonCol>
           <IonCol class="ion-align-items-center">
             <IonRange
