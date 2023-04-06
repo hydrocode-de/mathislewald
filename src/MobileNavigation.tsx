@@ -10,7 +10,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import React from "react";
 import { Redirect, Route } from "react-router";
 import InventoryListPage from "./pages/InventoryListPage";
-import MapPage from "./pages/MapPage";
+import MapPage from "./pages/MobilePage";
 import SettingsPage from "./pages/SettingsPage";
 import TreeOverviewPage from "./pages/TreeOverviewPage";
 

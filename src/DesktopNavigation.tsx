@@ -19,7 +19,7 @@ import { listSharp, map } from "ionicons/icons";
 import DataLayerDrawer from "./components/DataLayerSelector";
 import TreeOverviewPage from "./pages/TreeOverviewPage";
 import InventoryListPage from "./pages/InventoryListPage";
-import MapPage from "./pages/MapPage";
+import MapPage from "./pages/MobilePage";
 import SettingsPage from "./pages/SettingsPage";
 import DesktopPage from "./pages/DesktopPage";
 
@@ -29,8 +29,7 @@ const MobileNavigation: React.FC = () => {
     <IonReactRouter>
       <DesktopPage />
     </IonReactRouter>
-  )
-
+  );
 };
 
 export default MobileNavigation;

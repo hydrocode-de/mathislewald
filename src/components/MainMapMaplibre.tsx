@@ -92,28 +92,6 @@ const MainMap: React.FC = () => {
             width={100}
           />
         </div>
-        <div
-          style={{
-            position: "absolute",
-            zIndex: 99,
-            padding: 10,
-            paddingLeft: 6,
-          }}
-        >
-          <IonButton color={"light"}>
-            <IonLabel>Height</IonLabel>
-            <IonIcon icon={chevronDownOutline} />
-          </IonButton>
-          <IonButton color={"light"} id="open-filterbar-popover">
-            {/* <IonIcon icon={options} /> */}
-            <IonLabel>Filter</IonLabel>
-            <IonIcon icon={chevronDownOutline} />
-          </IonButton>
-          <IonButton color={"light"}>
-            <IonLabel>Selection</IonLabel>
-            <IonIcon icon={bookmarks}></IonIcon>
-          </IonButton>
-        </div>
       </div>
       <InventorySource />
       <BaseLayerSource />
