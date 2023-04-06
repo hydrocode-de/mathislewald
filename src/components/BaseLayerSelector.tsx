@@ -21,7 +21,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { close, layers } from "ionicons/icons";
+import { close, closeCircle, layers } from "ionicons/icons";
 import { useState } from "react";
 import { useLayers } from "../context/layers";
 // import "./BaseLayerSelector.css";
@@ -123,13 +123,13 @@ export const BaseLayerSheetModal: React.FC<{
     <IonModal
       ref={modal}
       trigger="open-map-selection-popover"
-      initialBreakpoint={0.6}
+      initialBreakpoint={0.55}
     >
       <IonToolbar>
         <IonTitle>Map Type Selection</IonTitle>
         <IonButtons slot="end">
           <IonButton onClick={() => modal.current?.dismiss()}>
-            <IonIcon icon={close} />
+            <IonIcon icon={closeCircle} />
           </IonButton>
         </IonButtons>
       </IonToolbar>

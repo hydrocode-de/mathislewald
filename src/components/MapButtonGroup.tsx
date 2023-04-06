@@ -13,12 +13,7 @@ const MapButtonGroup: React.FC<MapButtonGroupProps> = ({
   //   left,
 }) => {
   return (
-    <div
-    //   style={{
-    //     position: "absolute",
-    //     zIndex: 4,
-    //   }}
-    >
+    <div>
       <IonButton color={"light"}>
         <IonLabel>Height</IonLabel>
         <IonIcon icon={chevronDownOutline} />

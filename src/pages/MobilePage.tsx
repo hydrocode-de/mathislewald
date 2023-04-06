@@ -58,7 +58,14 @@ const MapPage: React.FC = () => {
             left: 5,
           }}
         >
-          <MapButtonGroup padding={0} />
+          <div
+            style={{
+              paddingTop: "10px",
+              paddingLeft: "5px",
+            }}
+          >
+            <MapButtonGroup padding={0} />
+          </div>
         </div>
         <IonFab slot="fixed" horizontal="end" vertical="bottom">
           <IonFabButton routerLink="/list" routerDirection="none">
@@ -74,13 +81,6 @@ const MapPage: React.FC = () => {
           }}
         >
           <ActiveMapSelectionButton height={80} width={80} />
-          {/* <MapSelectionButton
-                  name="osm"
-                  titel="osm"
-                  src="assets/openstreetmap.png"
-                  height={100}
-                  width={100}
-                /> */}
         </div>
 
         <MainMap />
