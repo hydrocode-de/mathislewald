@@ -135,8 +135,8 @@ export const BaseLayerPopover: React.FC = () => {
       arrow={true}
       showBackdrop={false}
       style={{
-        "--offset-x": "20px",
-        "--offset-y": "-20px",
+        "--offset-x": "10px",
+        // "--offset-y": "-20px",
         "--min-width": "350px",
       }}
     >
