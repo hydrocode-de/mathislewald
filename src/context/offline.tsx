@@ -42,6 +42,7 @@ interface OfflineState {
     getImageData: (name: string) => Promise<string>
     getBaselayer: (name: string) => Promise<string>
     updateSelection: (selection: InventorySelection) => Promise<string>
+    dropSelection: (selectionId: number) => Promise<void>
 }
 
 // initial state
@@ -55,6 +56,7 @@ const initialState: OfflineState = {
     getImageData: (name: string) => Promise.reject(),
     getBaselayer: (name: string) => Promise.reject(),
     updateSelection: (selection: InventorySelection) => Promise.reject(),
+    dropSelection: (selectionId: number) => Promise.reject(),
 }
 
 // build the context
@@ -308,13 +310,39 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             } else {
                 newSelections = [selection]
             }
-            
+
             // update the selections state variable
             setSelections(newSelections)
 
             // return the local path
             return path
         })
+    }
+
+    const dropSelection = async (selectionId: number): Promise<void> => {
+        // reject if the selection is still null
+        if (!selections) {
+            return Promise.reject('Selections not loaded')
+        }
+        
+        // find the selection
+        const selection = selections?.find(s => s.id === selectionId)
+        if (!selection) {
+            return Promise.reject('Selection not found')
+        }
+
+        // delete the file
+        await Filesystem.deleteFile({
+            path: `/selections/${selection.id}.json`,
+            directory: Directory.Data
+        })
+
+        // create the new array of selections
+        const newSelections = cloneDeep(selections.filter(s => s.id !== selectionId))
+        setSelections(newSelections)
+
+        // resolve the promise
+        return Promise.resolve()
     }
 
     const getBaselayer = (name: string) => {
@@ -432,6 +460,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         getImageData,
         getBaselayer,
         updateSelection,
+        dropSelection,
     }
 
     return <>
