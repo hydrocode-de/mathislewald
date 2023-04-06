@@ -301,6 +301,18 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         }) 
         // resolve the path
         .then(() => {
+            // create the new array of selections
+            let newSelections: InventorySelection[] = []
+            if (selections) {
+                newSelections = cloneDeep([...selections, selection])
+            } else {
+                newSelections = [selection]
+            }
+            
+            // update the selections state variable
+            setSelections(newSelections)
+
+            // return the local path
             return path
         })
     }
@@ -324,6 +336,11 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     }
 
     const refreshOfflineData = (identifier: string) => {}
+
+    // effect to load the selections only once at component mount
+    useEffect(() => {
+        loadSelections()
+    }, [])
 
     // run a check for data only once
     useEffect(() => {
