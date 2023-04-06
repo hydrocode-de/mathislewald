@@ -1,19 +1,32 @@
 import { IonButton, IonIcon, IonLabel } from "@ionic/react";
 import { bookmarks, chevronDownOutline } from "ionicons/icons";
 
-const MapButtonGroup = () => {
+interface MapButtonGroupProps {
+  padding: number;
+}
+
+const MapButtonGroup: React.FC<MapButtonGroupProps> = ({ padding }) => {
   return (
     <div
-      style={{
-        position: "absolute",
-        zIndex: 99,
-      }}
+      style={
+        {
+          // position: "absolute",
+          // zIndex: 99,
+        }
+      }
     >
       <IonButton color={"light"}>
         <IonLabel>Height</IonLabel>
         <IonIcon icon={chevronDownOutline} />
       </IonButton>
-      <IonButton color={"light"} id="open-filterbar-popover">
+      <IonButton
+        color={"light"}
+        id="open-filterbar-popover"
+        style={{
+          paddingLeft: padding,
+          paddingRight: padding,
+        }}
+      >
         {/* <IonIcon icon={options} /> */}
         <IonLabel>Filter</IonLabel>
         <IonIcon icon={chevronDownOutline} />

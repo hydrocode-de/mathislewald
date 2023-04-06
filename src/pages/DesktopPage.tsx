@@ -24,6 +24,7 @@ import { Route, Switch } from "react-router";
 import TreeDetails from "../components/TreeDetails";
 import Settings from "../components/Settings";
 import FilterBarPopover from "../components/FilterBarPopover";
+import MapButtonGroup from "../components/MapButtonGroup";
 
 const DesktopPage: React.FC = () => {
   return (
@@ -39,11 +40,6 @@ const DesktopPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {/* <IonFab slot="fixed" horizontal="end" vertical="top">
-          <IonFabButton id="open-modal">
-            <IonIcon icon={map} />
-          </IonFabButton>
-        </IonFab> */}
         <IonGrid class="ion-no-padding">
           <IonRow>
             <IonCol sizeMd="5" sizeLg="3.8" sizeXl="3">
@@ -52,6 +48,16 @@ const DesktopPage: React.FC = () => {
               </div>
             </IonCol>
             <IonCol>
+              <div
+                style={{
+                  top: 12,
+                  left: 20,
+                  position: "absolute",
+                  zIndex: 4,
+                }}
+              >
+                <MapButtonGroup padding={10} />
+              </div>
               <MainMap />
               <BaseLayerPopover />
               <FilterBarPopover />
