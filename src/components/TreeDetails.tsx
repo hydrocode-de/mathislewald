@@ -55,6 +55,9 @@ const TreeOverviewItem: React.FC<{
 };
 
 const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
+  // get the current preffered color scheme
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  
   // load all inventory data
   const { filteredInventory, allInventory } = useData();
 
@@ -64,7 +67,7 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
 
   // state for the plot data
   const [data, setData] = useState<Data[]>([]);
-  const [layout, setLayout] = useState<Partial<Layout>>({} as Layout);
+  const [layout, setLayout] = useState<Partial<Layout>>({autosize: true} as Layout);
 
   // state to set the plot type
   const [plotType, setPlotType] = useState<"hist2d" | "heights" | "radius">(
@@ -102,7 +105,12 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
 
     // create traces and layout container
     let traces: Data[] = [];
-    let layout = { autosize: true };
+    let layout = { 
+      autosize: true,
+      paper_bgcolor: 'transparent',
+      plot_bgcolor: 'transparent',
+      font: {color: isDark ? 'white' : 'black'}
+    } as Layout;
 
     // switch the plot type
     if (plotType === "hist2d") {
@@ -122,7 +130,7 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
     // update
     setData(traces);
     setLayout(layout);
-  }, [allInventory, feature, plotType]);
+  }, [allInventory, feature, plotType, isDark]);
 
   return (
     <>
@@ -210,7 +218,6 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
           {currentImg ? (
             <img src={`data:image/png;base64,${currentImg}`} alt="" />
           ) : null}
-          {/* <img src={`http://geowwd.uni-freiburg.de/img/${feature?.properties.image}`} alt="a lidar image" /> */}
         </IonCardContent>
       </IonCard>
     </>
