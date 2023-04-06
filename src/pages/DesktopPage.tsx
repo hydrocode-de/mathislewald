@@ -7,37 +7,20 @@ import {
   IonCardHeader,
   IonCol,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonGrid,
   IonHeader,
   IonIcon,
-  IonLabel,
-  IonMenu,
-  IonMenuButton,
-  IonMenuToggle,
   IonPage,
-  IonPopover,
-  IonRouterOutlet,
   IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import {
-  bookmarks,
-  chevronDown,
-  chevronDownOutline,
-  chevronDownSharp,
-  layers,
-  map,
-  options,
-  settingsOutline,
-} from "ionicons/icons";
+import { settingsOutline } from "ionicons/icons";
 import React from "react";
 import InventoryList from "../components/InventoryList";
 import MainMap from "../components/MainMapMaplibre";
 import { BaseLayerPopover } from "../components/BaseLayerSelector";
-import { Route, RouteComponentProps, Switch } from "react-router";
+import { Route, Switch } from "react-router";
 import TreeDetails from "../components/TreeDetails";
 import Settings from "../components/Settings";
 import FilterBarPopover from "../components/FilterBarPopover";
@@ -63,7 +46,7 @@ const DesktopPage: React.FC = () => {
         </IonFab> */}
         <IonGrid class="ion-no-padding">
           <IonRow>
-            <IonCol sizeMd="4" sizeXl="3">
+            <IonCol sizeMd="5" sizeLg="3.8" sizeXl="3">
               <div style={{ height: "95vh", overflowY: "auto" }}>
                 <InventoryList />
               </div>
@@ -74,7 +57,6 @@ const DesktopPage: React.FC = () => {
               <FilterBarPopover />
 
               <Switch>
-                {/* Tree detail card  */}
                 <Route
                   exact
                   path="/list/:id"
@@ -84,8 +66,8 @@ const DesktopPage: React.FC = () => {
                         position: "absolute",
                         top: 60,
                         left: 12,
-                        width: "33vw",
-                        maxWidth: "400px",
+                        // width: "33vw",
+                        width: "400px",
                         height: "90%",
                         zIndex: 999,
                         overflowY: "auto",
@@ -138,9 +120,7 @@ const DesktopPage: React.FC = () => {
                   </IonCard>
                 </Route>
 
-                <Route path="/">
-                  <></>
-                </Route>
+                <Route path="/"></Route>
               </Switch>
             </IonCol>
           </IonRow>

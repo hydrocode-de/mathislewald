@@ -19,7 +19,7 @@ import {
   BaseLayerPopover,
   BaseLayerSheetModal,
 } from "../components/BaseLayerSelector";
-import "./MapPage.css";
+import "./MobilePage.css";
 
 // const MapButton: React.FC = () => {
 //   return (
