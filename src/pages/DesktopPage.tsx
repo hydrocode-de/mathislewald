@@ -68,7 +68,7 @@ const DesktopPage: React.FC = () => {
                   left: 20,
                 }}
               >
-                <ActiveMapSelectionButton />
+                <ActiveMapSelectionButton height={100} width={100} />
                 {/* <MapSelectionButton
                   name="osm"
                   titel="osm"

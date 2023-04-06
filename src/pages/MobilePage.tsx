@@ -21,6 +21,7 @@ import {
 } from "../components/BaseLayerSelector";
 import "./MobilePage.css";
 import MapButtonGroup from "../components/MapButtonGroup";
+import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
 
 // const MapButton: React.FC = () => {
 //   return (
@@ -64,6 +65,23 @@ const MapPage: React.FC = () => {
             <IonIcon icon={listSharp} />
           </IonFabButton>
         </IonFab>
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 99,
+            bottom: 20,
+            left: 15,
+          }}
+        >
+          <ActiveMapSelectionButton height={80} width={80} />
+          {/* <MapSelectionButton
+                  name="osm"
+                  titel="osm"
+                  src="assets/openstreetmap.png"
+                  height={100}
+                  width={100}
+                /> */}
+        </div>
 
         <MainMap />
         <BaseLayerSheetModal modal={modal}></BaseLayerSheetModal>

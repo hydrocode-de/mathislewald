@@ -3,7 +3,15 @@ import { useEffect, useState } from "react";
 import { useLayers } from "../context/layers";
 import { setCacheNameDetails } from "workbox-core";
 
-const ActiveMapSelectionButton = () => {
+interface ActiveMapSelectionButtonProps {
+  height: number;
+  width: number;
+}
+
+const ActiveMapSelectionButton: React.FC<ActiveMapSelectionButtonProps> = ({
+  height,
+  width,
+}) => {
   const layers = useLayers();
 
   const [src, setSrc] = useState("assets/openstreetmap.png");
@@ -30,14 +38,14 @@ const ActiveMapSelectionButton = () => {
       id="open-map-selection-popover"
       class="ion-no-padding"
       style={{
-        height: 100,
-        width: 100,
+        height: height,
+        width: width,
       }}
     >
       <div
         style={{
-          height: 100,
-          width: 100,
+          height: height,
+          width: width,
           // padding: isHoverDTM ? 2 : 0,
           borderColor: "#0fac0c",
           borderWidth: 2,
@@ -54,7 +62,7 @@ const ActiveMapSelectionButton = () => {
         <div
           style={{
             backgroundColor: "#0fac0c",
-            height: 25,
+            height: height / 4,
             width: "100%",
             display: "flex",
             alignItems: "center",
