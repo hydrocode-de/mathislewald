@@ -46,6 +46,8 @@ interface DataState {
   filterValues: FilterValues;
   setFilterValues: (value: FilterValues) => void;
   inventoryStats: InventoryDataStats | null;
+  activeVariable: string;
+  setActiveVariable: (value: string) => void;
 }
 
 // initial empty state
@@ -60,6 +62,8 @@ const initialState: DataState = {
   },
   setFilterValues: (value: FilterValues) => {},
   inventoryStats: null,
+  activeVariable: "height",
+  setActiveVariable: (value: string) => {},
 };
 
 // build the context
@@ -75,6 +79,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const [inventoryCount, setInventoryCount] = useState<Count>(
     initialState.inventoryCount
   );
+  const [activeVariable, setActiveVariable] = useState<string>("height");
 
   // create state for synchronization
   const [synced, setSynced] = useState<boolean>(false);
@@ -211,6 +216,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     filterValues: filterValues,
     setFilterValues: setFilterValues,
     inventoryStats: inventoryStats || null,
+    activeVariable: activeVariable,
+    setActiveVariable: setActiveVariable,
   };
 
   return (

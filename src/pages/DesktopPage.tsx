@@ -26,6 +26,7 @@ import Settings from "../components/Settings";
 import FilterBarPopover from "../components/RangeFilterPopover";
 import MapButtonGroup from "../components/MapButtonGroup";
 import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
+import VariableSelectionPopover from "../components/VvariableSelectionPopover";
 
 const DesktopPage: React.FC = () => {
   return (
@@ -72,6 +73,7 @@ const DesktopPage: React.FC = () => {
               <MainMap />
               <BaseLayerPopover />
               <FilterBarPopover />
+              <VariableSelectionPopover />
 
               <Switch>
                 <Route

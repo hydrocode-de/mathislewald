@@ -1,5 +1,6 @@
 import { IonButton, IonIcon, IonLabel } from "@ionic/react";
 import { bookmarks, chevronDownOutline } from "ionicons/icons";
+import { useData } from "../context/data";
 
 interface MapButtonGroupProps {
   padding: number;
@@ -12,10 +13,12 @@ const MapButtonGroup: React.FC<MapButtonGroupProps> = ({
   //   top,
   //   left,
 }) => {
+  const { activeVariable } = useData();
+
   return (
     <div>
-      <IonButton color={"light"}>
-        <IonLabel>Height</IonLabel>
+      <IonButton color={"light"} id="open-variable-selector">
+        <IonLabel>{activeVariable}</IonLabel>
         <IonIcon icon={chevronDownOutline} />
       </IonButton>
       <IonButton
