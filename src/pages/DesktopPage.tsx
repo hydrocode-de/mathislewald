@@ -25,6 +25,8 @@ import TreeDetails from "../components/TreeDetails";
 import Settings from "../components/Settings";
 import FilterBarPopover from "../components/FilterBarPopover";
 import MapButtonGroup from "../components/MapButtonGroup";
+import MapSelectionButton from "../components/MapSelectionButton";
+import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
 
 const DesktopPage: React.FC = () => {
   return (
@@ -50,13 +52,30 @@ const DesktopPage: React.FC = () => {
             <IonCol>
               <div
                 style={{
-                  top: 12,
-                  left: 20,
                   position: "absolute",
                   zIndex: 4,
+                  top: 12,
+                  left: 10,
                 }}
               >
                 <MapButtonGroup padding={10} />
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  zIndex: 99,
+                  bottom: 20,
+                  left: 20,
+                }}
+              >
+                <ActiveMapSelectionButton />
+                {/* <MapSelectionButton
+                  name="osm"
+                  titel="osm"
+                  src="assets/openstreetmap.png"
+                  height={100}
+                  width={100}
+                /> */}
               </div>
               <MainMap />
               <BaseLayerPopover />

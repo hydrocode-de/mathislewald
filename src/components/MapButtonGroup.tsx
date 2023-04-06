@@ -3,17 +3,21 @@ import { bookmarks, chevronDownOutline } from "ionicons/icons";
 
 interface MapButtonGroupProps {
   padding: number;
+  //   top: number;
+  //   left: number;
 }
 
-const MapButtonGroup: React.FC<MapButtonGroupProps> = ({ padding }) => {
+const MapButtonGroup: React.FC<MapButtonGroupProps> = ({
+  padding,
+  //   top,
+  //   left,
+}) => {
   return (
     <div
-      style={
-        {
-          // position: "absolute",
-          // zIndex: 99,
-        }
-      }
+    //   style={{
+    //     position: "absolute",
+    //     zIndex: 4,
+    //   }}
     >
       <IonButton color={"light"}>
         <IonLabel>Height</IonLabel>
@@ -27,7 +31,6 @@ const MapButtonGroup: React.FC<MapButtonGroupProps> = ({ padding }) => {
           paddingRight: padding,
         }}
       >
-        {/* <IonIcon icon={options} /> */}
         <IonLabel>Filter</IonLabel>
         <IonIcon icon={chevronDownOutline} />
       </IonButton>

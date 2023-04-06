@@ -29,49 +29,42 @@ import MapSelectionButton from "./MapSelectionButton";
 
 const BaseLayerVisualSelector: React.FC = () => {
   return (
-    <IonGrid>
-      <IonRow>
-        <IonCol>
-          <MapSelectionButton
-            name=""
-            src="assets/openstreetmap.png"
-            titel="OSM"
-            height={100}
-            width={100}
-          />
-        </IonCol>
-        <IonCol>
-          <MapSelectionButton
-            name="density"
-            src="assets/density.png"
-            titel="Density"
-            height={100}
-            width={100}
-          />
-        </IonCol>
-      </IonRow>
-
-      <IonRow>
-        <IonCol>
-          <MapSelectionButton
-            name="dtm"
-            src="assets/dtm.png"
-            titel="DTM"
-            height={100}
-            width={100}
-          />
-        </IonCol>
-        <IonCol>
-          <MapSelectionButton
-            name="ortho"
-            src="assets/ortho.png"
-            titel="Ortho"
-            height={100}
-            width={100}
-          />
-        </IonCol>
-      </IonRow>
-    </IonGrid>
+    <div
+      style={{
+        padding: 7,
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+    >
+      <MapSelectionButton
+        name=""
+        src="assets/openstreetmap.png"
+        titel="OSM"
+        height={80}
+        width={80}
+      />
+      <MapSelectionButton
+        name="density"
+        src="assets/density.png"
+        titel="Density"
+        height={80}
+        width={80}
+      />
+      <MapSelectionButton
+        name="dtm"
+        src="assets/dtm.png"
+        titel="DTM"
+        height={80}
+        width={80}
+      />
+      <MapSelectionButton
+        name="ortho"
+        src="assets/ortho.png"
+        titel="Ortho"
+        height={80}
+        width={80}
+      />
+    </div>
   );
 };
 
@@ -135,17 +128,19 @@ export const BaseLayerSheetModal: React.FC<{
 export const BaseLayerPopover: React.FC = () => {
   return (
     <IonPopover
-      trigger="open-modal"
+      trigger="open-map-selection-popover"
       triggerAction="click"
       reference="trigger"
-      side="left"
+      side="right"
       arrow={true}
       showBackdrop={false}
-      style={{ "--offset-x": "-20px" }}
+      style={{
+        "--offset-x": "20px",
+        "--offset-y": "-20px",
+        "--min-width": "350px",
+      }}
     >
-      <div>
-        <BaseLayerVisualSelector />
-      </div>
+      <BaseLayerVisualSelector />
     </IonPopover>
   );
 };

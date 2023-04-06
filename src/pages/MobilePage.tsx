@@ -20,6 +20,7 @@ import {
   BaseLayerSheetModal,
 } from "../components/BaseLayerSelector";
 import "./MobilePage.css";
+import MapButtonGroup from "../components/MapButtonGroup";
 
 // const MapButton: React.FC = () => {
 //   return (
@@ -49,11 +50,15 @@ const MapPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {/* <IonFab slot="fixed" horizontal="end" vertical="top">
-          <IonFabButton id="open-modal">
-            <IonIcon icon={map} />
-          </IonFabButton>
-        </IonFab> */}
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 4,
+            left: 5,
+          }}
+        >
+          <MapButtonGroup padding={0} />
+        </div>
         <IonFab slot="fixed" horizontal="end" vertical="bottom">
           <IonFabButton routerLink="/list" routerDirection="none">
             <IonIcon icon={listSharp} />

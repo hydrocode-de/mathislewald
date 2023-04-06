@@ -76,23 +76,7 @@ const MainMap: React.FC = () => {
         // 47.884438269626294, 8.088652498339387
       }}
     >
-      <div>
-        <div
-          style={{
-            position: "absolute",
-            bottom: 20,
-            left: 20,
-          }}
-        >
-          <MapSelectionButton
-            name="osm"
-            titel="osm"
-            src="assets/openstreetmap.png"
-            height={100}
-            width={100}
-          />
-        </div>
-      </div>
+      <div></div>
       <InventorySource />
       <BaseLayerSource />
       <UserLocationSource />
