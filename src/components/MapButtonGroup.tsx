@@ -20,7 +20,7 @@ const MapButtonGroup: React.FC<MapButtonGroupProps> = ({
       </IonButton>
       <IonButton
         color={"light"}
-        id="open-filterbar-popover"
+        id="open-range-filter"
         style={{
           paddingLeft: padding,
           paddingRight: padding,

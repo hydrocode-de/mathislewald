@@ -1,20 +1,11 @@
 import {
   IonButton,
-  IonButtons,
   IonCol,
-  IonContent,
   IonGrid,
-  IonHeader,
-  IonItem,
-  IonItemDivider,
   IonLabel,
   IonList,
-  IonListHeader,
-  IonPage,
   IonRange,
   IonRow,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 
 import React, { useState } from "react";
@@ -30,12 +21,10 @@ const RangeFilter: React.FC = () => {
   const { filterValues, setFilterValues, inventoryStats } = useData();
   const [radius, setRadius] = useState<RangeValue>({ ...filterValues.radius });
   const [height, setHeight] = useState<RangeValue>({ ...filterValues.height });
+  // console.log("filterValues:", filterValues);
 
   return (
     <IonList inset class="ion-padding">
-      <IonTitle class="ion-no-padding ion-padding-bottom">
-        <IonLabel>Filter</IonLabel>
-      </IonTitle>
       <IonGrid class="ion-no-padding">
         <IonRow class="ion-align-items-center">
           <IonCol size="4">

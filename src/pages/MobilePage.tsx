@@ -11,17 +11,15 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { layers, listSharp, map, settingsOutline } from "ionicons/icons";
+import { layers, listSharp, settingsOutline } from "ionicons/icons";
 import { useRef } from "react";
 
 import MainMap from "../components/MainMapMaplibre";
-import {
-  BaseLayerPopover,
-  BaseLayerSheetModal,
-} from "../components/BaseLayerSelector";
+import { BaseLayerSheetModal } from "../components/BaseLayerSelector";
 import "./MobilePage.css";
 import MapButtonGroup from "../components/MapButtonGroup";
 import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
+import RangeFilterSheetModal from "../components/RangeFilterModal";
 
 // const MapButton: React.FC = () => {
 //   return (
@@ -84,7 +82,8 @@ const MapPage: React.FC = () => {
         </div>
 
         <MainMap />
-        <BaseLayerSheetModal modal={modal}></BaseLayerSheetModal>
+        <BaseLayerSheetModal modal={modal} />
+        <RangeFilterSheetModal modal={modal} />
       </IonContent>
     </IonPage>
   );

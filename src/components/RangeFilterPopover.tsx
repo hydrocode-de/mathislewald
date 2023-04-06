@@ -5,7 +5,7 @@ import RangeFilter from "./RangeFilter";
 const FilterBarPopover: React.FC = () => {
   return (
     <IonPopover
-      trigger="open-filterbar-popover"
+      trigger="open-range-filter"
       triggerAction="click"
       reference="trigger"
       side="bottom"

@@ -23,9 +23,8 @@ import { BaseLayerPopover } from "../components/BaseLayerSelector";
 import { Route, Switch } from "react-router";
 import TreeDetails from "../components/TreeDetails";
 import Settings from "../components/Settings";
-import FilterBarPopover from "../components/FilterBarPopover";
+import FilterBarPopover from "../components/RangeFilterPopover";
 import MapButtonGroup from "../components/MapButtonGroup";
-import MapSelectionButton from "../components/MapSelectionButton";
 import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
 
 const DesktopPage: React.FC = () => {
@@ -69,13 +68,6 @@ const DesktopPage: React.FC = () => {
                 }}
               >
                 <ActiveMapSelectionButton height={100} width={100} />
-                {/* <MapSelectionButton
-                  name="osm"
-                  titel="osm"
-                  src="assets/openstreetmap.png"
-                  height={100}
-                  width={100}
-                /> */}
               </div>
               <MainMap />
               <BaseLayerPopover />
