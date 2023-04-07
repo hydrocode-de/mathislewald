@@ -14,7 +14,12 @@ const RangeFilterSheetModal: React.FC<{
   modal: React.RefObject<HTMLIonModalElement>;
 }> = ({ modal }) => {
   return (
-    <IonModal ref={modal} trigger="open-range-filter" initialBreakpoint={0.5}>
+    <IonModal
+      ref={modal}
+      trigger="open-range-filter"
+      initialBreakpoint={0.5}
+      breakpoints={[0, 0.25, 0.5, 0.75]}
+    >
       <IonToolbar>
         <IonTitle>Filter Data</IonTitle>
         <IonButtons slot="end">
