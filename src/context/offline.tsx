@@ -41,8 +41,9 @@ interface OfflineState {
     remoteChecksums: Checksums | null;
     getImageData: (name: string) => Promise<string>
     getBaselayer: (name: string) => Promise<string>
+    createSelection: (treeIds: number[], title?: string) => Promise<string>
     updateSelection: (selection: InventorySelection) => Promise<string>
-    dropSelection: (selectionId: number) => Promise<void>
+    dropSelection: (selectionId: string) => Promise<void>
 }
 
 // initial state
@@ -55,8 +56,9 @@ const initialState: OfflineState = {
     remoteChecksums: null,
     getImageData: (name: string) => Promise.reject(),
     getBaselayer: (name: string) => Promise.reject(),
+    createSelection: (treeIds: number[], title?: string) => Promise.reject(),
     updateSelection: (selection: InventorySelection) => Promise.reject(),
-    dropSelection: (selectionId: number) => Promise.reject(),
+    dropSelection: (selectionId: string) => Promise.reject(),
 }
 
 // build the context
@@ -287,6 +289,21 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
 
     }
 
+    const createSelection = async (treeIds: number[], title?: string): Promise<string> => {
+        // create a random 16 character string as id
+        const id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+
+        // create the selection object
+        const selection: InventorySelection = {
+            id: id,
+            title: title ? title : 'New Selection',
+            treeIds: treeIds
+        }
+
+        // use updateSelection to create the file
+        return updateSelection(selection)
+    }
+
     const updateSelection = async (selection: InventorySelection): Promise<string> => {
         // create the selections folder if it does not exist
         if (!fileInfos?.map(i => i.name).includes('selections')) {
@@ -319,7 +336,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         })
     }
 
-    const dropSelection = async (selectionId: number): Promise<void> => {
+    const dropSelection = async (selectionId: string): Promise<void> => {
         // reject if the selection is still null
         if (!selections) {
             return Promise.reject('Selections not loaded')
@@ -459,6 +476,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         remoteChecksums,
         getImageData,
         getBaselayer,
+        createSelection,
         updateSelection,
         dropSelection,
     }
