@@ -352,11 +352,13 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         await Filesystem.deleteFile({
             path: `/selections/${selection.id}.json`,
             directory: Directory.Data
+        }).then(() => {
+            updateFileList()
         })
 
         // create the new array of selections
-        const newSelections = cloneDeep(selections.filter(s => s.id !== selectionId))
-        setSelections(newSelections)
+        // const newSelections = cloneDeep(selections.filter(s => s.id !== selectionId))
+        // setSelections(newSelections)
 
         // resolve the promise
         return Promise.resolve()
@@ -385,7 +387,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     // effect to load the selections only once at component mount
     useEffect(() => {
         loadSelections()
-    }, [])
+    }, [fileInfos])
 
     // run a check for data only once
     useEffect(() => {

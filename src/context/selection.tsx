@@ -8,13 +8,13 @@ import { InventorySelection } from "./inventory-selection.model";
 interface SelectionState {
     selections: InventorySelection[];
     activeSelection: InventoryData | null;
-    setActiveSelection: (selectionId: number | null) => void
+    setActiveSelection: (selectionId: string | null) => void
 }
 
 const initialState: SelectionState = {
     selections: [],
     activeSelection: null,
-    setActiveSelection: (selectionId: number | null) => {}
+    setActiveSelection: (selectionId: string | null) => {}
 }
 
 // add the context
@@ -30,7 +30,7 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
     const { filteredInventory } = useData()
     
     // define the context functions
-    const setActiveSelection = (selectionId: number | null) => {
+    const setActiveSelection = (selectionId: string | null) => {
         if (selectionId === null || !filteredInventory) {
             setActiveSelectionState(null)
         } else {
