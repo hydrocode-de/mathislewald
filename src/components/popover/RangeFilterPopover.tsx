@@ -11,7 +11,7 @@ const FilterBarPopover: React.FC = () => {
       side="bottom"
       arrow={true}
       // mode="md"
-      showBackdrop={false}
+      showBackdrop={true}
       style={{
         "--offset-x": "10px",
         "--offset-y": "20px",

@@ -10,7 +10,7 @@ const BaseLayerPopover: React.FC = () => {
       side="right"
       arrow={false}
       mode="md"
-      showBackdrop={false}
+      showBackdrop={true}
       style={{
         "--offset-x": "10px",
         // "--offset-y": "-20px",

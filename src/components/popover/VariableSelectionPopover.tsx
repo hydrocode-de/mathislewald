@@ -11,7 +11,8 @@ const VariableSelectionPopover: React.FC = () => {
       reference="trigger"
       side="bottom"
       arrow={true}
-      showBackdrop={false}
+      showBackdrop={true}
+      translucent={true}
       style={{
         // "--offset-x": "16px",
         "--offset-y": "20px",
