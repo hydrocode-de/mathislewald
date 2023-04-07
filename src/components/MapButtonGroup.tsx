@@ -18,8 +18,8 @@ const MapButtonGroup: React.FC<MapButtonGroupProps> = ({
   return (
     <div>
       <IonButton color={"light"} id="open-variable-selector">
-        <IonLabel>{activeVariable}</IonLabel>
-        <IonIcon icon={chevronDownOutline} />
+        {activeVariable}
+        <IonIcon icon={chevronDownOutline} slot="end" />
       </IonButton>
       <IonButton
         color={"light"}
@@ -29,12 +29,12 @@ const MapButtonGroup: React.FC<MapButtonGroupProps> = ({
           paddingRight: padding,
         }}
       >
-        <IonLabel>Filter</IonLabel>
-        <IonIcon icon={chevronDownOutline} />
+        Filter
+        <IonIcon icon={chevronDownOutline} slot="end" />
       </IonButton>
       <IonButton color={"light"} disabled>
-        <IonLabel>Selection</IonLabel>
-        <IonIcon icon={bookmarks}></IonIcon>
+        Selection
+        <IonIcon icon={bookmarks} slot="end"></IonIcon>
       </IonButton>
     </div>
   );
