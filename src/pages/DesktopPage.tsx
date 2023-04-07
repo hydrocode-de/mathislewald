@@ -15,7 +15,11 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { settingsOutline } from "ionicons/icons";
+import {
+  closeCircle,
+  closeCircleOutline,
+  settingsOutline,
+} from "ionicons/icons";
 import React from "react";
 import InventoryList from "../components/InventoryList";
 import MainMap from "../components/MainMapMaplibre";
@@ -81,6 +85,7 @@ const DesktopPage: React.FC = () => {
                   path="/list/:id"
                   render={(props) => (
                     <IonCard
+                      color={"light"}
                       style={{
                         position: "absolute",
                         top: 60,
@@ -91,20 +96,17 @@ const DesktopPage: React.FC = () => {
                         zIndex: 999,
                         overflowY: "auto",
                       }}
+                      class="ion-no-padding"
                     >
-                      <IonCardHeader>
-                        <IonToolbar>
-                          <IonButtons slot="start">
-                            <IonBackButton />
-                          </IonButtons>
-                          <IonButtons slot="end">
-                            <IonButton routerLink="/" routerDirection="root">
-                              CLOSE
-                            </IonButton>
-                          </IonButtons>
-                        </IonToolbar>
-                      </IonCardHeader>
-                      <IonCardContent>
+                      <IonToolbar>
+                        <IonTitle>Overview</IonTitle>
+                        <IonButtons slot="end">
+                          <IonButton routerLink="/" routerDirection="root">
+                            <IonIcon icon={closeCircleOutline} size="large" />
+                          </IonButton>
+                        </IonButtons>
+                      </IonToolbar>
+                      <IonCardContent class="ion-no-padding">
                         <TreeDetails treeID={Number(props.match.params.id)} />
                       </IonCardContent>
                     </IonCard>
