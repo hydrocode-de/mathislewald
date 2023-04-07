@@ -21,9 +21,9 @@ const RangeFilter: React.FC = () => {
   const { filterValues, setFilterValues, inventoryStats } = useData();
   const [radius, setRadius] = useState<RangeValue>({ ...filterValues.radius });
   const [height, setHeight] = useState<RangeValue>({ ...filterValues.height });
-  // console.log("filterValues:", filterValues);
-  // console.log("radius", radius);
-  // console.log("height", height);
+  console.log("filterValues:", filterValues);
+  console.log("radius", radius);
+  console.log("height", height);
 
   return (
     <IonList class="ion-padding">
