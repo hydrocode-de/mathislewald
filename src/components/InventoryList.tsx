@@ -1,5 +1,6 @@
 import {
   IonButton,
+  IonContent,
   IonIcon,
   IonItem,
   IonLabel,
@@ -52,45 +53,47 @@ const InventoryList: React.FC = () => {
   };
 
   return (
-    <IonList>
-      <IonListHeader>
-        <IonLabel>List View</IonLabel>
-        <IonButton class="ion-padding-horizontal">
-          <IonIcon icon={filterOutline} color={"primary"}></IonIcon>
-        </IonButton>
-      </IonListHeader>
+    <IonContent color={"light"}>
+      <IonList inset>
+        <IonListHeader>
+          <IonLabel>List View</IonLabel>
+          <IonButton class="ion-padding-horizontal">
+            <IonIcon icon={filterOutline} color={"primary"}></IonIcon>
+          </IonButton>
+        </IonListHeader>
 
-      {filteredInventory?.features.map((f) => {
-        return (
-          <IonItem
-            key={f.id}
-            button
-            onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
-          >
-            <IonThumbnail slot="start" style={{ borderRadius: "15px" }}>
-              <img
-                alt="Silhouette of mountains"
-                src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
-                // src={`data:image/png;base64,${f.id}`}
-              />
-            </IonThumbnail>
-            <IonLabel>
-              <p> ID: {f.properties.treeid}</p>
-              <div style={{ display: "flex", alignItems: "end" }}>
-                <h1>{f.properties.height.toFixed(1)}</h1>
-                <p>{""}m</p>
-              </div>
-            </IonLabel>
-            <IonLabel>
-              <p>{distString(f)} away</p>
-            </IonLabel>
-            <IonButton fill="clear">
-              <IonIcon icon={bookmarkOutline}></IonIcon>
-            </IonButton>
-          </IonItem>
-        );
-      })}
-    </IonList>
+        {filteredInventory?.features.map((f) => {
+          return (
+            <IonItem
+              key={f.id}
+              button
+              onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
+            >
+              <IonThumbnail slot="start" style={{ borderRadius: "15px" }}>
+                <img
+                  alt="Silhouette of mountains"
+                  src="https://ionicframework.com/docs/img/demos/thumbnail.svg"
+                  // src={`data:image/png;base64,${f.id}`}
+                />
+              </IonThumbnail>
+              <IonLabel>
+                <p> ID: {f.properties.treeid}</p>
+                <div style={{ display: "flex", alignItems: "end" }}>
+                  <h1>{f.properties.height.toFixed(1)}</h1>
+                  <p>{""}m</p>
+                </div>
+              </IonLabel>
+              <IonLabel>
+                <p>{distString(f)} away</p>
+              </IonLabel>
+              <IonButton fill="clear">
+                <IonIcon icon={bookmarkOutline}></IonIcon>
+              </IonButton>
+            </IonItem>
+          );
+        })}
+      </IonList>
+    </IonContent>
   );
 };
 
