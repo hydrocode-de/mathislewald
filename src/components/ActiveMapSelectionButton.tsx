@@ -17,6 +17,7 @@ const ActiveMapSelectionButton: React.FC<ActiveMapSelectionButtonProps> = ({
   const [titel, setTitel] = useState("OSM");
 
   useEffect(() => {
+    // set the src and titel of the active map
     if (layers.activeBaseLayer.toString() === "density") {
       setSrc("assets/density.png");
       setTitel("Density");

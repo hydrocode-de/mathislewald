@@ -27,28 +27,28 @@ const BaseLayerPopover: React.FC = () => {
         <MapSelectionButton
           name=""
           src="assets/openstreetmap.png"
-          titel="OSM"
+          title="OSM"
           height={80}
           width={80}
         />
         <MapSelectionButton
           name="density"
           src="assets/density.png"
-          titel="Density"
+          title="Density"
           height={80}
           width={80}
         />
         <MapSelectionButton
           name="dtm"
           src="assets/dtm.png"
-          titel="DTM"
+          title="DTM"
           height={80}
           width={80}
         />
         <MapSelectionButton
           name="ortho"
           src="assets/ortho.png"
-          titel="Ortho"
+          title="Ortho"
           height={80}
           width={80}
         />

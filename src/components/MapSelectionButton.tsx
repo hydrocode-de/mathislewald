@@ -4,7 +4,7 @@ import { useLayers } from "../context/layers";
 
 interface MapSelectionButtonProps {
   name: string;
-  titel: string;
+  title: string;
   src: string;
   height: number;
   width: number;
@@ -13,7 +13,7 @@ interface MapSelectionButtonProps {
 const MapSelectionButton: React.FC<MapSelectionButtonProps> = ({
   name,
   src,
-  titel,
+  title: titel,
   height,
   width,
 }) => {

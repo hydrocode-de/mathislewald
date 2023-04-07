@@ -1,26 +1,13 @@
 import {
-  IonBadge,
   IonButton,
-  IonCard,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonCol,
-  IonGrid,
   IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonListHeader,
-  IonRow,
   IonThumbnail,
 } from "@ionic/react";
-import {
-  arrowForwardOutline,
-  bookmark,
-  bookmarkOutline,
-  filterOutline,
-} from "ionicons/icons";
-import { useState } from "react";
+import { bookmarkOutline, filterOutline } from "ionicons/icons";
 import { useHistory } from "react-router";
 
 import distance from "@turf/distance";
@@ -32,8 +19,6 @@ import { InventoryFeature } from "../context/data.model";
 import "./InventoryList.css";
 
 const InventoryList: React.FC = () => {
-  const [hovered, setHovered] = useState(0);
-
   // load the filtered inventory list
   const { filteredInventory } = useData();
 
@@ -41,11 +26,7 @@ const InventoryList: React.FC = () => {
   const history = useHistory();
 
   // get the current position from the Settings
-  const { positionEnabled, position } = useSettings();
-
-  const handleOnHover = (id: number) => {
-    setHovered(id);
-  };
+  const { position } = useSettings();
 
   // we need to close the modal on navigate
   const onNavigate = (path: string) => {
@@ -99,7 +80,6 @@ const InventoryList: React.FC = () => {
                 <h1>{f.properties.height.toFixed(1)}</h1>
                 <p>{""}m</p>
               </div>
-              {/* <IonBadge>Height</IonBadge> */}
             </IonLabel>
             <IonLabel>
               <p>{distString(f)} away</p>
@@ -115,77 +95,3 @@ const InventoryList: React.FC = () => {
 };
 
 export default InventoryList;
-
-{
-  /* <IonButton */
-}
-{
-  /* slot="end" */
-}
-{
-  /* //   onClick={() => onNavigate(`/list/${f.id}`)} */
-}
-{
-  /* > */
-}
-{
-  /* <IonIcon icon={caretForwardOutline} /> */
-}
-{
-  /* </IonButton> */
-}
-
-// <IonCard key={f.id}>
-//   <IonRow class="ion-padding ion-align-items-center">
-//     <IonCol>
-//       <IonCardSubtitle>TREE ID</IonCardSubtitle>
-//       <IonCardTitle>{f.properties.treeid}</IonCardTitle>
-//     </IonCol>
-//     {positionEnabled && position ? (
-//       <IonCol class="ion-text-center">
-//         <IonCardSubtitle>DISTANCE</IonCardSubtitle>
-//         <IonCardTitle>
-//           <IonIcon icon={navigateOutline} size="small" />
-//           &nbsp; {distString(f)}
-//         </IonCardTitle>
-//       </IonCol>
-//     ) : null}
-//     <IonCol class="ion-text-center ion-hide-sm-down">
-//       <IonCardSubtitle>RADIUS</IonCardSubtitle>
-//       <IonCardTitle>{f.properties.radius.toFixed(1)}</IonCardTitle>
-//     </IonCol>
-//     <IonCol class="ion-text-end">
-//       <IonButton
-//         // fill="outline"
-//         onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
-//       >
-//         <IonIcon icon={arrowForwardOutline} slot="icon-only" />
-//       </IonButton>
-//     </IonCol>
-//   </IonRow>
-// </IonCard>
-
-// <IonCard
-//   key={f.id}
-//   onClick={() => onNavigate(`/list/${f.i`}`)}
-//   style={{
-//     marginBottom: "1.3rem",
-//     padding: "1rem 3rem",
-//     display: "flex",
-//     justifyContent: "space-between",
-//   }}
-// >
-//   <div>
-//     <IonCardSubtitle>TREE ID</IonCardSubtitle>
-//     <IonCardTitle>{f.id}</IonCardTitle>
-//     <IonCardSubtitle>
-//       <IonIcon icon={navigateOutline} />
-//       &nbsp;&nbsp;42m away
-//     </IonCardSubtitle>
-//   </div>
-//   <div>
-//     <IonButton size="small">
-//       <IonIcon icon={arrowForwardOutline} slot="icon-only" />
-//     </IonButton>
-//   </div>
-// </IonCard>

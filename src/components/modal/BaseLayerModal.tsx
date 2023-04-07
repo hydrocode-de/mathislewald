@@ -47,14 +47,14 @@ const BaseLayerSheetModal: React.FC<{
           <MapSelectionButton
             name=""
             src="assets/openstreetmap.png"
-            titel="OSM"
+            title="OSM"
             height={120}
             width={150}
           />
           <MapSelectionButton
             name="density"
             src="assets/density.png"
-            titel="Density"
+            title="Density"
             height={120}
             width={150}
           />
@@ -68,14 +68,14 @@ const BaseLayerSheetModal: React.FC<{
           <MapSelectionButton
             name="dtm"
             src="assets/dtm.png"
-            titel="DTM"
+            title="DTM"
             height={120}
             width={150}
           />
           <MapSelectionButton
             name="ortho"
             src="assets/ortho.png"
-            titel="Ortho"
+            title="Ortho"
             height={120}
             width={150}
           />

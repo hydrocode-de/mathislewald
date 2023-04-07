@@ -74,7 +74,6 @@ const MainMap: React.FC = () => {
         // 47.884438269626294, 8.088652498339387
       }}
     >
-      <div></div>
       <InventorySource />
       <BaseLayerSource />
       <UserLocationSource />
