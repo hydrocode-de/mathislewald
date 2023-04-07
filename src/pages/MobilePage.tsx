@@ -31,7 +31,10 @@ import VariableSelectionModal from "../components/modal/VariableSelectionModal";
 // };
 
 const MapPage: React.FC = () => {
-  const modal = useRef<HTMLIonModalElement>(null);
+  const baseLayerModal = useRef<HTMLIonModalElement>(null);
+  const filterModal = useRef<HTMLIonModalElement>(null);
+  const variableSelectionModal = useRef<HTMLIonModalElement>(null);
+
   return (
     <IonPage>
       <IonHeader>
@@ -83,9 +86,9 @@ const MapPage: React.FC = () => {
         </div>
 
         <MainMap />
-        <BaseLayerSheetModal modal={modal} />
-        <RangeFilterSheetModal modal={modal} />
-        <VariableSelectionModal modal={modal} />
+        <BaseLayerSheetModal modal={baseLayerModal} />
+        <RangeFilterSheetModal modal={filterModal} />
+        <VariableSelectionModal modal={variableSelectionModal} />
       </IonContent>
     </IonPage>
   );

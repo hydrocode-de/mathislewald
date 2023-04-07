@@ -7,7 +7,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import MapSelectionButton from "../MapSelectionButton";
-import { closeCircle } from "ionicons/icons";
+import { closeCircle, closeCircleOutline } from "ionicons/icons";
 
 const BaseLayerSheetModal: React.FC<{
   modal: React.RefObject<HTMLIonModalElement>;
@@ -22,7 +22,7 @@ const BaseLayerSheetModal: React.FC<{
         <IonTitle>Map Type Selection</IonTitle>
         <IonButtons slot="end">
           <IonButton onClick={() => modal.current?.dismiss()}>
-            <IonIcon icon={closeCircle} />
+            <IonIcon icon={closeCircleOutline} />
           </IonButton>
         </IonButtons>
       </IonToolbar>
