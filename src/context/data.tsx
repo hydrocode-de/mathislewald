@@ -46,6 +46,8 @@ interface DataState {
   filterValues: FilterValues;
   setFilterValues: (value: FilterValues) => void;
   inventoryStats: InventoryDataStats | null;
+  activeVariable: string;
+  setActiveVariable: (value: string) => void;
 }
 
 // initial empty state
@@ -55,11 +57,13 @@ const initialState: DataState = {
   inventoryCount: { total: 0, filtered: 0 },
   synced: false,
   filterValues: {
-    radius: { lower: 10, upper: 90 },
-    height: { lower: 10, upper: 90 },
+    radius: { lower: 4, upper: 50 },
+    height: { lower: 3, upper: 43 },
   },
   setFilterValues: (value: FilterValues) => {},
   inventoryStats: null,
+  activeVariable: "height",
+  setActiveVariable: (value: string) => {},
 };
 
 // build the context
@@ -75,13 +79,14 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const [inventoryCount, setInventoryCount] = useState<Count>(
     initialState.inventoryCount
   );
+  const [activeVariable, setActiveVariable] = useState<string>("height");
 
   // create state for synchronization
   const [synced, setSynced] = useState<boolean>(false);
   //TODO: Use real values instread.
   const [filterValues, setFilterValues] = useState<FilterValues>({
-    radius: { lower: 0, upper: 90 },
-    height: { lower: 0, upper: 90 },
+    radius: { lower: 4, upper: 50 },
+    height: { lower: 3, upper: 43 },
   });
 
   // use the offline context
@@ -166,9 +171,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   // re-filter inventory when allInventory changes
   useEffect(() => {
     if (allInventory) {
-//      console.log("allInventory:", allInventory);
-//      console.log("filterValues:", filterValues);
-      
+      //      console.log("allInventory:", allInventory);
+      //      console.log("filterValues:", filterValues);
+
       // TODO build the filter here
       const inv = {
         type: "FeatureCollection",
@@ -186,9 +191,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       } as InventoryData;
 
       // update the bounding box
-      inv.bbox = bbox(inv)
+      inv.bbox = bbox(inv);
       setFilteredInventory(inv);
-      
+
       // set the counts as state for performance reasons
       setInventoryCount({
         total: allInventory.features.length,
@@ -199,7 +204,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       setFilteredInventory(undefined);
       setInventoryCount({ total: 0, filtered: 0 });
     }
-//    console.log("filteredInventory:", filteredInventory);
+    //    console.log("filteredInventory:", filteredInventory);
   }, [allInventory, filterValues]);
 
   // create the final value
@@ -211,6 +216,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     filterValues: filterValues,
     setFilterValues: setFilterValues,
     inventoryStats: inventoryStats || null,
+    activeVariable: activeVariable,
+    setActiveVariable: setActiveVariable,
   };
 
   return (

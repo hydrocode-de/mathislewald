@@ -1,6 +1,8 @@
 import {
   IonButtons,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonHeader,
   IonIcon,
   IonMenuButton,
@@ -8,7 +10,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { layers } from "ionicons/icons";
+import { layers, map } from "ionicons/icons";
 import React from "react";
 import InventoryList from "../components/InventoryList";
 
@@ -27,6 +29,11 @@ const InventoryListPage: React.FC = () => {
       </IonHeader>
       <IonContent color="light">
         <InventoryList></InventoryList>
+        <IonFab slot="fixed" horizontal="end" vertical="bottom">
+          <IonFabButton routerLink="/map" routerDirection="none">
+            <IonIcon icon={map} />
+          </IonFabButton>
+        </IonFab>
       </IonContent>
     </IonPage>
   );

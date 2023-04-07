@@ -1,18 +1,11 @@
 import {
   IonButton,
-  IonButtons,
   IonCol,
-  IonContent,
   IonGrid,
-  IonHeader,
-  IonItem,
   IonLabel,
   IonList,
-  IonPage,
   IonRange,
   IonRow,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 
 import React, { useState } from "react";
@@ -28,12 +21,15 @@ const RangeFilter: React.FC = () => {
   const { filterValues, setFilterValues, inventoryStats } = useData();
   const [radius, setRadius] = useState<RangeValue>({ ...filterValues.radius });
   const [height, setHeight] = useState<RangeValue>({ ...filterValues.height });
+  // console.log("filterValues:", filterValues);
+  // console.log("radius", radius);
+  // console.log("height", height);
 
   return (
-    <IonList inset class="ion-padding">
+    <IonList class="ion-padding">
       <IonGrid class="ion-no-padding">
         <IonRow class="ion-align-items-center">
-          <IonCol size="3">
+          <IonCol size="4">
             <IonLabel>Height</IonLabel>
           </IonCol>
           <IonCol>
@@ -62,7 +58,7 @@ const RangeFilter: React.FC = () => {
           </IonCol>
         </IonRow>
         <IonRow class="ion-align-items-center">
-          <IonCol size="3">
+          <IonCol size="4">
             <IonLabel class="ion-no-padding">Radius</IonLabel>
           </IonCol>
           <IonCol>
@@ -91,8 +87,8 @@ const RangeFilter: React.FC = () => {
           </IonCol>
         </IonRow>
         <IonRow class="ion-align-items-center">
-          <IonCol size="3">
-            <IonLabel class="ion-no-padding">Dist.</IonLabel>
+          <IonCol size="4">
+            <IonLabel class="ion-no-padding">Distance</IonLabel>
           </IonCol>
           <IonCol class="ion-align-items-center">
             <IonRange

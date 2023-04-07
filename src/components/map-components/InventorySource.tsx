@@ -1,19 +1,12 @@
 import { useEffect, useState } from "react";
 import cloneDeep from "lodash.clonedeep";
 import { CirclePaint, CircleLayout, MapLayerMouseEvent } from "mapbox-gl";
-import { Source, Layer, useMap, MapRef } from "react-map-gl";
+import { Source, Layer, useMap } from "react-map-gl";
 
 import { useData } from "../../context/data";
 import { InventoryData, InventoryFeature } from "../../context/data.model";
 import { useLayers } from "../../context/layers";
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonItem,
-  IonLabel,
-} from "@ionic/react";
+import { IonPopover } from "@ionic/react";
 import { useHistory } from "react-router";
 import { useOffline } from "../../context/offline";
 
@@ -97,9 +90,9 @@ const InventoryLayer: React.FC = () => {
         setHovered((e.features as any)[0]);
 
         // set the preview Image
-        getImageData(JSON.parse((e.features as any)[0].properties.images)[0])
-        .then(val => setCurrentImg(`data:image/png;base64,${val}`))
-        
+        getImageData(
+          JSON.parse((e.features as any)[0].properties.images)[0]
+        ).then((val) => setCurrentImg(`data:image/png;base64,${val}`));
 
         map.current?.setFeatureState(
           { source: "inventory", id: e.features[0].id },
@@ -114,7 +107,7 @@ const InventoryLayer: React.FC = () => {
     // mouseLeave
     map.current.on("mouseleave", "inventory", (e: MapLayerMouseEvent) => {
       setHovered(undefined);
-      setCurrentImg(null)
+      setCurrentImg(null);
       // disable hover state for all features, not matter what
       src?.features.forEach((f) => {
         map.current?.setFeatureState(
@@ -184,39 +177,40 @@ const InventoryLayer: React.FC = () => {
         </Source>
       ) : null}
       {hovered ? (
-        <IonCard
-          style={{
-            position: "fixed",
-            zIndex: 99,
-            backgroundTransparency: 0.6,
-            top: "64px",
-            left: 0,
-            maxWidth: "250px",
-          }}
-        >
-          <img
-            alt="img"
-            //src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.images[0]}`}
-            src={currentImg ? currentImg : ''}
-            width="250"
-          />
-          <IonCardHeader>
-            <IonCardTitle>TreeID: {hovered.properties.treeid}</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <IonItem lines="none">
-              <IonLabel slot="start">Height: </IonLabel>
-              <IonLabel>{hovered.properties.height.toFixed(1)} m</IonLabel>
-            </IonItem>
-            <IonItem lines="none">
-              <IonLabel slot="start">Radius: </IonLabel>
-              <IonLabel>
-                {(hovered.properties.radius * 100).toFixed(0)} cm
-              </IonLabel>
-            </IonItem>
-          </IonCardContent>
-        </IonCard>
-      ) : null}
+        <IonPopover>test</IonPopover>
+      ) : // <IonCard
+      //   style={{
+      //     position: "fixed",
+      //     zIndex: 99,
+      //     backgroundTransparency: 0.6,
+      //     top: "64px",
+      //     left: 0,
+      //     maxWidth: "250px",
+      //   }}
+      // >
+      //   <img
+      //     alt="img"
+      //     //src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.images[0]}`}
+      //     src={currentImg ? currentImg : ''}
+      //     width="250"
+      //   />
+      //   <IonCardHeader>
+      //     <IonCardTitle>TreeID: {hovered.properties.treeid}</IonCardTitle>
+      //   </IonCardHeader>
+      //   <IonCardContent>
+      //     <IonItem lines="none">
+      //       <IonLabel slot="start">Height: </IonLabel>
+      //       <IonLabel>{hovered.properties.height.toFixed(1)} m</IonLabel>
+      //     </IonItem>
+      //     <IonItem lines="none">
+      //       <IonLabel slot="start">Radius: </IonLabel>
+      //       <IonLabel>
+      //         {(hovered.properties.radius * 100).toFixed(0)} cm
+      //       </IonLabel>
+      //     </IonItem>
+      //   </IonCardContent>
+      // </IonCard>
+      null}
     </>
   );
 };

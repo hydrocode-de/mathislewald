@@ -11,26 +11,22 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { layers, map, settings, settingsOutline } from "ionicons/icons";
+import { layers, listSharp, settingsOutline } from "ionicons/icons";
 import { useRef } from "react";
 
 import MainMap from "../components/MainMapMaplibre";
-import {
-  BaseLayerPopover,
-  BaseLayerSheetModal,
-} from "../components/BaseLayerSelector";
-import "./MapPage.css";
-
-const MapButton: React.FC = () => {
-  return (
-    <IonButton id="open-modal" className="mapButton" size="small">
-      <IonIcon icon={layers} />
-    </IonButton>
-  );
-};
+import BaseLayerSheetModal from "../components/modal/BaseLayerModal";
+import "./MobilePage.css";
+import MapButtonGroup from "../components/MapButtonGroup";
+import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
+import RangeFilterSheetModal from "../components/modal/RangeFilterModal";
+import VariableSelectionModal from "../components/modal/VariableSelectionModal";
 
 const MapPage: React.FC = () => {
-  const modal = useRef<HTMLIonModalElement>(null);
+  const baseLayerModal = useRef<HTMLIonModalElement>(null);
+  const filterModal = useRef<HTMLIonModalElement>(null);
+  const variableSelectionModal = useRef<HTMLIonModalElement>(null);
+
   return (
     <IonPage>
       <IonHeader>
@@ -48,20 +44,43 @@ const MapPage: React.FC = () => {
           <IonTitle>Mathislewald</IonTitle>
         </IonToolbar>
       </IonHeader>
-
       <IonContent fullscreen>
-        <IonFab slot="fixed" horizontal="end" vertical="top">
-          <IonFabButton id="open-modal">
-            <IonIcon icon={map} />
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 4,
+            left: 5,
+          }}
+        >
+          <div
+            style={{
+              paddingTop: "10px",
+              paddingLeft: "5px",
+            }}
+          >
+            <MapButtonGroup padding={0} />
+          </div>
+        </div>
+        <IonFab slot="fixed" horizontal="end" vertical="bottom">
+          <IonFabButton routerLink="/list" routerDirection="none">
+            <IonIcon icon={listSharp} />
           </IonFabButton>
         </IonFab>
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 99,
+            bottom: 20,
+            left: 15,
+          }}
+        >
+          <ActiveMapSelectionButton height={80} width={80} />
+        </div>
 
         <MainMap />
-        {window.innerWidth > 768 ? (
-          <BaseLayerPopover />
-        ) : (
-          <BaseLayerSheetModal modal={modal}></BaseLayerSheetModal>
-        )}
+        <BaseLayerSheetModal modal={baseLayerModal} />
+        <RangeFilterSheetModal modal={filterModal} />
+        <VariableSelectionModal modal={variableSelectionModal} />
       </IonContent>
     </IonPage>
   );
