@@ -1,6 +1,6 @@
 import { IonPopover } from "@ionic/react";
 import React from "react";
-import RangeFilter from "./RangeFilter";
+import RangeFilter from "../RangeFilter";
 
 const FilterBarPopover: React.FC = () => {
   return (

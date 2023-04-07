@@ -1,13 +1,14 @@
 import {
   IonButton,
   IonButtons,
+  IonContent,
   IonIcon,
   IonModal,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { closeCircle } from "ionicons/icons";
-import RangeFilter from "./RangeFilter";
+import { closeCircleOutline } from "ionicons/icons";
+import RangeFilter from "../RangeFilter";
 
 const RangeFilterSheetModal: React.FC<{
   modal: React.RefObject<HTMLIonModalElement>;
@@ -18,11 +19,13 @@ const RangeFilterSheetModal: React.FC<{
         <IonTitle>Filter Data</IonTitle>
         <IonButtons slot="end">
           <IonButton onClick={() => modal.current?.dismiss()}>
-            <IonIcon icon={closeCircle} />
+            <IonIcon icon={closeCircleOutline} />
           </IonButton>
         </IonButtons>
       </IonToolbar>
-      <RangeFilter />
+      <IonContent class="ion-padding">
+        <RangeFilter />
+      </IonContent>
     </IonModal>
   );
 };

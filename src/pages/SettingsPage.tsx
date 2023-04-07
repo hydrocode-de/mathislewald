@@ -1,26 +1,32 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage,  IonTitle, IonToolbar } from "@ionic/react"
+import {
+  IonBackButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
 
 import Settings from "../components/Settings";
 
 const SettingsPage: React.FC = () => {
-    return (
-        <IonPage>
-            
-            <IonHeader>
-                <IonToolbar>
-                    <IonButtons slot="start">
-                        <IonBackButton />
-                    </IonButtons>
-                    <IonTitle>Settings</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+  return (
+    <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton />
+          </IonButtons>
+          <IonTitle>Settings</IonTitle>
+        </IonToolbar>
+      </IonHeader>
 
-            <IonContent fullscreen>
-                <Settings />
-            </IonContent>
+      <IonContent fullscreen>
+        <Settings />
+      </IonContent>
+    </IonPage>
+  );
+};
 
-        </IonPage>
-    )
-}
-
-export default SettingsPage
+export default SettingsPage;

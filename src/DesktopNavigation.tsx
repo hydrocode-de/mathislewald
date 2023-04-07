@@ -16,7 +16,7 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
 import { listSharp, map } from "ionicons/icons";
-import DataLayerDrawer from "./components/DataLayerSelector";
+import DataLayerDrawer from "./components/archive/DataLayerSelector";
 import TreeOverviewPage from "./pages/TreeOverviewPage";
 import InventoryListPage from "./pages/InventoryListPage";
 import MapPage from "./pages/MobilePage";

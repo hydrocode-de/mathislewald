@@ -26,7 +26,7 @@ const VarialbeSelector: React.FC = () => {
           slot="end"
           value="BHD"
           onClick={() => {
-            setActiveVariable("Radius");
+            setActiveVariable("BHD");
           }}
         ></IonRadio>
       </IonItem>

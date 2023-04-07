@@ -10,7 +10,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { layers, listSharp, map } from "ionicons/icons";
+import { layers, map } from "ionicons/icons";
 import React from "react";
 import InventoryList from "../components/InventoryList";
 

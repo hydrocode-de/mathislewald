@@ -1,6 +1,4 @@
 import {
-  IonBackButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -8,18 +6,12 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
-  IonHeader,
   IonItem,
   IonLabel,
-  IonListHeader,
   IonNote,
-  IonPage,
   IonRow,
   IonSegment,
   IonSegmentButton,
-  IonText,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 import { Data, Layout } from "plotly.js";
 import { useEffect, useState } from "react";

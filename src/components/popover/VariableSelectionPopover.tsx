@@ -1,6 +1,6 @@
 import { IonPopover } from "@ionic/react";
 import React from "react";
-import VarialbeSelector from "./VariableSelector";
+import VarialbeSelector from "../VariableSelector";
 
 const VariableSelectionPopover: React.FC = () => {
   return (

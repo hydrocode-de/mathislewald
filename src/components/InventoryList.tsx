@@ -19,7 +19,6 @@ import {
   bookmark,
   bookmarkOutline,
   filterOutline,
-  navigateOutline,
 } from "ionicons/icons";
 import { useState } from "react";
 import { useHistory } from "react-router";

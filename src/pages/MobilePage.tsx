@@ -15,11 +15,12 @@ import { layers, listSharp, settingsOutline } from "ionicons/icons";
 import { useRef } from "react";
 
 import MainMap from "../components/MainMapMaplibre";
-import { BaseLayerSheetModal } from "../components/BaseLayerSelector";
+import BaseLayerSheetModal from "../components/modal/BaseLayerModal";
 import "./MobilePage.css";
 import MapButtonGroup from "../components/MapButtonGroup";
 import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
-import RangeFilterSheetModal from "../components/RangeFilterModal";
+import RangeFilterSheetModal from "../components/modal/RangeFilterModal";
+import VariableSelectionModal from "../components/modal/VariableSelectionModal";
 
 // const MapButton: React.FC = () => {
 //   return (
@@ -84,6 +85,7 @@ const MapPage: React.FC = () => {
         <MainMap />
         <BaseLayerSheetModal modal={modal} />
         <RangeFilterSheetModal modal={modal} />
+        <VariableSelectionModal modal={modal} />
       </IonContent>
     </IonPage>
   );

@@ -1,7 +1,6 @@
 import { IonButton, IonImg, IonNote } from "@ionic/react";
 import { useEffect, useState } from "react";
 import { useLayers } from "../context/layers";
-import { setCacheNameDetails } from "workbox-core";
 
 interface ActiveMapSelectionButtonProps {
   height: number;

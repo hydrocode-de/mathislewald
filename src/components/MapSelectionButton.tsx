@@ -1,13 +1,4 @@
-import {
-  IonButton,
-  IonContent,
-  IonHeader,
-  IonImg,
-  IonNote,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonButton, IonImg, IonNote } from "@ionic/react";
 import React from "react";
 import { useLayers } from "../context/layers";
 

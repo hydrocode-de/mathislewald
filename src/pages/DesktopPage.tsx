@@ -19,14 +19,14 @@ import { settingsOutline } from "ionicons/icons";
 import React from "react";
 import InventoryList from "../components/InventoryList";
 import MainMap from "../components/MainMapMaplibre";
-import { BaseLayerPopover } from "../components/BaseLayerSelector";
+import BaseLayerPopover from "../components/popover/BaseLayerPopover";
 import { Route, Switch } from "react-router";
 import TreeDetails from "../components/TreeDetails";
 import Settings from "../components/Settings";
-import FilterBarPopover from "../components/RangeFilterPopover";
+import FilterBarPopover from "../components/popover/RangeFilterPopover";
 import MapButtonGroup from "../components/MapButtonGroup";
 import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
-import VariableSelectionPopover from "../components/VvariableSelectionPopover";
+import VariableSelectionPopover from "../components/popover/VariableSelectionPopover";
 
 const DesktopPage: React.FC = () => {
   return (
