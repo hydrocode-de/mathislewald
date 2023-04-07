@@ -22,14 +22,6 @@ import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
 import RangeFilterSheetModal from "../components/modal/RangeFilterModal";
 import VariableSelectionModal from "../components/modal/VariableSelectionModal";
 
-// const MapButton: React.FC = () => {
-//   return (
-//     <IonButton id="open-modal" className="mapButton" size="small">
-//       <IonIcon icon={layers} />
-//     </IonButton>
-//   );
-// };
-
 const MapPage: React.FC = () => {
   const baseLayerModal = useRef<HTMLIonModalElement>(null);
   const filterModal = useRef<HTMLIonModalElement>(null);
