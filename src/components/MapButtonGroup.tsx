@@ -32,7 +32,7 @@ const MapButtonGroup: React.FC<MapButtonGroupProps> = ({
         <IonLabel>Filter</IonLabel>
         <IonIcon icon={chevronDownOutline} />
       </IonButton>
-      <IonButton color={"light"}>
+      <IonButton color={"light"} disabled>
         <IonLabel>Selection</IonLabel>
         <IonIcon icon={bookmarks}></IonIcon>
       </IonButton>
