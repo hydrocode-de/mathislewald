@@ -16,7 +16,7 @@ const SelectionList: React.FC = () => {
     }
 
     return (
-        <IonList inset>
+        <IonList>
             {selections?.map((s) => (
                 <IonItem key={s.id} lines="none">
                     <IonLabel>{s.title}</IonLabel>
