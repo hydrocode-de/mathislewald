@@ -26,7 +26,7 @@ const RangeFilter: React.FC = () => {
   // console.log("height", height);
 
   return (
-    <IonList inset class="ion-padding">
+    <IonList class="ion-padding">
       <IonGrid class="ion-no-padding">
         <IonRow class="ion-align-items-center">
           <IonCol size="4">

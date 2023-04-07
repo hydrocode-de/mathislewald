@@ -55,7 +55,7 @@ const DesktopPage: React.FC = () => {
                   position: "absolute",
                   zIndex: 4,
                   top: 12,
-                  left: 10,
+                  left: 20,
                 }}
               >
                 <MapButtonGroup padding={10} />

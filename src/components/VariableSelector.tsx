@@ -7,7 +7,7 @@ const VarialbeSelector: React.FC = () => {
     <IonRadioGroup
       //   value="space-between"
       allowEmptySelection={true}
-      value="Height"
+      value={activeVariable === "Height" ? "Height" : "BHD"}
     >
       <IonItem>
         <IonLabel>Height</IonLabel>
@@ -22,7 +22,13 @@ const VarialbeSelector: React.FC = () => {
 
       <IonItem>
         <IonLabel>BHD</IonLabel>
-        <IonRadio slot="end" value="BHD"></IonRadio>
+        <IonRadio
+          slot="end"
+          value="BHD"
+          onClick={() => {
+            setActiveVariable("Radius");
+          }}
+        ></IonRadio>
       </IonItem>
     </IonRadioGroup>
   );
