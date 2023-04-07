@@ -9,7 +9,8 @@ const FilterBarPopover: React.FC = () => {
       triggerAction="click"
       reference="trigger"
       side="bottom"
-      arrow={false}
+      arrow={true}
+      // mode="md"
       showBackdrop={false}
       style={{
         "--offset-x": "10px",
