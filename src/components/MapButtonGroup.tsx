@@ -1,4 +1,4 @@
-import { IonButton, IonIcon, IonLabel } from "@ionic/react";
+import { IonBadge, IonButton, IonIcon, IonLabel } from "@ionic/react";
 import { bookmarks, chevronDownOutline } from "ionicons/icons";
 import { useData } from "../context/data";
 
@@ -13,25 +13,38 @@ const MapButtonGroup: React.FC<MapButtonGroupProps> = ({
   //   top,
   //   left,
 }) => {
-  const { activeVariable } = useData();
+  const { activeVariable, inventoryCount } = useData();
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+      }}
+    >
       <IonButton color={"light"} id="open-variable-selector">
         {activeVariable}
         <IonIcon icon={chevronDownOutline} slot="end" />
       </IonButton>
-      <IonButton
-        color={"light"}
-        id="open-range-filter"
-        style={{
-          paddingLeft: padding,
-          paddingRight: padding,
-        }}
-      >
-        Filter
-        <IonIcon icon={chevronDownOutline} slot="end" />
-      </IonButton>
+      <div>
+        <IonButton
+          color={"light"}
+          id="open-range-filter"
+          style={{
+            paddingLeft: padding,
+            paddingRight: padding,
+          }}
+        >
+          <IonBadge
+            style={{
+              marginRight: 6,
+            }}
+          >
+            {inventoryCount.filtered}
+          </IonBadge>
+          Filter
+          <IonIcon icon={chevronDownOutline} slot="end" />
+        </IonButton>
+      </div>
       <IonButton color={"light"} disabled>
         Selection
         <IonIcon icon={bookmarks} slot="end"></IonIcon>
