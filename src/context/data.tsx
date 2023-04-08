@@ -43,7 +43,7 @@ interface DataState {
   filteredInventory: InventoryData | null;
   inventoryCount: Count;
   synced: boolean;
-  filterValues: FilterValues;
+  filterValues: FilterValues | undefined;
   setFilterValues: (value: FilterValues) => void;
   inventoryStats: InventoryDataStats | null;
   activeVariable: string;
@@ -56,10 +56,7 @@ const initialState: DataState = {
   filteredInventory: null,
   inventoryCount: { total: 0, filtered: 0 },
   synced: false,
-  filterValues: {
-    radius: { lower: 4, upper: 50 },
-    height: { lower: 3, upper: 43 },
-  },
+  filterValues: undefined,
   setFilterValues: (value: FilterValues) => {},
   inventoryStats: null,
   activeVariable: "height",
@@ -85,10 +82,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const [synced, setSynced] = useState<boolean>(false);
 
   //TODO: Use real values instread.
-  const [filterValues, setCurrentFilterValues] = useState<FilterValues>({
-    radius: { lower: 4, upper: 50 },
-    height: { lower: 3, upper: 43 },
-  });
+  const [filterValues, setCurrentFilterValues] = useState<FilterValues | undefined>(undefined);
 
   // use the offline context
   const { inventory } = useOffline();
@@ -97,30 +91,40 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const setFilterValues = (newValues: FilterValues) => {
     setCurrentFilterValues({
       height: { ...newValues.height },
-      radius: {lower: newValues.radius.lower / 1000, upper: newValues.radius.upper}
+      radius: { ...newValues.radius}
     })
   } 
 
   // copy over inventory data
   useEffect(() => {
     if (inventory) {
+      // copy inventory over
       setAllInventory(inventory);
+
+      // calculate the stats for variables
+      const currentStats = {
+        radiusMax: Math.max(
+          ...inventory.features.map((f) => f.properties.radius)
+        ),
+        radiusMin: Math.min(
+          ...inventory.features.map((f) => f.properties.radius)
+        ),
+        heightMax: Math.max(
+          ...inventory.features.map((f) => f.properties.height)
+        ),
+        heightMin: Math.min(
+          ...inventory.features.map((f) => f.properties.height)
+        ),
+      }
       setInventoryStats({
-        data: {
-          radiusMax: Math.max(
-            ...inventory.features.map((f) => f.properties.radius)
-          ),
-          radiusMin: Math.min(
-            ...inventory.features.map((f) => f.properties.radius)
-          ),
-          heightMax: Math.max(
-            ...inventory.features.map((f) => f.properties.height)
-          ),
-          heightMin: Math.min(
-            ...inventory.features.map((f) => f.properties.height)
-          ),
-        },
+        data: {...currentStats},
       });
+
+      // set the filter to the current min/max as the dataset changed
+      setCurrentFilterValues({
+        radius: {lower: currentStats.radiusMin, upper: currentStats.radiusMax},
+        height: {lower: currentStats.heightMin, upper: currentStats.heightMax}
+      })
 
       setInventoryCount({
         total: inventory.features.length,
@@ -134,7 +138,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
 
   // re-filter inventory when allInventory changes
   useEffect(() => {
-    if (allInventory) {
+    if (allInventory && !!filterValues) {
       //      console.log("allInventory:", allInventory);
       //      console.log("filterValues:", filterValues);
 
@@ -145,8 +149,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
           ...cloneDeep(
             allInventory.features.filter(
               (f) =>
-                f.properties.radius > filterValues.radius.lower / 100 &&
-                f.properties.radius < filterValues.radius.upper / 100 &&
+                f.properties.radius > filterValues.radius.lower &&
+                f.properties.radius < filterValues.radius.upper &&
                 f.properties.height > filterValues.height.lower &&
                 f.properties.height < filterValues.height.upper
             )

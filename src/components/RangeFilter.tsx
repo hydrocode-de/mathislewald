@@ -25,16 +25,16 @@ const RangeFilter: React.FC = () => {
   const [radius, setRadius] = useState<RangeValue | undefined>(undefined);
   const [height, setHeight] = useState<RangeValue | undefined>(undefined);
 
-  // use effect to set the filter to min and max only once
+  // use effect to set the filter to current filter
   useEffect(() => {
     // set default radius if still undefined
-    if (!radius && inventoryStats?.data!) {
-      setRadius({lower: inventoryStats.data.radiusMin * 100, upper: inventoryStats.data.radiusMax * 100})
+    if (!radius && !!filterValues) {
+      setRadius({...filterValues.radius})
     }
 
     // set default height if still undefined
-    if (!height && inventoryStats?.data!) {
-      setHeight({lower: inventoryStats.data.heightMin, upper: inventoryStats.data.heightMax})
+    if (!height && !!filterValues) {
+      setHeight({...filterValues.height})
     }
   }, [inventoryStats, radius, height])
 
@@ -83,13 +83,13 @@ const RangeFilter: React.FC = () => {
           <IonCol>
             <IonRange
               dualKnobs={true}
-              value={radius}
+              value={{lower: radius?.lower! * 100, upper: radius?.upper! * 100}}
               pin={true}
               min={(inventoryStats?.data?.radiusMin as number) * 100}
               max={(inventoryStats?.data?.radiusMax as number) * 100}
               pinFormatter={(value: number) => `${value.toFixed(0)}cm`}
               class="ion-no-padding"
-              onIonKnobMoveEnd={e => e.detail.value ? setRadius(e.detail.value as RangeValue) : null}
+              onIonKnobMoveEnd={e => e.detail.value ? setRadius({lower: (e.detail.value as RangeValue).lower / 100, upper: (e.detail.value as RangeValue).upper / 100}) : null}
               // onIonChange={({ detail }) => {
               //   if (detail.value) {
               //     // console.log("e.detail.value:", Object(detail.value));
@@ -132,8 +132,10 @@ const RangeFilter: React.FC = () => {
         <IonRow class="ion-justify-content-end">
           <IonButton
             disabled={
-              isEqual(filterValues.radius, radius) &&
-              isEqual(filterValues.height, height)
+              (filterValues &&
+                isEqual(filterValues.radius, radius) &&
+                isEqual(filterValues.height, height)
+              ) || !filterValues
             }
             onClick={() => {
               if (!radius || !height) return
