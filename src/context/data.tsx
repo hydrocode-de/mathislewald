@@ -83,14 +83,23 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
 
   // create state for synchronization
   const [synced, setSynced] = useState<boolean>(false);
+
   //TODO: Use real values instread.
-  const [filterValues, setFilterValues] = useState<FilterValues>({
+  const [filterValues, setCurrentFilterValues] = useState<FilterValues>({
     radius: { lower: 4, upper: 50 },
     height: { lower: 3, upper: 43 },
   });
 
   // use the offline context
   const { inventory } = useOffline();
+
+  // define the setFilterValues function
+  const setFilterValues = (newValues: FilterValues) => {
+    setCurrentFilterValues({
+      height: { ...newValues.height },
+      radius: {lower: newValues.radius.lower / 1000, upper: newValues.radius.upper}
+    })
+  } 
 
   // copy over inventory data
   useEffect(() => {
@@ -122,51 +131,6 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       setInventoryCount({ total: 0, filtered: 0 });
     }
   }, [inventory]);
-
-  // use the offline context
-
-  // copy over inventory data
-  // useEffect(() => {
-  //   if (inventory) {
-  //     setAllInventory(inventory);
-  //     setInventoryCount({
-  //       total: inventory.features.length,
-  //       filtered: inventory.features.length,
-  //     });
-  //   } else {
-  //     setAllInventory(undefined);
-  //     setInventoryCount({ total: 0, filtered: 0 });
-  //   }
-  // }, [inventory]);
-
-  // re-filter inventory when allInventory changes
-  //   useEffect(() => {
-  //       if (allInventory) {
-  //           // TODO build the filter here
-  //           const inv = {
-  //               type: 'FeatureCollection',
-  //               bbox: allInventory?.bbox,  // TODO after filter, update this
-  //               features: [...cloneDeep(allInventory.features.filter(f => true))]
-  //           } as InventoryData
-
-  //           // set States
-  //           setFilteredInventory(inv)
-  //           setInventoryCount({total: allInventory.features.length, filtered: inv.features.length})
-  //           setSynced(true)
-  //       } else {
-  //           setFilteredInventory(undefined)
-  //           setInventoryCount({total: 0, filtered: 0})
-  //       }
-  //   }, [allInventory])
-
-  //   // create the final value
-  //   const value = {
-  //       allInventory: allInventory || null,
-  //       filteredInventory: filteredInventory || null,
-  //       inventoryCount,
-  //       synced
-  //   }
-  // }, [inventory]);
 
   // re-filter inventory when allInventory changes
   useEffect(() => {
@@ -213,11 +177,11 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     filteredInventory: filteredInventory || null,
     inventoryCount,
     synced,
-    filterValues: filterValues,
-    setFilterValues: setFilterValues,
+    filterValues,
+    setFilterValues,
     inventoryStats: inventoryStats || null,
-    activeVariable: activeVariable,
-    setActiveVariable: setActiveVariable,
+    activeVariable,
+    setActiveVariable,
   };
 
   return (
