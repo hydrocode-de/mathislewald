@@ -1,11 +1,13 @@
 import { IonBadge, IonButton, IonIcon, IonItem, IonLabel, IonList } from "@ionic/react"
 import { trashOutline } from "ionicons/icons"
 import { useOffline } from "../context/offline"
+import { useSelection } from "../context/selection"
 
 const SelectionList: React.FC = () => {
     // load the selection-related functions from the offline context
     // TODO: replace with data context, once implemented
-    const { selections, createSelection, dropSelection } = useOffline()
+    const { createSelection, dropSelection } = useOffline()
+    const { selections } = useSelection()
     
     // create random selection - DEBUG ONLY
     const onCreateNewSelection = () => {
@@ -26,7 +28,8 @@ const SelectionList: React.FC = () => {
                     </IonButton>
                 </IonItem>
             ))}
-            <IonButton fill="solid" expand="block" color="success" onClick={onCreateNewSelection}>NEW SELECTION</IonButton>
+            {/* <IonButton fill="solid" expand="block" color="success" onClick={onCreateNewSelection}>NEW SELECTION</IonButton> */}
+            <IonButton fill="clear" expand="block" color="danger" disabled>DELETE ALl</IonButton>
         </IonList>
     )
 }
