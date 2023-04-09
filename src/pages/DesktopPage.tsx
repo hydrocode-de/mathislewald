@@ -83,11 +83,13 @@ const DesktopPage: React.FC = () => {
                     <IonCard
                       style={{
                         position: "absolute",
+                        margin: "0px",
                         top: 60,
-                        left: 12,
+                        left: 20,
                         // width: "33vw",
                         width: "400px",
-                        height: "90%",
+                        maxWidth: "80%",
+                        height: "calc(100% - 60px - 20px)",
                         zIndex: 999,
                         overflowY: "auto",
                       }}
