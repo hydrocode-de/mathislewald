@@ -1,5 +1,5 @@
 export interface InventorySelection {
-    id: number;
+    id: string;
     title?: string;
     treeIds: number[];
 }

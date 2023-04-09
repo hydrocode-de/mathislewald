@@ -9,6 +9,7 @@ import { SettingsProvider } from './context/settings';
 import { DataProvider } from './context/data';
 import { LayersProvider } from './context/layers';
 import { OfflineProvider } from './context/offline';
+import { SelectionProvider } from './context/selection';
 
 
 const container = document.getElementById('root');
@@ -18,9 +19,11 @@ root.render(
     <SettingsProvider>
       <OfflineProvider>
         <DataProvider>
-          <LayersProvider>
-            <App />
-          </LayersProvider>
+          <SelectionProvider>
+            <LayersProvider>
+              <App />
+            </LayersProvider>
+          </SelectionProvider>
         </DataProvider>
       </OfflineProvider>
     </SettingsProvider>

@@ -16,6 +16,7 @@ import { InventoryData } from "./data.model";
 import { useSettings } from "./settings";
 import * as wfs from "../util/wfs";
 import * as wms from "../util/wms";
+import { InventorySelection } from "./inventory-selection.model";
 
 
 export type OFFLINE_STATUS = 'pending' | 'downloading' | 'online' | 'offline'
@@ -35,10 +36,14 @@ interface OfflineState {
     status: OFFLINE_STATUS,
     inventory: InventoryData | null;
     baselayers: wms.BaseLayerData[] | null;
+    selections: InventorySelection[] | null;
     localChecksums: Checksums | null;
     remoteChecksums: Checksums | null;
     getImageData: (name: string) => Promise<string>
     getBaselayer: (name: string) => Promise<string>
+    createSelection: (treeIds: number[], title?: string) => Promise<string>
+    updateSelection: (selection: InventorySelection) => Promise<string>
+    dropSelection: (selectionId: string) => Promise<void>
 }
 
 // initial state
@@ -46,10 +51,14 @@ const initialState: OfflineState = {
     status: 'pending',
     inventory: null,
     baselayers: null,
+    selections: null,
     localChecksums: null,
     remoteChecksums: null,
     getImageData: (name: string) => Promise.reject(),
-    getBaselayer: (name: string) => Promise.reject()
+    getBaselayer: (name: string) => Promise.reject(),
+    createSelection: (treeIds: number[], title?: string) => Promise.reject(),
+    updateSelection: (selection: InventorySelection) => Promise.reject(),
+    dropSelection: (selectionId: string) => Promise.reject(),
 }
 
 // build the context
@@ -65,6 +74,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     const [inventory, setInventory] = useState<InventoryData | null>(null)
     const [images, _] = useState<OfflineImage[] | null>(null)
     const [baselayers, setBaseLayers] = useState<wms.BaseLayerData[] | null>(null)
+    const [selections, setSelections] = useState<InventorySelection[] | null>(null)
 
     // handle the files
     const [localChecksums, setLocalChecksums] = useState<Checksums | null>(null)
@@ -252,6 +262,108 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         setBaseLayers(layers)
     }
 
+    const loadSelections = () => {
+        // only load the selection file if the folder exists
+        if (fileInfos?.map(i => i.name).includes('selections')) {
+            // read the selections path
+            Filesystem.readdir({path: '/selections', directory: Directory.Data}).then(files => {
+                // get all selections that end on .json
+                const selectionFiles = files.files.filter(f => f.name.endsWith('.json'))
+                
+                // collect all requests for selections content
+                const requests: Promise<InventorySelection>[] = []
+                selectionFiles.forEach(f => {
+                    requests.push(Filesystem.readFile({path: `/selections/${f.name}`, directory: Directory.Data})
+                    .then(res => {
+                        const selection = JSON.parse(res.data) as InventorySelection
+                        return selection
+                    }))
+                })
+
+                // wait until all Promises resolved
+                Promise.all(requests).then(selections => {
+                    setSelections(selections)
+                })
+            })
+        }
+
+    }
+
+    const createSelection = async (treeIds: number[], title?: string): Promise<string> => {
+        // create a random 16 character string as id
+        const id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+
+        // create the selection object
+        const selection: InventorySelection = {
+            id: id,
+            title: title ? title : 'New Selection',
+            treeIds: treeIds
+        }
+
+        // use updateSelection to create the file
+        return updateSelection(selection)
+    }
+
+    const updateSelection = async (selection: InventorySelection): Promise<string> => {
+        // create the selections folder if it does not exist
+        if (!fileInfos?.map(i => i.name).includes('selections')) {
+            await Filesystem.mkdir({path: '/selections', directory: Directory.Data})
+        }
+
+        // create the selection file
+        const path = `/selections/${selection.id}.json`
+        return Filesystem.writeFile({
+            path: path,
+            directory: Directory.Data,
+            data: JSON.stringify(selection),
+            encoding: Encoding.UTF8
+        }) 
+        // resolve the path
+        .then(() => {
+            // create the new array of selections
+            let newSelections: InventorySelection[] = []
+            if (selections) {
+                newSelections = cloneDeep([...selections, selection])
+            } else {
+                newSelections = [selection]
+            }
+
+            // update the selections state variable
+            setSelections(newSelections)
+
+            // return the local path
+            return path
+        })
+    }
+
+    const dropSelection = async (selectionId: string): Promise<void> => {
+        // reject if the selection is still null
+        if (!selections) {
+            return Promise.reject('Selections not loaded')
+        }
+        
+        // find the selection
+        const selection = selections?.find(s => s.id === selectionId)
+        if (!selection) {
+            return Promise.reject('Selection not found')
+        }
+
+        // delete the file
+        await Filesystem.deleteFile({
+            path: `/selections/${selection.id}.json`,
+            directory: Directory.Data
+        }).then(() => {
+            updateFileList()
+        })
+
+        // create the new array of selections
+        // const newSelections = cloneDeep(selections.filter(s => s.id !== selectionId))
+        // setSelections(newSelections)
+
+        // resolve the promise
+        return Promise.resolve()
+    }
+
     const getBaselayer = (name: string) => {
         return Filesystem.readFile({path: `/baselayers/${name}.json`, directory: Directory.Data})
         .then(file => {
@@ -271,6 +383,11 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
     }
 
     const refreshOfflineData = (identifier: string) => {}
+
+    // effect to load the selections only once at component mount
+    useEffect(() => {
+        loadSelections()
+    }, [fileInfos])
 
     // run a check for data only once
     useEffect(() => {
@@ -338,17 +455,32 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             // wait until all are finished
             Promise.all(downloadPromises).then(() => setStatus('online'))
         }
-    }, [localChecksums, remoteChecksums])    
+    }, [localChecksums, remoteChecksums])
+
+    // load the selections once at context creation
+    useEffect(() => {
+        // only run if the selection is still null
+        if (selections) return
+
+        // only load if the selections folder exists
+        if (fileInfos?.map(i => i.name).includes('selections')) {
+            loadSelections()
+        }
+    }, [selections])
 
     // build the final context value
     const value = {
         status,
         inventory,
         baselayers,
+        selections,
         localChecksums,
         remoteChecksums,
         getImageData,
-        getBaselayer
+        getBaselayer,
+        createSelection,
+        updateSelection,
+        dropSelection,
     }
 
     return <>
