@@ -17,6 +17,7 @@ const BaseLayerSheetModal: React.FC<{
       ref={modal}
       trigger="open-map-selection-popover"
       initialBreakpoint={0.55}
+      breakpoints={[0, 0.25, 0.5, 0.75]}
     >
       <IonToolbar>
         <IonTitle>Map Type Selection</IonTitle>

@@ -8,8 +8,9 @@ const BaseLayerPopover: React.FC = () => {
       triggerAction="click"
       reference="trigger"
       side="right"
-      arrow={true}
-      showBackdrop={false}
+      arrow={false}
+      mode="md"
+      showBackdrop={true}
       style={{
         "--offset-x": "10px",
         // "--offset-y": "-20px",
