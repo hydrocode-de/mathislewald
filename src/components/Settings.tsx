@@ -6,6 +6,7 @@ import { checkmark, close } from "ionicons/icons"
 import { useOffline } from "../context/offline"
 import pack from '../../package.json';
 import { useSettings } from "../context/settings";
+import SelectionList from "./SelectionList";
 
 const Settings: React.FC = () => {
     // load offline context
@@ -103,6 +104,13 @@ const Settings: React.FC = () => {
                         ) : (<IonLabel><i>no GPS, or not activated</i></IonLabel>)}
                     </IonItem>
                 </IonList>
+            </IonAccordion>
+
+            <IonAccordion value="selection">
+                <IonItem slot="header" color="light">Selections</IonItem>
+                <div slot="content">
+                    <SelectionList />
+                </div>
             </IonAccordion>
 
         </IonAccordionGroup>
