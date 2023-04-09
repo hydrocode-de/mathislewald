@@ -1,6 +1,4 @@
 import {
-  IonBackButton,
-  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -8,18 +6,12 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
-  IonHeader,
   IonItem,
   IonLabel,
-  IonListHeader,
   IonNote,
-  IonPage,
   IonRow,
   IonSegment,
   IonSegmentButton,
-  IonText,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 import { Data, Layout } from "plotly.js";
 import { useEffect, useState } from "react";
@@ -63,6 +55,9 @@ const TreeOverviewItem: React.FC<{
 };
 
 const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
+  // get the current preffered color scheme
+  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
   // load all inventory data
   const { filteredInventory, allInventory } = useData();
 
@@ -72,7 +67,9 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
 
   // state for the plot data
   const [data, setData] = useState<Data[]>([]);
-  const [layout, setLayout] = useState<Partial<Layout>>({} as Layout);
+  const [layout, setLayout] = useState<Partial<Layout>>({
+    autosize: true,
+  } as Layout);
 
   // state to set the plot type
   const [plotType, setPlotType] = useState<"hist2d" | "heights" | "radius">(
@@ -110,7 +107,12 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
 
     // create traces and layout container
     let traces: Data[] = [];
-    let layout = { autosize: true };
+    let layout = {
+      autosize: true,
+      paper_bgcolor: "transparent",
+      plot_bgcolor: "transparent",
+      font: { color: isDark ? "white" : "black" },
+    } as Layout;
 
     // switch the plot type
     if (plotType === "hist2d") {
@@ -130,15 +132,17 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
     // update
     setData(traces);
     setLayout(layout);
-  }, [allInventory, feature, plotType]);
+  }, [allInventory, feature, plotType, isDark]);
 
   return (
     <>
       {/* <IonListHeader>Overview</IonListHeader> */}
-      <IonCard>
-        <IonCardHeader>
+      <IonCard
+      // class="ion-padding"
+      >
+        {/* <IonCardHeader>
           <IonCardTitle>Overview</IonCardTitle>
-        </IonCardHeader>
+        </IonCardHeader> */}
         <IonCardContent>
           {feature && (
             <div>
@@ -164,12 +168,41 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
       </IonCard>
       <IonCard>
         <IonCardHeader>
-          <IonCardTitle>Charts</IonCardTitle>
+          <IonCardTitle class="ion-text-center">LIDAR Scans</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <IonItem lines="none">
+            <IonLabel className="ion-text-wrap">
+              <h3>LiDAR scan images</h3>
+              <p>
+                Measured individual tree height using a combination of
+                stereophotogrammetry and LiDAR.
+              </p>
+            </IonLabel>
+          </IonItem>
+          {currentImg ? (
+            <img src={`data:image/png;base64,${currentImg}`} alt="" />
+          ) : null}
+          <IonItem lines="none">
+            <IonSegment value={"front"}>
+              <IonSegmentButton value="front">
+                <IonLabel>Front</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="back">
+                <IonLabel>Back</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+          </IonItem>
+        </IonCardContent>
+      </IonCard>
+      <IonCard>
+        <IonCardHeader>
+          {/* <IonCardTitle>Charts</IonCardTitle> */}
+          <IonCardTitle class="ion-text-center">
+            {plotTypeName[plotType]}
+          </IonCardTitle>
         </IonCardHeader>
         <IonCardContent class="ion-no-padding">
-          <IonLabel class="ion-text-center">
-            <IonCardSubtitle>{plotTypeName[plotType]}</IonCardSubtitle>
-          </IonLabel>
           <div style={{ paddingTop: "3vh" }}>
             <Plot
               data={data}
@@ -179,7 +212,7 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
               config={{ displayModeBar: false }}
             />
           </div>
-          <IonItem lines="none" class="ion-padding-vertical">
+          <IonItem lines="none">
             <IonSegment
               value={plotType}
               onIonChange={(e) =>
@@ -200,27 +233,6 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
         </IonCardContent>
       </IonCard>
       {/* <IonListHeader>LIDAR Scans</IonListHeader> */}
-
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>LIDAR Scans</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <IonItem lines="none">
-            <IonLabel className="ion-text-wrap">
-              <h3>LiDAR scan images</h3>
-              <p>
-                Measured individual tree height using a combination of
-                stereophotogrammetry and LiDAR.
-              </p>
-            </IonLabel>
-          </IonItem>
-          {currentImg ? (
-            <img src={`data:image/png;base64,${currentImg}`} alt="" />
-          ) : null}
-          {/* <img src={`http://geowwd.uni-freiburg.de/img/${feature?.properties.image}`} alt="a lidar image" /> */}
-        </IonCardContent>
-      </IonCard>
     </>
   );
 };

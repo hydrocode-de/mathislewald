@@ -12,17 +12,16 @@ import {
 } from "@ionic/react";
 import { scanOutline } from "ionicons/icons";
 
-import { useData } from "../context/data";
-import { useLayers } from "../context/layers";
-import FilterBar from "./FilterBar";
-import RangeFilter from "./RangeFilter";
+import { useData } from "../../context/data";
+import { useLayers } from "../../context/layers";
+import RangeFilter from "../RangeFilter";
 
 const DataLayerDrawer: React.FC = () => {
   // subscribe to the available Inventories
   const layers = useLayers();
 
   // get the current filter state for badges
-  const { inventoryCount } = useData()
+  const { inventoryCount } = useData();
 
   const toggleInventoryLayer = (name: string) => {
     if (layers.activeInventoryLayer.includes(name)) {
@@ -37,14 +36,21 @@ const DataLayerDrawer: React.FC = () => {
       <IonListHeader mode="ios">
         <IonLabel>
           Data
-          <IonBadge style={{ marginLeft: "10px" }}>{ inventoryCount.total }</IonBadge>
+          <IonBadge style={{ marginLeft: "10px" }}>
+            {inventoryCount.total}
+          </IonBadge>
         </IonLabel>
       </IonListHeader>
       <IonList inset>
         {layers.availableInventoryLayer.map((l) => (
           <IonItem lines="none" key={l.name}>
             <IonLabel>{l.title}</IonLabel>
-            <IonButton slot="start" fill="clear" disabled={!layers.activeInventoryLayer.includes(l.name)} onClick={() => layers.flyToFeature('inventory')}>
+            <IonButton
+              slot="start"
+              fill="clear"
+              disabled={!layers.activeInventoryLayer.includes(l.name)}
+              onClick={() => layers.flyToFeature("inventory")}
+            >
               <IonIcon icon={scanOutline} slot="icon-only" />
             </IonButton>
             <IonToggle
@@ -59,7 +65,9 @@ const DataLayerDrawer: React.FC = () => {
       <IonListHeader mode="ios">
         <IonLabel>
           Filter
-          <IonBadge style={{ marginLeft: "10px" }}>{ inventoryCount.filtered }</IonBadge>
+          <IonBadge style={{ marginLeft: "10px" }}>
+            {inventoryCount.filtered}
+          </IonBadge>
         </IonLabel>
       </IonListHeader>
       <RangeFilter />
