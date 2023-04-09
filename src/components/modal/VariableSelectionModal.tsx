@@ -18,6 +18,7 @@ const VariableSelectionModal: React.FC<{
       ref={modal}
       trigger="open-variable-selector"
       initialBreakpoint={0.4}
+      breakpoints={[0, 0.25, 0.5, 0.75]}
     >
       <IonToolbar>
         <IonTitle>Select Variable</IonTitle>

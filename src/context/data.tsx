@@ -98,6 +98,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   // copy over inventory data
   useEffect(() => {
     if (inventory) {
+      // console.log("runnning effect");
+
       // copy inventory over
       setAllInventory(inventory);
 
@@ -140,7 +142,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   useEffect(() => {
     if (allInventory && !!filterValues) {
       //      console.log("allInventory:", allInventory);
-      //      console.log("filterValues:", filterValues);
+      console.log("filterValues:", filterValues);
 
       // TODO build the filter here
       const inv = {

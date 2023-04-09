@@ -7,10 +7,12 @@ const VariableSelectionPopover: React.FC = () => {
     <IonPopover
       trigger="open-variable-selector"
       triggerAction="click"
+      // mode="md"
       reference="trigger"
       side="bottom"
-      arrow={false}
-      showBackdrop={false}
+      arrow={true}
+      showBackdrop={true}
+      translucent={true}
       style={{
         // "--offset-x": "16px",
         "--offset-y": "20px",
