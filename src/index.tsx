@@ -18,13 +18,13 @@ root.render(
   <React.StrictMode>
     <SettingsProvider>
       <OfflineProvider>
-        <SelectionProvider>
-          <DataProvider>
+        <DataProvider>
+          <SelectionProvider>
             <LayersProvider>
               <App />
             </LayersProvider>
-          </DataProvider>
-        </SelectionProvider>
+          </SelectionProvider>
+        </DataProvider>
       </OfflineProvider>
     </SettingsProvider>
   </React.StrictMode>
