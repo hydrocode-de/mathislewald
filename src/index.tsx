@@ -9,6 +9,7 @@ import { SettingsProvider } from './context/settings';
 import { DataProvider } from './context/data';
 import { LayersProvider } from './context/layers';
 import { OfflineProvider } from './context/offline';
+import { SelectionProvider } from './context/selection';
 
 
 const container = document.getElementById('root');
@@ -17,11 +18,13 @@ root.render(
   <React.StrictMode>
     <SettingsProvider>
       <OfflineProvider>
-        <DataProvider>
-          <LayersProvider>
-            <App />
-          </LayersProvider>
-        </DataProvider>
+        <SelectionProvider>
+          <DataProvider>
+            <LayersProvider>
+              <App />
+            </LayersProvider>
+          </DataProvider>
+        </SelectionProvider>
       </OfflineProvider>
     </SettingsProvider>
   </React.StrictMode>
