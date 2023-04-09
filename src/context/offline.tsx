@@ -41,8 +41,8 @@ interface OfflineState {
     remoteChecksums: Checksums | null;
     getImageData: (name: string) => Promise<string>
     getBaselayer: (name: string) => Promise<string>
-    createSelection: (treeIds: number[], title?: string) => Promise<string>
-    updateSelection: (selection: InventorySelection) => Promise<string>
+    createSelection: (treeIds: number[], title?: string) => Promise<InventorySelection>
+    updateSelection: (selection: InventorySelection) => Promise<InventorySelection>
     dropSelection: (selectionId: string) => Promise<void>
 }
 
@@ -289,7 +289,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
 
     }
 
-    const createSelection = async (treeIds: number[], title?: string): Promise<string> => {
+    const createSelection = async (treeIds: number[], title?: string): Promise<InventorySelection> => {
         // create a random 16 character string as id
         const id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
 
@@ -304,7 +304,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
         return updateSelection(selection)
     }
 
-    const updateSelection = async (selection: InventorySelection): Promise<string> => {
+    const updateSelection = async (selection: InventorySelection): Promise<InventorySelection> => {
         // create the selections folder if it does not exist
         if (!fileInfos?.map(i => i.name).includes('selections')) {
             await Filesystem.mkdir({path: '/selections', directory: Directory.Data})
@@ -323,16 +323,16 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             // create the new array of selections
             let newSelections: InventorySelection[] = []
             if (selections) {
-                newSelections = cloneDeep([...selections, selection])
+                newSelections = cloneDeep([...selections, {...selection}])
             } else {
-                newSelections = [selection]
+                newSelections = [{...selection}]
             }
 
             // update the selections state variable
             setSelections(newSelections)
 
             // return the local path
-            return path
+            return selection
         })
     }
 
