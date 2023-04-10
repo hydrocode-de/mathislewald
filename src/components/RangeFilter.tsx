@@ -44,8 +44,8 @@ const RangeFilter: React.FC = () => {
   // console.log("height", height);
 
   return (
-    <IonList class="ion-padding">
-      <IonItem>
+    <IonList>
+      <IonItem lines="inset">
         <IonLabel position="stacked">Height</IonLabel>
         <IonRange
           dualKnobs={true}
@@ -74,7 +74,7 @@ const RangeFilter: React.FC = () => {
           </IonLabel>
         </IonRange>
       </IonItem>
-      <IonItem>
+      <IonItem lines="inset">
         <IonLabel position="stacked">Radius</IonLabel>
         <IonRange
           dualKnobs={true}
@@ -105,7 +105,7 @@ const RangeFilter: React.FC = () => {
           </IonLabel>
         </IonRange>
       </IonItem>
-      <IonItem>
+      <IonItem lines="inset">
         <IonLabel position="stacked" class="ion-no-padding">
           Distance
         </IonLabel>
@@ -139,7 +139,7 @@ const RangeFilter: React.FC = () => {
             height: { ...height },
           });
         }}
-        class="ion-margin-top"
+        class="ion-margin"
       >
         Add Filter
       </IonButton>
