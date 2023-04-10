@@ -1,6 +1,6 @@
 import bbox from "@turf/bbox";
 import cloneDeep from "lodash.clonedeep";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { InventoryData } from "./data.model";
 import { InventorySelection } from "./inventory-selection.model";
 import { useOffline } from "./offline";
@@ -37,7 +37,7 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
     // get a reference to all inventory data
     const { inventory } = useOffline()
 
-    const {selections: offlineSelections, createSelection} = useOffline()
+    const {selections: offlineSelections, createSelection, updateSelection} = useOffline()
 
     // subscribe to changes in offline selections
     useEffect(() => {
@@ -58,23 +58,32 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
     }
 
     const addToActiveSelection = async (treeId: number) => {
+        // skip if the treeId is already selection
+        if (activeSelection && activeSelection.selection.treeIds.includes(treeId)) {
+            return
+        }
         // get the selection representation from the current data or create a new one
         let selection: InventorySelection;
         if (!activeSelection) {
-            selection = await createSelection([], `New Selection ${selections.length}`)
+            // create a new selection
+            selection = await createSelection([treeId], `New Selection ${selections.length}`)
         } else {
-            selection = activeSelection.selection
+            // update
+            activeSelection.selection.treeIds.push(treeId)
+            selection = await updateSelection(activeSelection.selection)            
         }
 
-        // add the tree to selection
-        selection.treeIds.push(treeId)
-
         // build the geojson
-        const newActiveSelection = getSelectionWithGeoJSON(selection)
-        setActiveSelectionState(newActiveSelection)
+ //       const newActiveSelection = getSelectionWithGeoJSON(selection)
+ //       setActiveSelectionState(newActiveSelection)
+
+        // set the selection active if it was not
+        // if (activeSelectionId !== selection.id) {
+            setActiveSelectionId(selection.id)
+        // }
     }
 
-    const getSelectionWithGeoJSON = (selection: InventorySelection): ActiveSelection => {
+    const getSelectionWithGeoJSON = useCallback((selection: InventorySelection): ActiveSelection => {
         // filter the full inventory for any selected tree
         const features = inventory?.features.filter(f => selection.treeIds.includes(Number(f.properties.treeid))) || []
 
@@ -88,7 +97,7 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
         data.bbox = bbox(data)
 
         return {selection: cloneDeep(selection), geoJSON: cloneDeep(data)}
-    }
+    }, [selections])
 
     // use effect to update the current active selection, when the activeSelectionId or the filteredInventory changes
     useEffect(() => {
@@ -104,7 +113,7 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
         } else {
             setActiveSelectionState(null)
         }
-    }, [activeSelectionId, inventory])
+    }, [activeSelectionId, inventory, selections])
 
 
     // create the context value

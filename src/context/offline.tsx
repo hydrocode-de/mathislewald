@@ -323,7 +323,7 @@ export const OfflineProvider: React.FC<React.PropsWithChildren> = ({ children })
             // create the new array of selections
             let newSelections: InventorySelection[] = []
             if (selections) {
-                newSelections = cloneDeep([...selections, {...selection}])
+                newSelections = cloneDeep([...selections.filter(s => s.id !== selection.id), {...selection}])
             } else {
                 newSelections = [{...selection}]
             }
