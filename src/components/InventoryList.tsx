@@ -53,7 +53,7 @@ const InventoryList: React.FC = () => {
     }
   };
 
-  const addToBookmarksHandler = (event: any) => {
+  const addToBookmarksHandler = (event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>) => {
     event.stopPropagation();
     console.log("add to bookmarks");
   };
