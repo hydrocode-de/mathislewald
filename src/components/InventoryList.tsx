@@ -18,6 +18,7 @@ import { useSettings } from "../context/settings";
 import { InventoryFeature } from "../context/data.model";
 
 import "./InventoryList.css";
+import { MouseEventHandler } from "react";
 
 const InventoryList: React.FC = () => {
   // load the filtered inventory list
@@ -50,6 +51,11 @@ const InventoryList: React.FC = () => {
     } else {
       return `${(d / 1000).toFixed(0)} km`;
     }
+  };
+
+  const addToBookmarksHandler = (event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>) => {
+    event.stopPropagation();
+    console.log("add to bookmarks");
   };
 
   return (
@@ -86,7 +92,7 @@ const InventoryList: React.FC = () => {
               <IonLabel>
                 <p>{distString(f)} away</p>
               </IonLabel>
-              <IonButton fill="clear">
+              <IonButton fill="clear" onClick={(e) => addToBookmarksHandler(e)}>
                 <IonIcon icon={bookmarkOutline}></IonIcon>
               </IonButton>
             </IonItem>
