@@ -19,6 +19,7 @@ import { useHistory } from "react-router";
 import { useOffline } from "../../context/offline";
 
 const InventoryLayer: React.FC = () => {
+  const { activeVariable } = useData();
   // component state
   const [src, setSrc] = useState<InventoryData>();
 
@@ -40,6 +41,7 @@ const InventoryLayer: React.FC = () => {
   // load source into component
   useEffect(() => {
     if (filteredInventory) {
+      console.log(filteredInventory);
       setSrc(
         cloneDeep({
           ...filteredInventory,
@@ -140,31 +142,47 @@ const InventoryLayer: React.FC = () => {
 
   // build paint and layout
   useEffect(() => {
+    console.log(activeVariable);
     const defaultPaint = {
       "circle-color": [
         "case",
         ["boolean", ["feature-state", "hover"], false],
-        "purple",
+        "green",
         ["to-color", ["feature-state", "color"], "gray"],
       ],
       "circle-opacity": [
         "case",
         ["boolean", ["feature-state", "hover"], false],
         0.9,
-        0.4,
+        0.7,
       ],
-      "circle-radius": [
-        "case",
-        ["boolean", ["feature-state", "hover"], false],
-        8.5,
-        6,
-      ],
+      "circle-radius":
+        activeVariable === "height"
+          ? ["/", ["get", activeVariable], 2]
+          : ["*", ["get", activeVariable], 50],
+      // "circle-radius": [
+      //   "case",
+      //   ["boolean", ["feature-state", "hover"], false],
+      //   10,
+      //   8,
+      // ],
+      // "circle-radius": [
+      //   "interpolate",
+      //   ["linear"],
+      //   ["zoom"],
+      //   // zoom is 5 (or less) -> circle radius will be 1px
+      //   15,
+      //   1,
+      //   // zoom is 10 (or greater) -> circle radius will be 5px
+      //   18,
+      //   10,
+      // ],
       "circle-stroke-width": 0.8,
-      "circle-stroke-color": "white",
+      "circle-stroke-color": "black",
     } as CirclePaint;
 
     setPaint(defaultPaint);
-  }, []);
+  }, [activeVariable]);
 
   const layout = {
     // TODO: NEED TO CHANGE THE FORMAT OF INVENTORY LAYER
@@ -181,47 +199,70 @@ const InventoryLayer: React.FC = () => {
             type="circle"
             paint={paint}
             layout={layout}
+            // layout={
+            //   {
+            //     // "icon-image": "custom-marker",
+            //     // get the title name from the source's "title" property
+            //     // "text-field": ["get", "title"],
+            //     // "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            //     // "text-offset": [0, 1.25],
+            //     // "text-anchor": "top",
+            //   }
+            // }
+          />
+          <Layer
+            id="inventory"
+            source="inventory"
+            type="symbol"
+            layout={{
+              "text-field": ["get", "id"],
+              // "text-field": "test",
+              "text-variable-anchor": ["top", "bottom", "left", "right"],
+              "text-radial-offset": 0.5,
+              "text-justify": "auto",
+              "icon-image": ["get", "icon"],
+            }}
           />
         </Source>
       ) : null}
-      {
+      {/* {
         hovered ? (
-          <IonCard
-            style={{
-              // position: "fixed",
-              zIndex: 99,
-              backgroundTransparency: 0.6,
-              top: "64px",
-              left: 0,
-              maxWidth: "250px",
-            }}
-          >
-            <img
-              alt="img"
-              //src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.images[0]}`}
-              src={currentImg ? currentImg : ""}
-              width="250"
-            />
-            <IonCardHeader>
-              <IonCardTitle>TreeID: {hovered.properties.treeid}</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonItem lines="none">
-                <IonLabel slot="start">Height: </IonLabel>
-                <IonLabel>{hovered.properties.height.toFixed(1)} m</IonLabel>
-              </IonItem>
-              <IonItem lines="none">
-                <IonLabel slot="start">Radius: </IonLabel>
-                <IonLabel>
-                  {(hovered.properties.radius * 100).toFixed(0)} cm
-                </IonLabel>
-              </IonItem>
-            </IonCardContent>
-          </IonCard>
+          // <IonCard
+          //   style={{
+          //     // position: "fixed",
+          //     zIndex: 99,
+          //     backgroundTransparency: 0.6,
+          //     top: "64px",
+          //     left: 0,
+          //     maxWidth: "250px",
+          //   }}
+          // >
+          //   <img
+          //     alt="img"
+          //     //src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.images[0]}`}
+          //     src={currentImg ? currentImg : ""}
+          //     width="250"
+          //   />
+          //   <IonCardHeader>
+          //     <IonCardTitle>TreeID: {hovered.properties.treeid}</IonCardTitle>
+          //   </IonCardHeader>
+          //   <IonCardContent>
+          //     <IonItem lines="none">
+          //       <IonLabel slot="start">Height: </IonLabel>
+          //       <IonLabel>{hovered.properties.height.toFixed(1)} m</IonLabel>
+          //     </IonItem>
+          //     <IonItem lines="none">
+          //       <IonLabel slot="start">Radius: </IonLabel>
+          //       <IonLabel>
+          //         {(hovered.properties.radius * 100).toFixed(0)} cm
+          //       </IonLabel>
+          //     </IonItem>
+          //   </IonCardContent>
+          // </IonCard>
         ) : // <IonPopover>test</IonPopover>
         null
         // null
-      }
+      } */}
     </>
   );
 };
