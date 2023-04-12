@@ -22,7 +22,7 @@ import {
 } from "ionicons/icons";
 import React from "react";
 import InventoryList from "../components/InventoryList";
-import MainMap from "../components/MainMapMaplibre";
+import MainMap from "../components/map-components/MainMapMaplibre";
 import BaseLayerPopover from "../components/popover/BaseLayerPopover";
 import { Route, Switch } from "react-router";
 import TreeDetails from "../components/TreeDetails";

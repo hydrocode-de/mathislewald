@@ -14,7 +14,7 @@ import {
 import { layers, listSharp, settingsOutline } from "ionicons/icons";
 import { useRef } from "react";
 
-import MainMap from "../components/MainMapMaplibre";
+import MainMap from "../components/map-components/MainMapMaplibre";
 import BaseLayerSheetModal from "../components/modal/BaseLayerModal";
 import "./MobilePage.css";
 import MapButtonGroup from "../components/MapButtonGroup";

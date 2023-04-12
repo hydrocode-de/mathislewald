@@ -4,10 +4,10 @@ import Map from "react-map-gl";
 
 // load the maplibre CSS styles
 import "maplibre-gl/dist/maplibre-gl.css";
-import InventorySource from "./map-components/InventorySource";
-import BaseLayerSource from "./map-components/BaseLayerSource";
-import UserLocationSource from "./map-components/UserLocationSource";
-import LayerInteraction from "./map-components/LayerInteraction";
+import InventorySource from "./InventorySource";
+import BaseLayerSource from "./BaseLayerSource";
+import UserLocationSource from "./UserLocationSource";
+import LayerInteraction from "./LayerInteraction";
 
 const MainMap: React.FC = () => {
   // onload callback handler
