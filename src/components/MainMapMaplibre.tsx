@@ -1,6 +1,6 @@
 import { Style } from "mapbox-gl";
 import maplibregl, { MapLibreEvent } from "maplibre-gl";
-import Map from "react-map-gl";
+import Map, { Source } from "react-map-gl";
 
 // load the maplibre CSS styles
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -16,13 +16,13 @@ const MainMap: React.FC = () => {
     setTimeout(() => e.target.resize(), 500);
 
     // add terrain control
-    (e as MapLibreEvent).target.addControl(
-      new maplibregl.TerrainControl({
-        source: "terrainSource",
-        exaggeration: 1.5,
-      }),
-      'top-left'
-    )
+    // (e as MapLibreEvent).target.addControl(
+    //   new maplibregl.TerrainControl({
+    //     source: "terrainSource",
+    //     exaggeration: 1.5,
+    //   }),
+    //   "top-left"
+    // );
   };
 
   // some hard-coded styles
@@ -62,9 +62,12 @@ const MainMap: React.FC = () => {
       // found here: https://betterprogramming.pub/using-3d-terrain-in-your-web-apps-1c0c56ae07e1
       terrainSource: {
         type: "raster-dem",
-        tiles: ['https://api.ellipsis-drive.com/v3/path/085f5e10-63b6-4e8f-a4c6-dce9689100d3/raster/timestamp/3179fa80-60ad-41c7-ae67-cdd5eeeca693/tile/{z}/{x}/{y}?style={"method":"terrainRgb", "parameters":{"alpha":1, "bandNumber":1} }'],
+        tiles: [
+          'https://api.ellipsis-drive.com/v3/path/085f5e10-63b6-4e8f-a4c6-dce9689100d3/raster/timestamp/3179fa80-60ad-41c7-ae67-cdd5eeeca693/tile/{z}/{x}/{y}?style={"method":"terrainRgb","parameters":{"alpha":1,"bandNumber":1}}',
+        ],
         tileSize: 256,
-      }
+        maxzoom: 13,
+      },
     },
     layers: [
       {
@@ -72,12 +75,16 @@ const MainMap: React.FC = () => {
         type: "raster",
         source: "osm",
       },
-      // {
-      //   id: "hillshade",
-      //   source: "terrainSource",
-      //   type: "hillshade",
-      // }
+      {
+        id: "hillshade",
+        source: "terrainSource",
+        type: "hillshade",
+      },
     ],
+    // terrain: {
+    //   source: "terrainSource",
+    //   exaggeration: 1,
+    // },
   } as Style;
 
   return (
@@ -95,8 +102,10 @@ const MainMap: React.FC = () => {
       }}
       terrain={{
         source: "terrainSource",
-        exaggeration: 1.5,
+        exaggeration: 1,
       }}
+      maxPitch={85}
+      // hillshade={{}}
     >
       <InventorySource />
       <BaseLayerSource />
