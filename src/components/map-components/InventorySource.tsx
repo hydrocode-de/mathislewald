@@ -199,30 +199,37 @@ const InventoryLayer: React.FC = () => {
             type="circle"
             paint={paint}
             layout={layout}
-            // layout={
-            //   {
-            //     // "icon-image": "custom-marker",
-            //     // get the title name from the source's "title" property
-            //     // "text-field": ["get", "title"],
-            //     // "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            //     // "text-offset": [0, 1.25],
-            //     // "text-anchor": "top",
-            //   }
-            // }
+            // layout={{
+            //   "icon-image": "custom-marker",
+            //   // get the title name from the source's "title" property
+            //   // "text-field": ["get", "id"],
+            //   "text-field": "test",
+            //   "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            //   // "text-offset": [0, 1.25],
+
+            //   "text-anchor": "top",
+            // }}
           />
-          <Layer
-            id="inventory"
+          {/* <Layer
+            id="inventory-label"
             source="inventory"
             type="symbol"
             layout={{
-              "text-field": ["get", "id"],
+              "text-field": ["get", "height"],
+              "text-size": 14,
+              "text-offset": [0, -1.5],
               // "text-field": "test",
-              "text-variable-anchor": ["top", "bottom", "left", "right"],
-              "text-radial-offset": 0.5,
-              "text-justify": "auto",
-              "icon-image": ["get", "icon"],
+              // "text-variable-anchor": ["top", "bottom", "left", "right"],
+              // "text-radial-offset": 0.5,
+              // "text-justify": "auto",
+              // "icon-image": ["get", "icon"],
             }}
-          />
+            paint={{
+              "text-color": "#ffff00",
+              "text-halo-color": "#333333",
+              "text-halo-width": 1,
+            }}
+          /> */}
         </Source>
       ) : null}
       {/* {
