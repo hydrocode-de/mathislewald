@@ -68,6 +68,7 @@ const InventoryLayer: React.FC = () => {
         (f) => f.id?.toString() === selectedInventoryTreeID
       );
       console.log("tree", tree);
+      setHovered(tree?.[0]);
       const coords = tree?.[0].geometry.coordinates as [number, number];
       map.current?.flyTo({
         center: coords,
@@ -167,7 +168,8 @@ const InventoryLayer: React.FC = () => {
     const defaultPaint = {
       "circle-color": [
         "case",
-        ["boolean", ["feature-state", "hover"], false],
+        // ["boolean", ["feature-state", "hover"], false],
+        ["==", ["get", "treeid"], selectedInventoryTreeID],
         "green",
         ["to-color", ["feature-state", "color"], "gray"],
       ],
@@ -177,10 +179,18 @@ const InventoryLayer: React.FC = () => {
         0.9,
         0.7,
       ],
-      "circle-radius":
+      "circle-radius": [
+        "case",
+        ["==", ["get", "treeid"], selectedInventoryTreeID],
+        // increase the radius when the feature's id matches selectedInventoryTreeID
+        activeVariable === "height"
+          ? ["/", ["get", activeVariable], 1]
+          : ["*", ["get", activeVariable], 100],
+        // original radius calculation
         activeVariable === "height"
           ? ["/", ["get", activeVariable], 2]
           : ["*", ["get", activeVariable], 50],
+      ],
       // "circle-radius": [
       //   "case",
       //   ["boolean", ["feature-state", "hover"], false],
@@ -203,7 +213,7 @@ const InventoryLayer: React.FC = () => {
     } as CirclePaint;
 
     setPaint(defaultPaint);
-  }, [activeVariable]);
+  }, [activeVariable, selectedInventoryTreeID]);
 
   const layout = {
     // TODO: NEED TO CHANGE THE FORMAT OF INVENTORY LAYER
