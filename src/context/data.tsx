@@ -41,7 +41,7 @@ interface Count {
 interface DataState {
   allInventory: InventoryData | null;
   filteredInventory: InventoryData | null;
-  selectedInventoryTree: InventoryData | null;
+  selectedInventoryTreeID: number | null;
   inventoryCount: Count;
   synced: boolean;
   filterValues: FilterValues | undefined;
@@ -55,7 +55,7 @@ interface DataState {
 const initialState: DataState = {
   allInventory: null,
   filteredInventory: null,
-  selectedInventoryTree: null,
+  selectedInventoryTreeID: null,
   inventoryCount: { total: 0, filtered: 0 },
   synced: false,
   filterValues: undefined,
@@ -74,8 +74,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   // create internal state of the provider
   const [allInventory, setAllInventory] = useState<InventoryData>();
   const [filteredInventory, setFilteredInventory] = useState<InventoryData>();
-  const [selectedInventoryTree, setSelectedInventoryTree] =
-    useState<InventoryData>();
+  const [selectedInventoryTreeID, setSelectedInventoryTreeID] = useState<
+    number | null
+  >(null);
   const [inventoryStats, setInventoryStats] = useState<InventoryDataStats>();
   const [inventoryCount, setInventoryCount] = useState<Count>(
     initialState.inventoryCount
@@ -86,8 +87,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     setActiveVariable(value);
   };
 
-  const setSelectedInventoryTreeHandler = (tree: InventoryData) => {
-    setSelectedInventoryTree(tree);
+  const setSelectedInventoryTreeIDHandler = (treeID: number) => {
+    setSelectedInventoryTreeID(treeID);
   };
 
   // create state for synchronization
@@ -201,8 +202,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const value = {
     allInventory: allInventory || null,
     filteredInventory: filteredInventory || null,
-    selectedInventoryTree: selectedInventoryTree || null,
-    setSelectedInventoryTreeHandler,
+    selectedInventoryTreeID: selectedInventoryTreeID || null,
+    setSelectedInventoryTreeIDHandler,
     inventoryCount,
     synced,
     filterValues,
