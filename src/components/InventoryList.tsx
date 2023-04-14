@@ -85,7 +85,9 @@ const InventoryList: React.FC = () => {
               key={f.id}
               button
               onClick={() => {
-                setSelectedInventoryTreeIDHandler(f.properties.treeid);
+                setSelectedInventoryTreeIDHandler(
+                  f.properties.treeid.toString()
+                );
                 onNavigate(`/list/${f.properties.treeid}`);
               }}
             >

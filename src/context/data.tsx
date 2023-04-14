@@ -41,8 +41,8 @@ interface Count {
 interface DataState {
   allInventory: InventoryData | null;
   filteredInventory: InventoryData | null;
-  selectedInventoryTreeID: number | null;
-  setSelectedInventoryTreeIDHandler: (treeID: number) => void;
+  selectedInventoryTreeID: string | null;
+  setSelectedInventoryTreeIDHandler: (treeID: string) => void;
   inventoryCount: Count;
   synced: boolean;
   filterValues: FilterValues | undefined;
@@ -57,7 +57,7 @@ const initialState: DataState = {
   allInventory: null,
   filteredInventory: null,
   selectedInventoryTreeID: null,
-  setSelectedInventoryTreeIDHandler: (treeID: number) => {},
+  setSelectedInventoryTreeIDHandler: (treeID: string) => {},
   inventoryCount: { total: 0, filtered: 0 },
   synced: false,
   filterValues: undefined,
@@ -77,7 +77,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const [allInventory, setAllInventory] = useState<InventoryData>();
   const [filteredInventory, setFilteredInventory] = useState<InventoryData>();
   const [selectedInventoryTreeID, setSelectedInventoryTreeID] = useState<
-    number | null
+    string | null
   >(null);
   const [inventoryStats, setInventoryStats] = useState<InventoryDataStats>();
   const [inventoryCount, setInventoryCount] = useState<Count>(
@@ -89,7 +89,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     setActiveVariable(value);
   };
 
-  const setSelectedInventoryTreeIDHandler = (treeID: number) => {
+  const setSelectedInventoryTreeIDHandler = (treeID: string) => {
     setSelectedInventoryTreeID(treeID);
   };
 

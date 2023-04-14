@@ -17,9 +17,14 @@ import {
 } from "@ionic/react";
 import { useHistory } from "react-router";
 import { useOffline } from "../../context/offline";
+import bbox from "@turf/bbox";
 
 const InventoryLayer: React.FC = () => {
-  const { activeVariable } = useData();
+  const {
+    activeVariable,
+    setSelectedInventoryTreeIDHandler,
+    selectedInventoryTreeID,
+  } = useData();
   // component state
   const [src, setSrc] = useState<InventoryData>();
 
@@ -54,6 +59,22 @@ const InventoryLayer: React.FC = () => {
       );
     }
   }, [filteredInventory]);
+
+  useEffect(() => {
+    console.log("active tree", selectedInventoryTreeID);
+    // const tree = src?.features.find((f) => f.id === selectedInventoryTreeID);
+    if (selectedInventoryTreeID != null) {
+      const tree = src?.features.filter(
+        (f) => f.id?.toString() === selectedInventoryTreeID
+      );
+      console.log("tree", tree);
+      const coords = tree?.[0].geometry.coordinates as [number, number];
+      map.current?.flyTo({
+        center: coords,
+        speed: 0.5,
+      });
+    }
+  }, [selectedInventoryTreeID]);
 
   // zoom to layer
   useEffect(() => {
