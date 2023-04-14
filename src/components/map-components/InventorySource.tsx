@@ -232,44 +232,40 @@ const InventoryLayer: React.FC = () => {
           /> */}
         </Source>
       ) : null}
-      {/* {
-        hovered ? (
-          // <IonCard
-          //   style={{
-          //     // position: "fixed",
-          //     zIndex: 99,
-          //     backgroundTransparency: 0.6,
-          //     top: "64px",
-          //     left: 0,
-          //     maxWidth: "250px",
-          //   }}
-          // >
-          //   <img
-          //     alt="img"
-          //     //src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.images[0]}`}
-          //     src={currentImg ? currentImg : ""}
-          //     width="250"
-          //   />
-          //   <IonCardHeader>
-          //     <IonCardTitle>TreeID: {hovered.properties.treeid}</IonCardTitle>
-          //   </IonCardHeader>
-          //   <IonCardContent>
-          //     <IonItem lines="none">
-          //       <IonLabel slot="start">Height: </IonLabel>
-          //       <IonLabel>{hovered.properties.height.toFixed(1)} m</IonLabel>
-          //     </IonItem>
-          //     <IonItem lines="none">
-          //       <IonLabel slot="start">Radius: </IonLabel>
-          //       <IonLabel>
-          //         {(hovered.properties.radius * 100).toFixed(0)} cm
-          //       </IonLabel>
-          //     </IonItem>
-          //   </IonCardContent>
-          // </IonCard>
-        ) : // <IonPopover>test</IonPopover>
-        null
-        // null
-      } */}
+      {hovered ? (
+        <IonCard
+          style={{
+            position: "relative",
+            zIndex: 99,
+            backgroundTransparency: 0.6,
+            top: "64px",
+            left: 0,
+            maxWidth: "250px",
+          }}
+        >
+          <img
+            alt="img"
+            //src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.images[0]}`}
+            src={currentImg ? currentImg : ""}
+            width="250"
+          />
+          <IonCardHeader>
+            <IonCardTitle>TreeID: {hovered.properties.treeid}</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonItem lines="none">
+              <IonLabel slot="start">Height: </IonLabel>
+              <IonLabel>{hovered.properties.height.toFixed(1)} m</IonLabel>
+            </IonItem>
+            <IonItem lines="none">
+              <IonLabel slot="start">Radius: </IonLabel>
+              <IonLabel>
+                {(hovered.properties.radius * 100).toFixed(0)} cm
+              </IonLabel>
+            </IonItem>
+          </IonCardContent>
+        </IonCard>
+      ) : null}
     </>
   );
 };
