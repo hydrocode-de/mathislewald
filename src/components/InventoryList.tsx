@@ -27,7 +27,11 @@ import { MouseEventHandler } from "react";
 
 const InventoryList: React.FC = () => {
   // load the filtered inventory list
-  const { filteredInventory, activeVariable } = useData();
+  const {
+    filteredInventory,
+    activeVariable,
+    setSelectedInventoryTreeIDHandler,
+  } = useData();
 
   // get a history context
   const history = useHistory();
@@ -80,7 +84,10 @@ const InventoryList: React.FC = () => {
             <IonItem
               key={f.id}
               button
-              onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
+              onClick={() => {
+                setSelectedInventoryTreeIDHandler(f.properties.treeid);
+                onNavigate(`/list/${f.properties.treeid}`);
+              }}
             >
               <IonThumbnail slot="start" style={{ borderRadius: "15px" }}>
                 <img

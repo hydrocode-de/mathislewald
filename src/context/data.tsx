@@ -42,6 +42,7 @@ interface DataState {
   allInventory: InventoryData | null;
   filteredInventory: InventoryData | null;
   selectedInventoryTreeID: number | null;
+  setSelectedInventoryTreeIDHandler: (treeID: number) => void;
   inventoryCount: Count;
   synced: boolean;
   filterValues: FilterValues | undefined;
@@ -56,6 +57,7 @@ const initialState: DataState = {
   allInventory: null,
   filteredInventory: null,
   selectedInventoryTreeID: null,
+  setSelectedInventoryTreeIDHandler: (treeID: number) => {},
   inventoryCount: { total: 0, filtered: 0 },
   synced: false,
   filterValues: undefined,
