@@ -41,6 +41,7 @@ interface Count {
 interface DataState {
   allInventory: InventoryData | null;
   filteredInventory: InventoryData | null;
+  selectedInventoryTree: InventoryData | null;
   inventoryCount: Count;
   synced: boolean;
   filterValues: FilterValues | undefined;
@@ -54,6 +55,7 @@ interface DataState {
 const initialState: DataState = {
   allInventory: null,
   filteredInventory: null,
+  selectedInventoryTree: null,
   inventoryCount: { total: 0, filtered: 0 },
   synced: false,
   filterValues: undefined,
@@ -72,6 +74,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   // create internal state of the provider
   const [allInventory, setAllInventory] = useState<InventoryData>();
   const [filteredInventory, setFilteredInventory] = useState<InventoryData>();
+  const [selectedInventoryTree, setSelectedInventoryTree] =
+    useState<InventoryData>();
   const [inventoryStats, setInventoryStats] = useState<InventoryDataStats>();
   const [inventoryCount, setInventoryCount] = useState<Count>(
     initialState.inventoryCount
@@ -80,6 +84,10 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
 
   const setActiveVarialbeHandler = (value: string) => {
     setActiveVariable(value);
+  };
+
+  const setSelectedInventoryTreeHandler = (tree: InventoryData) => {
+    setSelectedInventoryTree(tree);
   };
 
   // create state for synchronization
@@ -193,6 +201,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const value = {
     allInventory: allInventory || null,
     filteredInventory: filteredInventory || null,
+    selectedInventoryTree: selectedInventoryTree || null,
+    setSelectedInventoryTreeHandler,
     inventoryCount,
     synced,
     filterValues,
