@@ -88,11 +88,13 @@ const DesktopPage: React.FC = () => {
                       color={"light"}
                       style={{
                         position: "absolute",
+                        margin: "0px",
                         top: 60,
-                        left: 12,
+                        left: 20,
                         // width: "33vw",
                         width: "400px",
-                        height: `calc(100vh - 135px)`,
+                        maxWidth: "80%",
+                        height: "calc(100% - 60px - 20px)",
                         zIndex: 999,
                         overflowY: "auto",
                       }}
