@@ -171,7 +171,8 @@ const InventoryLayer: React.FC = () => {
         // ["boolean", ["feature-state", "hover"], false],
         ["==", ["get", "treeid"], selectedInventoryTreeID],
         "green",
-        ["to-color", ["feature-state", "color"], "gray"],
+        "gray",
+        // ["to-color", ["feature-state", "color"], "gray"],
       ],
       "circle-opacity": [
         "case",
