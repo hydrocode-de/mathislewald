@@ -12,6 +12,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useData } from "../context/data";
 import { isEqual } from "lodash";
+import { react } from "plotly.js";
 
 interface RangeValue {
   lower: number;
@@ -23,12 +24,8 @@ const RangeFilter: React.FC = () => {
   const { filterValues, setFilterValues, inventoryStats } = useData();
 
   // define the local radius and height state
-  const [radius, setRadius] = useState<RangeValue | undefined>(
-    filterValues?.radius
-  );
-  const [height, setHeight] = useState<RangeValue | undefined>(
-    filterValues?.height
-  );
+  const [radius, setRadius] = useState<RangeValue | undefined>(undefined);
+  const [height, setHeight] = useState<RangeValue | undefined>(undefined);
 
   // use effect to set the filter to current filter
   useEffect(() => {
@@ -41,11 +38,7 @@ const RangeFilter: React.FC = () => {
     if (!height && !!filterValues) {
       setHeight({ ...filterValues.height });
     }
-  }, [inventoryStats, radius, height]);
-
-  // console.log("filterValues:", filterValues);
-  // console.log("radius", radius);
-  // console.log("height", height);
+  }, [inventoryStats, radius, height, filterValues]);
 
   return (
     <IonList>
@@ -63,12 +56,6 @@ const RangeFilter: React.FC = () => {
           onIonKnobMoveEnd={(e) =>
             e.detail.value ? setHeight(e.detail.value as RangeValue) : null
           }
-          // onIonChange={({ detail }) => {
-          //   if (detail.value) {
-          //     // console.log("e.detail.value:", Object(detail.value));
-          //     setHeight(detail.value as RangeValue);
-          //   }
-          // }}
           pinFormatter={(value: number) => `${value.toFixed(0)}m`}
           class="ion-no-padding"
           disabled={!height}
@@ -85,7 +72,10 @@ const RangeFilter: React.FC = () => {
         <IonLabel position="stacked">Radius</IonLabel>
         <IonRange
           dualKnobs={true}
-          value={radius}
+          value={{
+            lower: radius?.lower! * 100,
+            upper: radius?.upper! * 100,
+          }}
           pin={true}
           min={(inventoryStats?.data?.radiusMin as number) * 100}
           max={(inventoryStats?.data?.radiusMax as number) * 100}
@@ -99,7 +89,7 @@ const RangeFilter: React.FC = () => {
                 })
               : null
           }
-          // disabled={!radius}
+          disabled={!radius}
         >
           <IonLabel color="medium" slot="start">
             {((inventoryStats?.data?.radiusMin as number) * 100).toFixed(0)}
