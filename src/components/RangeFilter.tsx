@@ -23,8 +23,12 @@ const RangeFilter: React.FC = () => {
   const { filterValues, setFilterValues, inventoryStats } = useData();
 
   // define the local radius and height state
-  const [radius, setRadius] = useState<RangeValue | undefined>(undefined);
-  const [height, setHeight] = useState<RangeValue | undefined>(undefined);
+  const [radius, setRadius] = useState<RangeValue | undefined>(
+    filterValues?.radius
+  );
+  const [height, setHeight] = useState<RangeValue | undefined>(
+    filterValues?.height
+  );
 
   // use effect to set the filter to current filter
   useEffect(() => {
@@ -49,7 +53,10 @@ const RangeFilter: React.FC = () => {
         <IonLabel position="stacked">Height</IonLabel>
         <IonRange
           dualKnobs={true}
-          value={height}
+          value={{
+            lower: height?.lower!,
+            upper: height?.upper!,
+          }}
           pin={true}
           min={inventoryStats?.data?.heightMin as number}
           max={inventoryStats?.data?.heightMax as number}
@@ -78,10 +85,7 @@ const RangeFilter: React.FC = () => {
         <IonLabel position="stacked">Radius</IonLabel>
         <IonRange
           dualKnobs={true}
-          value={{
-            lower: radius?.lower! * 100,
-            upper: radius?.upper! * 100,
-          }}
+          value={radius}
           pin={true}
           min={(inventoryStats?.data?.radiusMin as number) * 100}
           max={(inventoryStats?.data?.radiusMax as number) * 100}
@@ -95,7 +99,7 @@ const RangeFilter: React.FC = () => {
                 })
               : null
           }
-          disabled={!radius}
+          // disabled={!radius}
         >
           <IonLabel color="medium" slot="start">
             {((inventoryStats?.data?.radiusMin as number) * 100).toFixed(0)}
@@ -118,10 +122,10 @@ const RangeFilter: React.FC = () => {
           class="ion-no-padding"
         >
           <IonLabel color="medium" slot="start">
-            0
+            {/* 0 */}
           </IonLabel>
           <IonLabel color="medium" slot="end">
-            100
+            {/* 100 */}
           </IonLabel>
         </IonRange>
       </IonItem>
