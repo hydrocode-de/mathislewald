@@ -70,7 +70,7 @@ const DesktopPage: React.FC = () => {
                   position: "absolute",
                   zIndex: 99,
                   bottom: 20,
-                  left: 20,
+                  right: 20,
                 }}
               >
                 <ActiveMapSelectionButton height={100} width={100} />
