@@ -137,6 +137,35 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
   return (
     <>
       {/* <IonListHeader>Overview</IonListHeader> */}
+      <IonCard>
+        <IonCardHeader>
+          {/* <IonCardTitle class="ion-text-center">LIDAR Scans</IonCardTitle> */}
+        </IonCardHeader>
+        <IonCardContent>
+          {/* <IonItem lines="none">
+            <IonSegment value={"front"}>
+              <IonSegmentButton value="front">
+                <IonLabel>Front</IonLabel>
+              </IonSegmentButton>
+              <IonSegmentButton value="back">
+                <IonLabel>Back</IonLabel>
+              </IonSegmentButton>
+            </IonSegment>
+          </IonItem> */}
+          {currentImg ? (
+            <img src={`data:image/png;base64,${currentImg}`} alt="" />
+          ) : null}
+          <IonItem lines="none">
+            <IonLabel className="ion-text-wrap">
+              <h3>LiDAR scan images</h3>
+              <p>
+                Measured individual tree height using a combination of
+                stereophotogrammetry and LiDAR.
+              </p>
+            </IonLabel>
+          </IonItem>
+        </IonCardContent>
+      </IonCard>
       <IonCard
       // class="ion-padding"
       >
@@ -146,11 +175,11 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
         <IonCardContent>
           {feature && (
             <div>
-              <TreeOverviewItem
+              {/* <TreeOverviewItem
                 name="TreeID"
                 value={feature!.properties.treeid.toString()}
                 description="Unique ID of the tree"
-              />
+              /> */}
               <TreeOverviewItem
                 name="Radius"
                 value={feature!.properties.radius.toFixed(2)}
@@ -168,50 +197,12 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
       </IonCard>
       <IonCard>
         <IonCardHeader>
-          <IonCardTitle class="ion-text-center">LIDAR Scans</IonCardTitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <IonItem lines="none">
-            <IonLabel className="ion-text-wrap">
-              <h3>LiDAR scan images</h3>
-              <p>
-                Measured individual tree height using a combination of
-                stereophotogrammetry and LiDAR.
-              </p>
-            </IonLabel>
-          </IonItem>
-          {currentImg ? (
-            <img src={`data:image/png;base64,${currentImg}`} alt="" />
-          ) : null}
-          <IonItem lines="none">
-            <IonSegment value={"front"}>
-              <IonSegmentButton value="front">
-                <IonLabel>Front</IonLabel>
-              </IonSegmentButton>
-              <IonSegmentButton value="back">
-                <IonLabel>Back</IonLabel>
-              </IonSegmentButton>
-            </IonSegment>
-          </IonItem>
-        </IonCardContent>
-      </IonCard>
-      <IonCard>
-        <IonCardHeader>
           {/* <IonCardTitle>Charts</IonCardTitle> */}
           <IonCardTitle class="ion-text-center">
             {plotTypeName[plotType]}
           </IonCardTitle>
         </IonCardHeader>
         <IonCardContent class="ion-no-padding">
-          <div style={{ paddingTop: "3vh" }}>
-            <Plot
-              data={data}
-              layout={layout}
-              useResizeHandler
-              style={{ width: "100%", height: "35vh" }}
-              config={{ displayModeBar: false }}
-            />
-          </div>
           <IonItem lines="none">
             <IonSegment
               value={plotType}
@@ -230,6 +221,15 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
               </IonSegmentButton>
             </IonSegment>
           </IonItem>
+          <div style={{ paddingTop: "3vh", paddingBottom: 20 }}>
+            <Plot
+              data={data}
+              layout={layout}
+              useResizeHandler
+              style={{ width: "100%", height: "35vh" }}
+              config={{ displayModeBar: false }}
+            />
+          </div>
         </IonCardContent>
       </IonCard>
       {/* <IonListHeader>LIDAR Scans</IonListHeader> */}

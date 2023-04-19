@@ -71,7 +71,7 @@ const InventoryList: React.FC = () => {
 
   return (
     <IonContent color={"light"}>
-      <IonList inset>
+      <IonList>
         <IonListHeader>
           <IonLabel>List View</IonLabel>
           <IonButton class="ion-padding-horizontal">
