@@ -65,7 +65,7 @@ const InventoryLayer: React.FC = () => {
     // const tree = src?.features.find((f) => f.id === selectedInventoryTreeID);
     if (selectedInventoryTreeID != null) {
       const tree = src?.features.filter(
-        (f) => f.id?.toString() === selectedInventoryTreeID
+        (f) => f.properties.treeid?.toString() === selectedInventoryTreeID
       );
       console.log("tree", tree);
       setHovered(tree?.[0]);
@@ -177,7 +177,7 @@ const InventoryLayer: React.FC = () => {
       "circle-opacity": [
         "case",
         ["boolean", ["feature-state", "hover"], false],
-        0.9,
+        1,
         0.7,
       ],
       "circle-radius": [
@@ -192,23 +192,6 @@ const InventoryLayer: React.FC = () => {
           ? ["/", ["get", activeVariable], 2]
           : ["*", ["get", activeVariable], 50],
       ],
-      // "circle-radius": [
-      //   "case",
-      //   ["boolean", ["feature-state", "hover"], false],
-      //   10,
-      //   8,
-      // ],
-      // "circle-radius": [
-      //   "interpolate",
-      //   ["linear"],
-      //   ["zoom"],
-      //   // zoom is 5 (or less) -> circle radius will be 1px
-      //   15,
-      //   1,
-      //   // zoom is 10 (or greater) -> circle radius will be 5px
-      //   18,
-      //   10,
-      // ],
       "circle-stroke-width": 0.8,
       "circle-stroke-color": "black",
     } as CirclePaint;
@@ -224,47 +207,42 @@ const InventoryLayer: React.FC = () => {
   return (
     <>
       {src ? (
-        <Source id="inventory" type="geojson" data={src}>
-          <Layer
-            id="inventory"
-            source="inventory"
-            type="circle"
-            paint={paint}
-            layout={layout}
-            // layout={{
-            //   "icon-image": "custom-marker",
-            //   // get the title name from the source's "title" property
-            //   // "text-field": ["get", "id"],
-            //   "text-field": "test",
-            //   "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            //   // "text-offset": [0, 1.25],
-
-            //   "text-anchor": "top",
-            // }}
-          />
-          {/* <Layer
-            id="inventory-label"
-            source="inventory"
-            type="symbol"
-            layout={{
-              "text-field": ["get", "height"],
-              "text-size": 14,
-              "text-offset": [0, -1.5],
-              // "text-field": "test",
-              // "text-variable-anchor": ["top", "bottom", "left", "right"],
-              // "text-radial-offset": 0.5,
-              // "text-justify": "auto",
-              // "icon-image": ["get", "icon"],
-            }}
-            paint={{
-              "text-color": "#ffff00",
-              "text-halo-color": "#333333",
-              "text-halo-width": 1,
-            }}
-          /> */}
-        </Source>
+        <>
+          <Source id="inventory" type="geojson" data={src}>
+            <Layer
+              id="inventory"
+              source="inventory"
+              type="circle"
+              paint={paint}
+              layout={layout}
+            />
+          </Source>
+          <Source id="inventory" type="geojson" data={src}>
+            <Layer
+              id="inventory-label"
+              source="inventory"
+              type="symbol"
+              layout={{
+                "text-field": ["get", activeVariable],
+                "text-anchor": "top",
+                "text-size": 25,
+                "text-offset": [0, -2.25],
+                "text-ignore-placement": true,
+              }}
+              paint={{
+                "text-color": "#000",
+                "text-opacity": [
+                  "case",
+                  ["boolean", ["feature-state", "hover"], false],
+                  1,
+                  0,
+                ],
+              }}
+            />
+          </Source>
+        </>
       ) : null}
-      {hovered ? (
+      {/* {hovered ? (
         <IonCard
           style={{
             position: "relative",
@@ -297,7 +275,7 @@ const InventoryLayer: React.FC = () => {
             </IonItem>
           </IonCardContent>
         </IonCard>
-      ) : null}
+      ) : null} */}
     </>
   );
 };

@@ -43,6 +43,7 @@ const MainMap: React.FC = () => {
 
   const osmStyle = {
     version: 8,
+    glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
     sources: {
       osm: {
         type: "raster",
@@ -70,8 +71,6 @@ const MainMap: React.FC = () => {
         longitude: 8.088652,
         latitude: 47.88443,
         zoom: 15,
-        // pitch: 52,
-        // 47.884438269626294, 8.088652498339387
       }}
     >
       <InventorySource />
