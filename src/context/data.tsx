@@ -53,6 +53,7 @@ interface DataState {
   activeVariable: string;
   sortDirection: SORTING;
   setActiveVarialbeHandler: (value: string) => void;
+  setSortDirection: (value: SORTING) => void;
 }
 
 // initial empty state
@@ -69,6 +70,7 @@ const initialState: DataState = {
   activeVariable: "height",
   sortDirection: "none",
   setActiveVarialbeHandler: (value: string) => {},
+  setSortDirection: (value: SORTING) => {},
 };
 
 // build the context
@@ -90,7 +92,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
 
   // active variable and sorting
   const [activeVariable, setActiveVariable] = useState<string>("height");
-  const [sortDirection, setSortDirection] = useState<SORTING>("none");
+  const [sortDirection, setSortDirectionState] = useState<SORTING>("none");
 
   const setActiveVarialbeHandler = (value: string) => {
     setActiveVariable(value);
@@ -117,6 +119,11 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       height: { ...newValues.height },
       radius: { ...newValues.radius },
     });
+  };
+
+  // define the setSortDirection function
+  const setSortDirection = (newDirection: SORTING) => {
+    setSortDirectionState(newDirection);
   };
 
   // copy over inventory data
@@ -235,6 +242,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     activeVariable,
     sortDirection,
     setActiveVarialbeHandler,
+    setSortDirection
   };
 
   return (
