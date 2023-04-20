@@ -168,11 +168,11 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     }
   }, [inventory]);
 
-  // re-filter inventory when allInventory changes
+  // re-filter inventory when allInventory changes, activeVariable or sorting changes
   useEffect(() => {
     if (allInventory && !!filterValues) {
       //      console.log("allInventory:", allInventory);
-      console.log("filterValues:", filterValues);
+      // console.log("filterValues:", filterValues);
 
       // TODO build the filter here
       const inv = {
@@ -190,6 +190,19 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         ],
       } as InventoryData;
 
+      // apply sorting, sort in place
+      if (sortDirection === "ascending") {
+        inv.features.sort((a, b) => a.properties[activeVariable] > b.properties[activeVariable] ? 1 : -1);
+      } 
+      else if (sortDirection === "descending") {
+        inv.features.sort((a, b) => a.properties[activeVariable] < b.properties[activeVariable] ? 1 : -1);
+      }
+      else {
+        // sort by id ascending
+        inv.features.sort((a, b) => Number(a.id) > Number(b.id) ? 1 : -1);
+      }
+
+
       // update the bounding box
       inv.bbox = bbox(inv);
       setFilteredInventory(inv);
@@ -205,7 +218,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       setInventoryCount({ total: 0, filtered: 0 });
     }
     //    console.log("filteredInventory:", filteredInventory);
-  }, [allInventory, filterValues, activeVariable]);
+  }, [allInventory, filterValues, activeVariable, sortDirection]);
+
 
   // create the final value
   const value = {
