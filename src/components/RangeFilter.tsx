@@ -31,13 +31,13 @@ const RangeFilter: React.FC = () => {
       setRadius({
         lower: filterValues.radius.lower,
         upper: filterValues.radius.upper,
-      })
+      });
       setHeight({
         lower: filterValues.height.lower,
         upper: filterValues.height.upper,
-      })
+      });
     }
-  }, [filterValues])
+  }, [filterValues]);
 
   return (
     <IonList>
