@@ -137,6 +137,25 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
   return (
     <>
       <IonCard>
+        <IonCardContent>
+          {feature && (
+            <div>
+              <TreeOverviewItem
+                name="Radius"
+                value={feature!.properties.radius.toFixed(2)}
+                description="Radius of a Tree"
+              />
+              <TreeOverviewItem
+                name="Height"
+                value={feature!.properties.height.toFixed(1)}
+                description="Measured individual tree height using a combination of
+                stereophotogrammetry and LiDAR."
+              />
+            </div>
+          )}
+        </IonCardContent>
+      </IonCard>
+      <IonCard>
         <IonCardHeader></IonCardHeader>
         <IonCardContent>
           {/* Use it later on */}
@@ -162,25 +181,6 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
               </p>
             </IonLabel>
           </IonItem>
-        </IonCardContent>
-      </IonCard>
-      <IonCard>
-        <IonCardContent>
-          {feature && (
-            <div>
-              <TreeOverviewItem
-                name="Radius"
-                value={feature!.properties.radius.toFixed(2)}
-                description="Radius of a Tree"
-              />
-              <TreeOverviewItem
-                name="Height"
-                value={feature!.properties.height.toFixed(1)}
-                description="Measured individual tree height using a combination of
-                stereophotogrammetry and LiDAR."
-              />
-            </div>
-          )}
         </IonCardContent>
       </IonCard>
       <IonCard>
