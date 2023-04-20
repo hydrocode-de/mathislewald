@@ -16,6 +16,8 @@ import bbox from "@turf/bbox";
 import { useOffline } from "./offline";
 import { InventoryData } from "./data.model";
 
+export type SORTING = "ascending" | "descending" | "none";
+
 interface FilterValues {
   radius: { lower: number; upper: number };
   height: { lower: number; upper: number };
@@ -49,6 +51,7 @@ interface DataState {
   setFilterValues: (value: FilterValues) => void;
   inventoryStats: InventoryDataStats | null;
   activeVariable: string;
+  sortDirection: SORTING;
   setActiveVarialbeHandler: (value: string) => void;
 }
 
@@ -64,6 +67,7 @@ const initialState: DataState = {
   setFilterValues: (value: FilterValues) => {},
   inventoryStats: null,
   activeVariable: "height",
+  sortDirection: "none",
   setActiveVarialbeHandler: (value: string) => {},
 };
 
@@ -83,7 +87,10 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const [inventoryCount, setInventoryCount] = useState<Count>(
     initialState.inventoryCount
   );
+
+  // active variable and sorting
   const [activeVariable, setActiveVariable] = useState<string>("height");
+  const [sortDirection, setSortDirection] = useState<SORTING>("none");
 
   const setActiveVarialbeHandler = (value: string) => {
     setActiveVariable(value);
@@ -212,6 +219,7 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     setFilterValues,
     inventoryStats: inventoryStats || null,
     activeVariable,
+    sortDirection,
     setActiveVarialbeHandler,
   };
 
