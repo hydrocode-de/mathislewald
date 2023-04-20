@@ -92,7 +92,7 @@ const DesktopPage: React.FC = () => {
                         top: 60,
                         left: 12,
                         // width: "33vw",
-                        width: "440px",
+                        width: "400px",
                         height: `calc(100vh - 135px)`,
                         zIndex: 999,
                         overflowY: "auto",
