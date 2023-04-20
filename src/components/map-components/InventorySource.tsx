@@ -6,11 +6,25 @@ import { Source, Layer, useMap } from "react-map-gl";
 import { useData } from "../../context/data";
 import { InventoryData, InventoryFeature } from "../../context/data.model";
 import { useLayers } from "../../context/layers";
-import { IonPopover } from "@ionic/react";
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonItem,
+  IonLabel,
+  IonPopover,
+} from "@ionic/react";
 import { useHistory } from "react-router";
 import { useOffline } from "../../context/offline";
+import bbox from "@turf/bbox";
 
 const InventoryLayer: React.FC = () => {
+  const {
+    activeVariable,
+    setSelectedInventoryTreeIDHandler,
+    selectedInventoryTreeID,
+  } = useData();
   // component state
   const [src, setSrc] = useState<InventoryData>();
 
@@ -32,11 +46,19 @@ const InventoryLayer: React.FC = () => {
   // load source into component
   useEffect(() => {
     if (filteredInventory) {
+      console.log(filteredInventory);
       setSrc(
         cloneDeep({
           ...filteredInventory,
           features: [
             ...filteredInventory.features.map((f, i) => {
+              // set radius to 1 decimal point and height to
+              if (f.properties.radius) {
+                f.properties.radius = Number(f.properties.radius.toFixed(1));
+              }
+              if (f.properties.height) {
+                f.properties.height = Math.round(f.properties.height);
+              }
               return { ...f, id: i };
             }),
           ],
@@ -44,6 +66,23 @@ const InventoryLayer: React.FC = () => {
       );
     }
   }, [filteredInventory]);
+
+  useEffect(() => {
+    console.log("active tree", selectedInventoryTreeID);
+    // const tree = src?.features.find((f) => f.id === selectedInventoryTreeID);
+    if (selectedInventoryTreeID != null) {
+      const tree = src?.features.filter(
+        (f) => f.properties.treeid?.toString() === selectedInventoryTreeID
+      );
+      console.log("tree", tree);
+      setHovered(tree?.[0]);
+      const coords = tree?.[0].geometry.coordinates as [number, number];
+      map.current?.flyTo({
+        center: coords,
+        speed: 0.5,
+      });
+    }
+  }, [selectedInventoryTreeID]);
 
   // zoom to layer
   useEffect(() => {
@@ -123,40 +162,51 @@ const InventoryLayer: React.FC = () => {
     // Click handler
     map.current.on("click", "inventory", (e: MapLayerMouseEvent) => {
       if (e.features && e.features.length > 0) {
+        // console.log(e.features[0]);
         // get the first feature
         const f = e.features[0] as GeoJSON.Feature<GeoJSON.Point>;
         history.push(`/list/${(f as InventoryFeature).properties.treeid}`);
+        setSelectedInventoryTreeIDHandler(f.properties?.treeid.toString());
       }
     });
   }, [map, src, history]);
 
   // build paint and layout
   useEffect(() => {
+    console.log(activeVariable);
     const defaultPaint = {
       "circle-color": [
         "case",
-        ["boolean", ["feature-state", "hover"], false],
-        "purple",
-        ["to-color", ["feature-state", "color"], "gray"],
+        // ["boolean", ["feature-state", "hover"], false],
+        ["==", ["get", "treeid"], selectedInventoryTreeID],
+        "grey",
+        "white",
+        // ["to-color", ["feature-state", "color"], "gray"],
       ],
       "circle-opacity": [
         "case",
         ["boolean", ["feature-state", "hover"], false],
-        0.9,
-        0.4,
+        1,
+        0.7,
       ],
       "circle-radius": [
         "case",
-        ["boolean", ["feature-state", "hover"], false],
-        8.5,
-        6,
+        ["==", ["get", "treeid"], selectedInventoryTreeID],
+        // increase the radius when the feature's id matches selectedInventoryTreeID
+        activeVariable === "height"
+          ? ["/", ["get", activeVariable], 1.9]
+          : ["*", ["get", activeVariable], 55],
+        // original radius calculation
+        activeVariable === "height"
+          ? ["/", ["get", activeVariable], 2]
+          : ["*", ["get", activeVariable], 50],
       ],
-      "circle-stroke-width": 0.8,
-      "circle-stroke-color": "white",
+      "circle-stroke-width": 1,
+      "circle-stroke-color": "black",
     } as CirclePaint;
 
     setPaint(defaultPaint);
-  }, []);
+  }, [activeVariable, selectedInventoryTreeID]);
 
   const layout = {
     // TODO: NEED TO CHANGE THE FORMAT OF INVENTORY LAYER
@@ -166,51 +216,77 @@ const InventoryLayer: React.FC = () => {
   return (
     <>
       {src ? (
-        <Source id="inventory" type="geojson" data={src}>
-          <Layer
-            id="inventory"
-            source="inventory"
-            type="circle"
-            paint={paint}
-            layout={layout}
-          />
-        </Source>
+        <>
+          <Source id="inventory" type="geojson" data={src}>
+            <Layer
+              id="inventory"
+              source="inventory"
+              type="circle"
+              paint={paint}
+              layout={layout}
+            />
+          </Source>
+          <Source id="inventory" type="geojson" data={src}>
+            <Layer
+              id="inventory-label"
+              source="inventory"
+              type="symbol"
+              layout={{
+                "text-field": ["get", activeVariable],
+                "text-anchor": "top",
+                "text-size": 25,
+                "text-offset": [0, -2.25],
+                "text-ignore-placement": true,
+              }}
+              paint={{
+                "text-color": "#fff",
+                "text-halo-width": 1.5,
+                "text-halo-color": "#000",
+                "text-opacity": [
+                  "case",
+                  ["boolean", ["feature-state", "hover"], false],
+                  1,
+                  0,
+                ],
+              }}
+            />
+          </Source>
+        </>
       ) : null}
-      {hovered ? (
-        <IonPopover>test</IonPopover>
-      ) : // <IonCard
-      //   style={{
-      //     position: "fixed",
-      //     zIndex: 99,
-      //     backgroundTransparency: 0.6,
-      //     top: "64px",
-      //     left: 0,
-      //     maxWidth: "250px",
-      //   }}
-      // >
-      //   <img
-      //     alt="img"
-      //     //src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.images[0]}`}
-      //     src={currentImg ? currentImg : ''}
-      //     width="250"
-      //   />
-      //   <IonCardHeader>
-      //     <IonCardTitle>TreeID: {hovered.properties.treeid}</IonCardTitle>
-      //   </IonCardHeader>
-      //   <IonCardContent>
-      //     <IonItem lines="none">
-      //       <IonLabel slot="start">Height: </IonLabel>
-      //       <IonLabel>{hovered.properties.height.toFixed(1)} m</IonLabel>
-      //     </IonItem>
-      //     <IonItem lines="none">
-      //       <IonLabel slot="start">Radius: </IonLabel>
-      //       <IonLabel>
-      //         {(hovered.properties.radius * 100).toFixed(0)} cm
-      //       </IonLabel>
-      //     </IonItem>
-      //   </IonCardContent>
-      // </IonCard>
-      null}
+      {/* {hovered ? (
+        <IonCard
+          style={{
+            position: "relative",
+            zIndex: 99,
+            backgroundTransparency: 0.6,
+            top: "64px",
+            left: 0,
+            maxWidth: "250px",
+          }}
+        >
+          <img
+            alt="img"
+            //src={`http://geowwd.uni-freiburg.de/img/${hovered.properties.images[0]}`}
+            src={currentImg ? currentImg : ""}
+            width="250"
+          />
+          <IonCardHeader>
+            <IonCardTitle>TreeID: {hovered.properties.treeid}</IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonItem lines="none">
+              <IonLabel slot="start">Height: </IonLabel>
+              <IonLabel>{hovered.properties.height.toFixed(1)} m</IonLabel>
+            </IonItem>
+            <IonItem lines="none">
+              <IonLabel slot="start">Radius: </IonLabel>
+              <IonLabel>
+                {(hovered.properties.radius * 100).toFixed(0)} cm
+              </IonLabel>
+            </IonItem>
+          </IonCardContent>
+        </IonCard>
+      ) : null} */}
     </>
   );
 };

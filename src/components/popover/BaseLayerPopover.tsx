@@ -7,12 +7,12 @@ const BaseLayerPopover: React.FC = () => {
       trigger="open-map-selection-popover"
       triggerAction="click"
       reference="trigger"
-      side="right"
+      side="left"
       arrow={false}
       mode="md"
       showBackdrop={true}
       style={{
-        "--offset-x": "10px",
+        "--offset-x": "-10px",
         // "--offset-y": "-20px",
         "--min-width": "350px",
       }}

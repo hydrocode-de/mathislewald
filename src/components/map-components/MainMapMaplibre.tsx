@@ -4,10 +4,10 @@ import Map from "react-map-gl";
 
 // load the maplibre CSS styles
 import "maplibre-gl/dist/maplibre-gl.css";
-import InventorySource from "./map-components/InventorySource";
-import BaseLayerSource from "./map-components/BaseLayerSource";
-import UserLocationSource from "./map-components/UserLocationSource";
-import LayerInteraction from "./map-components/LayerInteraction";
+import InventorySource from "./InventorySource";
+import BaseLayerSource from "./BaseLayerSource";
+import UserLocationSource from "./UserLocationSource";
+import LayerInteraction from "./LayerInteraction";
 
 const MainMap: React.FC = () => {
   // onload callback handler
@@ -43,6 +43,7 @@ const MainMap: React.FC = () => {
 
   const osmStyle = {
     version: 8,
+    glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
     sources: {
       osm: {
         type: "raster",
@@ -70,8 +71,6 @@ const MainMap: React.FC = () => {
         longitude: 8.088652,
         latitude: 47.88443,
         zoom: 15,
-        // pitch: 52,
-        // 47.884438269626294, 8.088652498339387
       }}
     >
       <InventorySource />

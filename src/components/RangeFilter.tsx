@@ -26,22 +26,18 @@ const RangeFilter: React.FC = () => {
   const [radius, setRadius] = useState<RangeValue | undefined>(undefined);
   const [height, setHeight] = useState<RangeValue | undefined>(undefined);
 
-  // use effect to set the filter to current filter
   useEffect(() => {
-    // set default radius if still undefined
-    if (!radius && !!filterValues) {
-      setRadius({ ...filterValues.radius });
+    if (filterValues) {
+      setRadius({
+        lower: filterValues.radius.lower,
+        upper: filterValues.radius.upper,
+      });
+      setHeight({
+        lower: filterValues.height.lower,
+        upper: filterValues.height.upper,
+      });
     }
-
-    // set default height if still undefined
-    if (!height && !!filterValues) {
-      setHeight({ ...filterValues.height });
-    }
-  }, [inventoryStats, radius, height]);
-
-  // console.log("filterValues:", filterValues);
-  // console.log("radius", radius);
-  // console.log("height", height);
+  }, [filterValues]);
 
   return (
     <IonList>
@@ -56,12 +52,6 @@ const RangeFilter: React.FC = () => {
           onIonKnobMoveEnd={(e) =>
             e.detail.value ? setHeight(e.detail.value as RangeValue) : null
           }
-          // onIonChange={({ detail }) => {
-          //   if (detail.value) {
-          //     // console.log("e.detail.value:", Object(detail.value));
-          //     setHeight(detail.value as RangeValue);
-          //   }
-          // }}
           pinFormatter={(value: number) => `${value.toFixed(0)}m`}
           class="ion-no-padding"
           disabled={!height}
@@ -118,10 +108,10 @@ const RangeFilter: React.FC = () => {
           class="ion-no-padding"
         >
           <IonLabel color="medium" slot="start">
-            0
+            {/* 0 */}
           </IonLabel>
           <IonLabel color="medium" slot="end">
-            100
+            {/* 100 */}
           </IonLabel>
         </IonRange>
       </IonItem>

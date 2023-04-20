@@ -8,7 +8,12 @@ import {
   IonListHeader,
   IonThumbnail,
 } from "@ionic/react";
-import { bookmarkOutline, filterOutline } from "ionicons/icons";
+import {
+  bookmarkOutline,
+  filterOutline,
+  location,
+  navigate,
+} from "ionicons/icons";
 import { useHistory } from "react-router";
 
 import distance from "@turf/distance";
@@ -22,7 +27,11 @@ import { MouseEventHandler } from "react";
 
 const InventoryList: React.FC = () => {
   // load the filtered inventory list
-  const { filteredInventory } = useData();
+  const {
+    filteredInventory,
+    activeVariable,
+    setSelectedInventoryTreeIDHandler,
+  } = useData();
 
   // get a history context
   const history = useHistory();
@@ -53,14 +62,16 @@ const InventoryList: React.FC = () => {
     }
   };
 
-  const addToBookmarksHandler = (event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>) => {
+  const addToBookmarksHandler = (
+    event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
+  ) => {
     event.stopPropagation();
     console.log("add to bookmarks");
   };
 
   return (
     <IonContent color={"light"}>
-      <IonList inset>
+      <IonList>
         <IonListHeader>
           <IonLabel>List View</IonLabel>
           <IonButton class="ion-padding-horizontal">
@@ -73,7 +84,12 @@ const InventoryList: React.FC = () => {
             <IonItem
               key={f.id}
               button
-              onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
+              onClick={() => {
+                setSelectedInventoryTreeIDHandler(
+                  f.properties.treeid.toString()
+                );
+                onNavigate(`/list/${f.properties.treeid}`);
+              }}
             >
               <IonThumbnail slot="start" style={{ borderRadius: "15px" }}>
                 <img
@@ -83,14 +99,38 @@ const InventoryList: React.FC = () => {
                 />
               </IonThumbnail>
               <IonLabel>
-                <p> ID: {f.properties.treeid}</p>
-                <div style={{ display: "flex", alignItems: "end" }}>
-                  <h1>{f.properties.height.toFixed(1)}</h1>
-                  <p>{""}m</p>
-                </div>
+                <p style={{ fontSize: 12, paddingBottom: 0, fontWeight: 400 }}>
+                  ID {f.properties.treeid}
+                </p>
+                {activeVariable === "height" ? (
+                  <div style={{ display: "flex", alignItems: "end" }}>
+                    <h1>{f.properties.height.toFixed(1)}</h1>
+                    <p>{""}m</p>
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", alignItems: "end" }}>
+                    <h1>{(f.properties.radius * 100).toFixed(0)}</h1>
+                    <p>{""}cm</p>
+                  </div>
+                )}
               </IonLabel>
               <IonLabel>
-                <p>{distString(f)} away</p>
+                <p
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <IonIcon
+                    style={{
+                      position: "relative",
+                      bottom: -2,
+                      left: -3,
+                    }}
+                    icon={navigate}
+                  ></IonIcon>
+                  {distString(f)}
+                </p>
               </IonLabel>
               <IonButton fill="clear" onClick={(e) => addToBookmarksHandler(e)}>
                 <IonIcon icon={bookmarkOutline}></IonIcon>

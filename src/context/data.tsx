@@ -41,26 +41,30 @@ interface Count {
 interface DataState {
   allInventory: InventoryData | null;
   filteredInventory: InventoryData | null;
+  selectedInventoryTreeID: string | null;
+  setSelectedInventoryTreeIDHandler: (treeID: string) => void;
   inventoryCount: Count;
   synced: boolean;
   filterValues: FilterValues | undefined;
   setFilterValues: (value: FilterValues) => void;
   inventoryStats: InventoryDataStats | null;
   activeVariable: string;
-  setActiveVariable: (value: string) => void;
+  setActiveVarialbeHandler: (value: string) => void;
 }
 
 // initial empty state
 const initialState: DataState = {
   allInventory: null,
   filteredInventory: null,
+  selectedInventoryTreeID: null,
+  setSelectedInventoryTreeIDHandler: (treeID: string) => {},
   inventoryCount: { total: 0, filtered: 0 },
   synced: false,
   filterValues: undefined,
   setFilterValues: (value: FilterValues) => {},
   inventoryStats: null,
   activeVariable: "height",
-  setActiveVariable: (value: string) => {},
+  setActiveVarialbeHandler: (value: string) => {},
 };
 
 // build the context
@@ -72,17 +76,30 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   // create internal state of the provider
   const [allInventory, setAllInventory] = useState<InventoryData>();
   const [filteredInventory, setFilteredInventory] = useState<InventoryData>();
+  const [selectedInventoryTreeID, setSelectedInventoryTreeID] = useState<
+    string | null
+  >(null);
   const [inventoryStats, setInventoryStats] = useState<InventoryDataStats>();
   const [inventoryCount, setInventoryCount] = useState<Count>(
     initialState.inventoryCount
   );
   const [activeVariable, setActiveVariable] = useState<string>("height");
 
+  const setActiveVarialbeHandler = (value: string) => {
+    setActiveVariable(value);
+  };
+
+  const setSelectedInventoryTreeIDHandler = (treeID: string) => {
+    setSelectedInventoryTreeID(treeID);
+  };
+
   // create state for synchronization
   const [synced, setSynced] = useState<boolean>(false);
 
   //TODO: Use real values instread.
-  const [filterValues, setCurrentFilterValues] = useState<FilterValues | undefined>(undefined);
+  const [filterValues, setCurrentFilterValues] = useState<
+    FilterValues | undefined
+  >(undefined);
 
   // use the offline context
   const { inventory } = useOffline();
@@ -91,9 +108,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const setFilterValues = (newValues: FilterValues) => {
     setCurrentFilterValues({
       height: { ...newValues.height },
-      radius: { ...newValues.radius}
-    })
-  } 
+      radius: { ...newValues.radius },
+    });
+  };
 
   // copy over inventory data
   useEffect(() => {
@@ -117,16 +134,22 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         heightMin: Math.min(
           ...inventory.features.map((f) => f.properties.height)
         ),
-      }
+      };
       setInventoryStats({
-        data: {...currentStats},
+        data: { ...currentStats },
       });
 
       // set the filter to the current min/max as the dataset changed
       setCurrentFilterValues({
-        radius: {lower: currentStats.radiusMin, upper: currentStats.radiusMax},
-        height: {lower: currentStats.heightMin, upper: currentStats.heightMax}
-      })
+        radius: {
+          lower: currentStats.radiusMin,
+          upper: currentStats.radiusMax,
+        },
+        height: {
+          lower: currentStats.heightMin,
+          upper: currentStats.heightMax,
+        },
+      });
 
       setInventoryCount({
         total: inventory.features.length,
@@ -175,19 +198,21 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       setInventoryCount({ total: 0, filtered: 0 });
     }
     //    console.log("filteredInventory:", filteredInventory);
-  }, [allInventory, filterValues]);
+  }, [allInventory, filterValues, activeVariable]);
 
   // create the final value
   const value = {
     allInventory: allInventory || null,
     filteredInventory: filteredInventory || null,
+    selectedInventoryTreeID: selectedInventoryTreeID || null,
+    setSelectedInventoryTreeIDHandler,
     inventoryCount,
     synced,
     filterValues,
     setFilterValues,
     inventoryStats: inventoryStats || null,
     activeVariable,
-    setActiveVariable,
+    setActiveVarialbeHandler,
   };
 
   return (

@@ -22,7 +22,7 @@ const MapButtonGroup: React.FC<MapButtonGroupProps> = ({
       }}
     >
       <IonButton color={"light"} id="open-variable-selector">
-        {activeVariable}
+        {activeVariable === "height" ? "Height" : "BHD"}
         <IonIcon icon={chevronDownOutline} slot="end" />
       </IonButton>
       <div>
