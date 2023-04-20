@@ -10,9 +10,10 @@ import {
 } from "@ionic/react";
 import {
   bookmarkOutline,
-  filterOutline,
-  location,
   navigate,
+  swapVerticalOutline,
+  arrowDownOutline,
+  arrowUpOutline
 } from "ionicons/icons";
 import { useHistory } from "react-router";
 
@@ -23,7 +24,6 @@ import { useSettings } from "../context/settings";
 import { InventoryFeature } from "../context/data.model";
 
 import "./InventoryList.css";
-import { MouseEventHandler } from "react";
 
 const InventoryList: React.FC = () => {
   // load the filtered inventory list
@@ -31,6 +31,8 @@ const InventoryList: React.FC = () => {
     filteredInventory,
     activeVariable,
     setSelectedInventoryTreeIDHandler,
+    sortDirection,
+    setSortDirection
   } = useData();
 
   // get a history context
@@ -44,6 +46,17 @@ const InventoryList: React.FC = () => {
     // navigate forward
     history.push(path);
   };
+
+  // handler for changing sort direction
+  const onSortDirectionChange = () => {
+    if (sortDirection === "none") {
+      setSortDirection("ascending");
+    } else if (sortDirection === "ascending") {
+      setSortDirection("descending");
+    } else {
+      setSortDirection("none");
+    }
+  }
 
   const distString = (feature: InventoryFeature) => {
     if (!position) return " - ";
@@ -74,8 +87,8 @@ const InventoryList: React.FC = () => {
       <IonList>
         <IonListHeader>
           <IonLabel>List View</IonLabel>
-          <IonButton class="ion-padding-horizontal">
-            <IonIcon icon={filterOutline} color={"primary"}></IonIcon>
+          <IonButton class="ion-padding-horizontal" onClick={onSortDirectionChange}>
+            <IonIcon icon={sortDirection === "none" ?  swapVerticalOutline : sortDirection === "ascending" ? arrowUpOutline : arrowDownOutline} color={sortDirection === "none" ? "dark" : "primary"}></IonIcon>
           </IonButton>
         </IonListHeader>
 

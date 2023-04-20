@@ -16,6 +16,8 @@ import bbox from "@turf/bbox";
 import { useOffline } from "./offline";
 import { InventoryData } from "./data.model";
 
+export type SORTING = "ascending" | "descending" | "none";
+
 interface FilterValues {
   radius: { lower: number; upper: number };
   height: { lower: number; upper: number };
@@ -49,7 +51,9 @@ interface DataState {
   setFilterValues: (value: FilterValues) => void;
   inventoryStats: InventoryDataStats | null;
   activeVariable: string;
+  sortDirection: SORTING;
   setActiveVarialbeHandler: (value: string) => void;
+  setSortDirection: (value: SORTING) => void;
 }
 
 // initial empty state
@@ -64,7 +68,9 @@ const initialState: DataState = {
   setFilterValues: (value: FilterValues) => {},
   inventoryStats: null,
   activeVariable: "height",
+  sortDirection: "none",
   setActiveVarialbeHandler: (value: string) => {},
+  setSortDirection: (value: SORTING) => {},
 };
 
 // build the context
@@ -83,7 +89,10 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
   const [inventoryCount, setInventoryCount] = useState<Count>(
     initialState.inventoryCount
   );
+
+  // active variable and sorting
   const [activeVariable, setActiveVariable] = useState<string>("height");
+  const [sortDirection, setSortDirectionState] = useState<SORTING>("none");
 
   const setActiveVarialbeHandler = (value: string) => {
     setActiveVariable(value);
@@ -110,6 +119,11 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       height: { ...newValues.height },
       radius: { ...newValues.radius },
     });
+  };
+
+  // define the setSortDirection function
+  const setSortDirection = (newDirection: SORTING) => {
+    setSortDirectionState(newDirection);
   };
 
   // copy over inventory data
@@ -161,11 +175,11 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     }
   }, [inventory]);
 
-  // re-filter inventory when allInventory changes
+  // re-filter inventory when allInventory changes, activeVariable or sorting changes
   useEffect(() => {
     if (allInventory && !!filterValues) {
       //      console.log("allInventory:", allInventory);
-      console.log("filterValues:", filterValues);
+      // console.log("filterValues:", filterValues);
 
       // TODO build the filter here
       const inv = {
@@ -183,6 +197,19 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
         ],
       } as InventoryData;
 
+      // apply sorting, sort in place
+      if (sortDirection === "ascending") {
+        inv.features.sort((a, b) => a.properties[activeVariable] - b.properties[activeVariable]);
+      } 
+      else if (sortDirection === "descending") {
+        inv.features.sort((a, b) => b.properties[activeVariable] - a.properties[activeVariable]);
+      }
+      else {
+        // sort by id ascending
+        inv.features.sort((a, b) => a.properties.treeid - b.properties.treeid);
+      }
+
+
       // update the bounding box
       inv.bbox = bbox(inv);
       setFilteredInventory(inv);
@@ -198,7 +225,8 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
       setInventoryCount({ total: 0, filtered: 0 });
     }
     //    console.log("filteredInventory:", filteredInventory);
-  }, [allInventory, filterValues, activeVariable]);
+  }, [allInventory, filterValues, activeVariable, sortDirection]);
+
 
   // create the final value
   const value = {
@@ -212,7 +240,9 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
     setFilterValues,
     inventoryStats: inventoryStats || null,
     activeVariable,
+    sortDirection,
     setActiveVarialbeHandler,
+    setSortDirection
   };
 
   return (
