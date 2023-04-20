@@ -192,14 +192,14 @@ export const DataProvider: React.FC<React.PropsWithChildren> = ({
 
       // apply sorting, sort in place
       if (sortDirection === "ascending") {
-        inv.features.sort((a, b) => a.properties[activeVariable] > b.properties[activeVariable] ? 1 : -1);
+        inv.features.sort((a, b) => a.properties[activeVariable] - b.properties[activeVariable]);
       } 
       else if (sortDirection === "descending") {
-        inv.features.sort((a, b) => a.properties[activeVariable] < b.properties[activeVariable] ? 1 : -1);
+        inv.features.sort((a, b) => b.properties[activeVariable] - a.properties[activeVariable]);
       }
       else {
         // sort by id ascending
-        inv.features.sort((a, b) => Number(a.id) > Number(b.id) ? 1 : -1);
+        inv.features.sort((a, b) => a.properties.treeid - b.properties.treeid);
       }
 
 
