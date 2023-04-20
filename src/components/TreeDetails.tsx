@@ -136,12 +136,10 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
 
   return (
     <>
-      {/* <IonListHeader>Overview</IonListHeader> */}
       <IonCard>
-        <IonCardHeader>
-          {/* <IonCardTitle class="ion-text-center">LIDAR Scans</IonCardTitle> */}
-        </IonCardHeader>
+        <IonCardHeader></IonCardHeader>
         <IonCardContent>
+          {/* Use it later on */}
           {/* <IonItem lines="none">
             <IonSegment value={"front"}>
               <IonSegmentButton value="front">
@@ -166,20 +164,10 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
           </IonItem>
         </IonCardContent>
       </IonCard>
-      <IonCard
-      // class="ion-padding"
-      >
-        {/* <IonCardHeader>
-          <IonCardTitle>Overview</IonCardTitle>
-        </IonCardHeader> */}
+      <IonCard>
         <IonCardContent>
           {feature && (
             <div>
-              {/* <TreeOverviewItem
-                name="TreeID"
-                value={feature!.properties.treeid.toString()}
-                description="Unique ID of the tree"
-              /> */}
               <TreeOverviewItem
                 name="Radius"
                 value={feature!.properties.radius.toFixed(2)}
@@ -197,7 +185,6 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
       </IonCard>
       <IonCard>
         <IonCardHeader>
-          {/* <IonCardTitle>Charts</IonCardTitle> */}
           <IonCardTitle class="ion-text-center">
             {plotTypeName[plotType]}
           </IonCardTitle>
@@ -232,7 +219,6 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
           </div>
         </IonCardContent>
       </IonCard>
-      {/* <IonListHeader>LIDAR Scans</IonListHeader> */}
     </>
   );
 };
