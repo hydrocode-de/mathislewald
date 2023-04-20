@@ -162,9 +162,11 @@ const InventoryLayer: React.FC = () => {
     // Click handler
     map.current.on("click", "inventory", (e: MapLayerMouseEvent) => {
       if (e.features && e.features.length > 0) {
+        // console.log(e.features[0]);
         // get the first feature
         const f = e.features[0] as GeoJSON.Feature<GeoJSON.Point>;
         history.push(`/list/${(f as InventoryFeature).properties.treeid}`);
+        setSelectedInventoryTreeIDHandler(f.properties?.treeid.toString());
       }
     });
   }, [map, src, history]);
@@ -192,8 +194,8 @@ const InventoryLayer: React.FC = () => {
         ["==", ["get", "treeid"], selectedInventoryTreeID],
         // increase the radius when the feature's id matches selectedInventoryTreeID
         activeVariable === "height"
-          ? ["/", ["get", activeVariable], 1]
-          : ["*", ["get", activeVariable], 100],
+          ? ["/", ["get", activeVariable], 1.9]
+          : ["*", ["get", activeVariable], 55],
         // original radius calculation
         activeVariable === "height"
           ? ["/", ["get", activeVariable], 2]
