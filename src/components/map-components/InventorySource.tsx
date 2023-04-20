@@ -52,6 +52,13 @@ const InventoryLayer: React.FC = () => {
           ...filteredInventory,
           features: [
             ...filteredInventory.features.map((f, i) => {
+              // set radius to 1 decimal point and height to
+              if (f.properties.radius) {
+                f.properties.radius = Number(f.properties.radius.toFixed(1));
+              }
+              if (f.properties.height) {
+                f.properties.height = Math.round(f.properties.height);
+              }
               return { ...f, id: i };
             }),
           ],
@@ -170,8 +177,8 @@ const InventoryLayer: React.FC = () => {
         "case",
         // ["boolean", ["feature-state", "hover"], false],
         ["==", ["get", "treeid"], selectedInventoryTreeID],
-        "green",
-        "gray",
+        "grey",
+        "white",
         // ["to-color", ["feature-state", "color"], "gray"],
       ],
       "circle-opacity": [
@@ -192,7 +199,7 @@ const InventoryLayer: React.FC = () => {
           ? ["/", ["get", activeVariable], 2]
           : ["*", ["get", activeVariable], 50],
       ],
-      "circle-stroke-width": 0.8,
+      "circle-stroke-width": 1,
       "circle-stroke-color": "black",
     } as CirclePaint;
 
@@ -230,7 +237,9 @@ const InventoryLayer: React.FC = () => {
                 "text-ignore-placement": true,
               }}
               paint={{
-                "text-color": "#000",
+                "text-color": "#fff",
+                "text-halo-width": 1.5,
+                "text-halo-color": "#000",
                 "text-opacity": [
                   "case",
                   ["boolean", ["feature-state", "hover"], false],
