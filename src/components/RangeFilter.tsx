@@ -12,7 +12,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { useData } from "../context/data";
 import { isEqual } from "lodash";
-import { react } from "plotly.js";
 
 interface RangeValue {
   lower: number;
@@ -27,18 +26,18 @@ const RangeFilter: React.FC = () => {
   const [radius, setRadius] = useState<RangeValue | undefined>(undefined);
   const [height, setHeight] = useState<RangeValue | undefined>(undefined);
 
-  // use effect to set the filter to current filter
   useEffect(() => {
-    // set default radius if still undefined
-    if (!radius && !!filterValues) {
-      setRadius({ ...filterValues.radius });
+    if (filterValues) {
+      setRadius({
+        lower: filterValues.radius.lower,
+        upper: filterValues.radius.upper,
+      })
+      setHeight({
+        lower: filterValues.height.lower,
+        upper: filterValues.height.upper,
+      })
     }
-
-    // set default height if still undefined
-    if (!height && !!filterValues) {
-      setHeight({ ...filterValues.height });
-    }
-  }, [inventoryStats, radius, height, filterValues]);
+  }, [filterValues])
 
   return (
     <IonList>
@@ -46,10 +45,7 @@ const RangeFilter: React.FC = () => {
         <IonLabel position="stacked">Height</IonLabel>
         <IonRange
           dualKnobs={true}
-          value={{
-            lower: height?.lower!,
-            upper: height?.upper!,
-          }}
+          value={height}
           pin={true}
           min={inventoryStats?.data?.heightMin as number}
           max={inventoryStats?.data?.heightMax as number}

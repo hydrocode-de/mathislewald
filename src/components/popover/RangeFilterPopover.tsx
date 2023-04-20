@@ -10,6 +10,7 @@ const FilterBarPopover: React.FC = () => {
       reference="trigger"
       side="bottom"
       arrow={true}
+      keepContentsMounted={true}
       // mode="md"
       showBackdrop={true}
       style={{
