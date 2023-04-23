@@ -14,14 +14,16 @@ interface SelectionState {
     selections: InventorySelection[];
     activeSelection: ActiveSelection | null;
     setActiveSelection: (selectionId: string | null) => void
-    addToActiveSelection: (treeId: number) => void
+    addToActiveSelection: (treeId: number) => Promise<void>
+    removeFromActiveSelection: (treeID: number) => Promise<void>
 }
 
 const initialState: SelectionState = {
     selections: [],
     activeSelection: null,
     setActiveSelection: (selectionId: string | null) => {},
-    addToActiveSelection: (treeId: number) => {}
+    addToActiveSelection: (treeId: number) => Promise.reject('Not implemented.'),
+    removeFromActiveSelection: (treeID: number) => Promise.reject('Not implemented.'),
 }
 
 // add the context
@@ -57,7 +59,7 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
         }
     }
 
-    const addToActiveSelection = async (treeId: number) => {
+    const addToActiveSelection = async (treeId: number): Promise<void> => {
         // skip if the treeId is already selection
         if (activeSelection && activeSelection.selection.treeIds.includes(treeId)) {
             return
@@ -81,6 +83,22 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
         // if (activeSelectionId !== selection.id) {
             setActiveSelectionId(selection.id)
         // }
+    }
+
+    const removeFromActiveSelection = async (treeId: number): Promise<void> => {
+        // skip if the treeId is not in selection
+        if (activeSelection && !activeSelection.selection.treeIds.includes(treeId)) {
+            return Promise.reject(`Tree ID=${treeId} is not in the active selection.`)
+        }
+
+        // remove the treeId
+        const newTreeIds = activeSelection?.selection.treeIds.filter(id => id !== treeId) || []
+
+        // update the selection
+        const selection = await updateSelection({...activeSelection!.selection, treeIds: newTreeIds})
+
+        // set the selection as the new active selection
+        setActiveSelectionId(selection.id)
     }
 
     const getSelectionWithGeoJSON = useCallback((selection: InventorySelection): ActiveSelection => {
@@ -121,7 +139,8 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
         selections,
         activeSelection,
         setActiveSelection,
-        addToActiveSelection
+        addToActiveSelection,
+        removeFromActiveSelection
     }
 
     // return the provider
