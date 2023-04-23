@@ -10,7 +10,7 @@ import {
 } from "@ionic/react";
 import {
   bookmarkOutline,
-  bookmark,
+  banOutline,
   navigate,
   swapVerticalOutline,
   arrowDownOutline,
@@ -38,7 +38,7 @@ const InventoryList: React.FC = () => {
   } = useData();
 
   // get selection functions
-  const { addToActiveSelection, activeSelection } = useSelection()
+  const { addToActiveSelection, removeFromActiveSelection, activeSelection } = useSelection()
 
   // get a history context
   const history = useHistory();
@@ -87,8 +87,12 @@ const InventoryList: React.FC = () => {
     // stop event propagation
     event.stopPropagation();
 
-    // add to active selection
-    addToActiveSelection(treeId)
+    // check if this treeId is already in the selection
+    if (activeSelection?.selection.treeIds.includes(treeId)) {
+      removeFromActiveSelection(treeId)
+    } else {
+      addToActiveSelection(treeId)
+    }
 
     //console.log("add to bookmarks");
   };
@@ -156,8 +160,11 @@ const InventoryList: React.FC = () => {
                   {distString(f)}
                 </p>
               </IonLabel>
-              <IonButton fill="clear" onClick={(e) => addToBookmarksHandler(e, f.properties.treeid)} disabled={activeSelection?.selection.treeIds.includes(f.properties.treeid)} >
-                <IonIcon icon={activeSelection?.selection.treeIds.includes(f.properties.treeid) ? bookmark : bookmarkOutline}></IonIcon>
+              <IonButton 
+                fill="clear" 
+                onClick={e => addToBookmarksHandler(e, f.properties.treeid)}
+              >
+                <IonIcon icon={activeSelection?.selection.treeIds.includes(f.properties.treeid) ? banOutline : bookmarkOutline}></IonIcon>
               </IonButton>
             </IonItem>
           );
