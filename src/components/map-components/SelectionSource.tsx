@@ -14,7 +14,6 @@ const SelectionSource: React.FC = () => {
     // update component state when activeSelection changes
     useEffect(() => {
         if (activeSelection) {
-            console.log(activeSelection)
             setSrc(cloneDeep(activeSelection.geoJSON))
         } else {
             setSrc(undefined)
@@ -22,7 +21,6 @@ const SelectionSource: React.FC = () => {
     }, [activeSelection])
 
     // if there is no source, return null
-    console.log(src)
     if (!src) {
         return (
             null
