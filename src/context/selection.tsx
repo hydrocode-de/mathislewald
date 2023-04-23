@@ -14,16 +14,16 @@ interface SelectionState {
     selections: InventorySelection[];
     activeSelection: ActiveSelection | null;
     setActiveSelection: (selectionId: string | null) => void
-    addToActiveSelection: (treeId: number) => Promise<void>
-    removeFromActiveSelection: (treeID: number) => Promise<void>
+    addToActiveSelection: (treeId: number | string) => Promise<void>
+    removeFromActiveSelection: (treeID: number | string) => Promise<void>
 }
 
 const initialState: SelectionState = {
     selections: [],
     activeSelection: null,
     setActiveSelection: (selectionId: string | null) => {},
-    addToActiveSelection: (treeId: number) => Promise.reject('Not implemented.'),
-    removeFromActiveSelection: (treeID: number) => Promise.reject('Not implemented.'),
+    addToActiveSelection: (treeId: number | string) => Promise.reject('Not implemented.'),
+    removeFromActiveSelection: (treeID: number | string) => Promise.reject('Not implemented.'),
 }
 
 // add the context
@@ -59,35 +59,35 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
         }
     }
 
-    const addToActiveSelection = async (treeId: number): Promise<void> => {
+    const addToActiveSelection = async (treeId: number | string): Promise<void> => {
         // skip if the treeId is already selection
-        if (activeSelection && activeSelection.selection.treeIds.includes(treeId)) {
-            return
+        if (activeSelection && activeSelection.selection.treeIds.includes(Number(treeId))) {
+            return Promise.reject(`The tree ID=${treeId} is already part of the current selection`)
         }
         // get the selection representation from the current data or create a new one
         let selection: InventorySelection;
         if (!activeSelection) {
             // create a new selection
-            selection = await createSelection([treeId], `New Selection ${selections.length}`)
+            selection = await createSelection([Number(treeId)], `New Selection ${selections.length}`)
         } else {
             // update
-            activeSelection.selection.treeIds.push(treeId)
+            activeSelection.selection.treeIds.push(Number(treeId))
             selection = await updateSelection(activeSelection.selection)            
         }
 
         // build the geojson
- //       const newActiveSelection = getSelectionWithGeoJSON(selection)
- //       setActiveSelectionState(newActiveSelection)
+        const newActiveSelection = getSelectionWithGeoJSON(selection)
+        setActiveSelectionState(newActiveSelection)
 
         // set the selection active if it was not
-        // if (activeSelectionId !== selection.id) {
+        if (activeSelectionId !== selection.id) {
             setActiveSelectionId(selection.id)
-        // }
+        }
     }
 
-    const removeFromActiveSelection = async (treeId: number): Promise<void> => {
+    const removeFromActiveSelection = async (treeId: number | string): Promise<void> => {
         // skip if the treeId is not in selection
-        if (activeSelection && !activeSelection.selection.treeIds.includes(treeId)) {
+        if (activeSelection && !activeSelection.selection.treeIds.includes(Number(treeId))) {
             return Promise.reject(`Tree ID=${treeId} is not in the active selection.`)
         }
 
@@ -97,8 +97,14 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
         // update the selection
         const selection = await updateSelection({...activeSelection!.selection, treeIds: newTreeIds})
 
+        // build the geoJSON
+        const newActiveSelection = getSelectionWithGeoJSON(selection)
+        setActiveSelectionState(newActiveSelection)
+
         // set the selection as the new active selection
-        setActiveSelectionId(selection.id)
+        if (activeSelectionId !== selection.id) {
+            setActiveSelectionId(selection.id)
+        }
     }
 
     const getSelectionWithGeoJSON = useCallback((selection: InventorySelection): ActiveSelection => {
@@ -115,7 +121,7 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
         data.bbox = bbox(data)
 
         return {selection: cloneDeep(selection), geoJSON: cloneDeep(data)}
-    }, [selections])
+    }, [inventory])
 
     // use effect to update the current active selection, when the activeSelectionId or the filteredInventory changes
     useEffect(() => {
@@ -131,7 +137,7 @@ export const SelectionProvider: React.FC<React.PropsWithChildren> = ({ children 
         } else {
             setActiveSelectionState(null)
         }
-    }, [activeSelectionId, inventory, selections])
+    }, [activeSelectionId, inventory, selections, getSelectionWithGeoJSON])
 
 
     // create the context value
