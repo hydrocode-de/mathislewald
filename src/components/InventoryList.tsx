@@ -10,6 +10,7 @@ import {
 } from "@ionic/react";
 import {
   bookmarkOutline,
+  bookmark,
   navigate,
   swapVerticalOutline,
   arrowDownOutline,
@@ -24,6 +25,7 @@ import { useSettings } from "../context/settings";
 import { InventoryFeature } from "../context/data.model";
 
 import "./InventoryList.css";
+import { useSelection } from "../context/selection";
 
 const InventoryList: React.FC = () => {
   // load the filtered inventory list
@@ -34,6 +36,9 @@ const InventoryList: React.FC = () => {
     sortDirection,
     setSortDirection
   } = useData();
+
+  // get selection functions
+  const { addToActiveSelection, activeSelection } = useSelection()
 
   // get a history context
   const history = useHistory();
@@ -76,10 +81,16 @@ const InventoryList: React.FC = () => {
   };
 
   const addToBookmarksHandler = (
-    event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>,
+    treeId: number
   ) => {
+    // stop event propagation
     event.stopPropagation();
-    console.log("add to bookmarks");
+
+    // add to active selection
+    addToActiveSelection(treeId)
+
+    //console.log("add to bookmarks");
   };
 
   return (
@@ -145,8 +156,8 @@ const InventoryList: React.FC = () => {
                   {distString(f)}
                 </p>
               </IonLabel>
-              <IonButton fill="clear" onClick={(e) => addToBookmarksHandler(e)}>
-                <IonIcon icon={bookmarkOutline}></IonIcon>
+              <IonButton fill="clear" onClick={(e) => addToBookmarksHandler(e, f.properties.treeid)} disabled={activeSelection?.selection.treeIds.includes(f.properties.treeid)} >
+                <IonIcon icon={activeSelection?.selection.treeIds.includes(f.properties.treeid) ? bookmark : bookmarkOutline}></IonIcon>
               </IonButton>
             </IonItem>
           );
