@@ -2,20 +2,20 @@ import { IonItem, IonLabel, IonRadio, IonRadioGroup } from "@ionic/react";
 import { useData } from "../context/data";
 
 const VarialbeSelector: React.FC = () => {
-  const { activeVariable, setActiveVariable } = useData();
+  const { activeVariable, setActiveVarialbeHandler } = useData();
   return (
     <IonRadioGroup
       //   value="space-between"
-      allowEmptySelection={true}
-      value={activeVariable === "Height" ? "Height" : "BHD"}
+      // allowEmptySelection={true}
+      value={activeVariable === "height" ? "height" : "radius"}
     >
       <IonItem>
         <IonLabel>Height</IonLabel>
         <IonRadio
           slot="end"
-          value="Height"
+          value="height"
           onClick={() => {
-            setActiveVariable("Height");
+            setActiveVarialbeHandler("height");
           }}
         ></IonRadio>
       </IonItem>
@@ -24,9 +24,9 @@ const VarialbeSelector: React.FC = () => {
         <IonLabel>BHD</IonLabel>
         <IonRadio
           slot="end"
-          value="BHD"
+          value="radius"
           onClick={() => {
-            setActiveVariable("BHD");
+            setActiveVarialbeHandler("radius");
           }}
         ></IonRadio>
       </IonItem>

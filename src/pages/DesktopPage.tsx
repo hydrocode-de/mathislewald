@@ -10,6 +10,7 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonLabel,
   IonPage,
   IonRow,
   IonTitle,
@@ -22,7 +23,7 @@ import {
 } from "ionicons/icons";
 import React from "react";
 import InventoryList from "../components/InventoryList";
-import MainMap from "../components/MainMapMaplibre";
+import MainMap from "../components/map-components/MainMapMaplibre";
 import BaseLayerPopover from "../components/popover/BaseLayerPopover";
 import { Route, Switch } from "react-router";
 import TreeDetails from "../components/TreeDetails";
@@ -48,7 +49,7 @@ const DesktopPage: React.FC = () => {
       <IonContent fullscreen>
         <IonGrid class="ion-no-padding">
           <IonRow>
-            <IonCol sizeMd="5" sizeLg="3.8" sizeXl="3">
+            <IonCol sizeMd="5" sizeLg="3.3" sizeXl="2.6">
               <div style={{ height: "95vh", overflowY: "auto" }}>
                 <InventoryList />
               </div>
@@ -69,7 +70,7 @@ const DesktopPage: React.FC = () => {
                   position: "absolute",
                   zIndex: 99,
                   bottom: 20,
-                  left: 20,
+                  right: 20,
                 }}
               >
                 <ActiveMapSelectionButton height={100} width={100} />
@@ -88,18 +89,42 @@ const DesktopPage: React.FC = () => {
                       color={"light"}
                       style={{
                         position: "absolute",
+                        margin: "0px",
                         top: 60,
-                        left: 12,
+                        left: 20,
                         // width: "33vw",
                         width: "400px",
-                        height: `calc(100vh - 135px)`,
+                        maxWidth: "80%",
+                        height: "calc(100% - 60px - 20px)",
                         zIndex: 999,
                         overflowY: "auto",
                       }}
                       class="ion-no-padding"
                     >
                       <IonToolbar>
-                        <IonTitle>Overview</IonTitle>
+                        <IonTitle class="ion-padding">
+                          <IonLabel>
+                            <p
+                              style={{
+                                fontSize: 15,
+                                fontWeight: 400,
+                                paddingBottom: 3,
+                                paddingLeft: 10,
+                              }}
+                            >
+                              Tree ID
+                            </p>
+                            <p
+                              style={{
+                                fontSize: 30,
+                                paddingLeft: 10,
+                                // fontWeight: 900
+                              }}
+                            >
+                              {props.match.params.id}
+                            </p>
+                          </IonLabel>
+                        </IonTitle>
                         <IonButtons slot="end">
                           <IonButton routerLink="/" routerDirection="root">
                             <IonIcon icon={closeCircleOutline} size="large" />

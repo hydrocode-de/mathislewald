@@ -8,7 +8,13 @@ import {
   IonListHeader,
   IonThumbnail,
 } from "@ionic/react";
-import { bookmarkOutline, filterOutline } from "ionicons/icons";
+import {
+  bookmarkOutline,
+  navigate,
+  swapVerticalOutline,
+  arrowDownOutline,
+  arrowUpOutline
+} from "ionicons/icons";
 import { useHistory } from "react-router";
 
 import distance from "@turf/distance";
@@ -21,7 +27,13 @@ import "./InventoryList.css";
 
 const InventoryList: React.FC = () => {
   // load the filtered inventory list
-  const { filteredInventory } = useData();
+  const {
+    filteredInventory,
+    activeVariable,
+    setSelectedInventoryTreeIDHandler,
+    sortDirection,
+    setSortDirection
+  } = useData();
 
   // get a history context
   const history = useHistory();
@@ -34,6 +46,17 @@ const InventoryList: React.FC = () => {
     // navigate forward
     history.push(path);
   };
+
+  // handler for changing sort direction
+  const onSortDirectionChange = () => {
+    if (sortDirection === "none") {
+      setSortDirection("ascending");
+    } else if (sortDirection === "ascending") {
+      setSortDirection("descending");
+    } else {
+      setSortDirection("none");
+    }
+  }
 
   const distString = (feature: InventoryFeature) => {
     if (!position) return " - ";
@@ -52,13 +75,20 @@ const InventoryList: React.FC = () => {
     }
   };
 
+  const addToBookmarksHandler = (
+    event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    console.log("add to bookmarks");
+  };
+
   return (
     <IonContent color={"light"}>
-      <IonList inset>
+      <IonList>
         <IonListHeader>
           <IonLabel>List View</IonLabel>
-          <IonButton class="ion-padding-horizontal">
-            <IonIcon icon={filterOutline} color={"primary"}></IonIcon>
+          <IonButton class="ion-padding-horizontal" onClick={onSortDirectionChange}>
+            <IonIcon icon={sortDirection === "none" ?  swapVerticalOutline : sortDirection === "ascending" ? arrowUpOutline : arrowDownOutline} color={sortDirection === "none" ? "dark" : "primary"}></IonIcon>
           </IonButton>
         </IonListHeader>
 
@@ -67,7 +97,12 @@ const InventoryList: React.FC = () => {
             <IonItem
               key={f.id}
               button
-              onClick={() => onNavigate(`/list/${f.properties.treeid}`)}
+              onClick={() => {
+                setSelectedInventoryTreeIDHandler(
+                  f.properties.treeid.toString()
+                );
+                onNavigate(`/list/${f.properties.treeid}`);
+              }}
             >
               <IonThumbnail slot="start" style={{ borderRadius: "15px" }}>
                 <img
@@ -77,16 +112,40 @@ const InventoryList: React.FC = () => {
                 />
               </IonThumbnail>
               <IonLabel>
-                <p> ID: {f.properties.treeid}</p>
-                <div style={{ display: "flex", alignItems: "end" }}>
-                  <h1>{f.properties.height.toFixed(1)}</h1>
-                  <p>{""}m</p>
-                </div>
+                <p style={{ fontSize: 12, paddingBottom: 0, fontWeight: 400 }}>
+                  ID {f.properties.treeid}
+                </p>
+                {activeVariable === "height" ? (
+                  <div style={{ display: "flex", alignItems: "end" }}>
+                    <h1>{f.properties.height.toFixed(1)}</h1>
+                    <p>{""}m</p>
+                  </div>
+                ) : (
+                  <div style={{ display: "flex", alignItems: "end" }}>
+                    <h1>{(f.properties.radius * 100).toFixed(0)}</h1>
+                    <p>{""}cm</p>
+                  </div>
+                )}
               </IonLabel>
               <IonLabel>
-                <p>{distString(f)} away</p>
+                <p
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <IonIcon
+                    style={{
+                      position: "relative",
+                      bottom: -2,
+                      left: -3,
+                    }}
+                    icon={navigate}
+                  ></IonIcon>
+                  {distString(f)}
+                </p>
               </IonLabel>
-              <IonButton fill="clear">
+              <IonButton fill="clear" onClick={(e) => addToBookmarksHandler(e)}>
                 <IonIcon icon={bookmarkOutline}></IonIcon>
               </IonButton>
             </IonItem>
