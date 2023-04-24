@@ -6,6 +6,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonSpinner,
   IonThumbnail,
 } from "@ionic/react";
 import {
@@ -26,8 +27,12 @@ import { InventoryFeature } from "../context/data.model";
 
 import "./InventoryList.css";
 import { useSelection } from "../context/selection";
+import { useState } from "react";
 
 const InventoryList: React.FC = () => {
+  // add a state for processing selections
+  const [selectionProcessing, setSelectionProcessing] = useState<boolean>(false)
+
   // load the filtered inventory list
   const {
     filteredInventory,
@@ -84,14 +89,17 @@ const InventoryList: React.FC = () => {
     event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>,
     treeId: number
   ) => {
+    // set selection processing
+    setSelectionProcessing(true)
+
     // stop event propagation
     event.stopPropagation();
 
     // check if this treeId is already in the selection
     if (activeSelection?.selection.treeIds.includes(treeId)) {
-      removeFromActiveSelection(treeId)
+      removeFromActiveSelection(treeId).finally(() => setSelectionProcessing(false))
     } else {
-      addToActiveSelection(treeId)
+      addToActiveSelection(treeId).finally(() => setSelectionProcessing(false))
     }
 
     //console.log("add to bookmarks");
@@ -162,9 +170,11 @@ const InventoryList: React.FC = () => {
               </IonLabel>
               <IonButton 
                 fill="clear" 
-                onClick={e => addToBookmarksHandler(e, f.properties.treeid)}
+                onClick={e => addToBookmarksHandler(e, Number(f.properties.treeid))}
               >
-                <IonIcon icon={activeSelection?.selection.treeIds.includes(f.properties.treeid) ? banOutline : bookmarkOutline}></IonIcon>
+                { selectionProcessing ? <IonSpinner name="lines" /> : (
+                  <IonIcon icon={activeSelection?.selection.treeIds.includes(Number(f.properties.treeid)) ? banOutline : bookmarkOutline} />
+                )}
               </IonButton>
             </IonItem>
           );

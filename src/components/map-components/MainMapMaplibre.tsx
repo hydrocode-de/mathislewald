@@ -8,6 +8,7 @@ import InventorySource from "./InventorySource";
 import BaseLayerSource from "./BaseLayerSource";
 import UserLocationSource from "./UserLocationSource";
 import LayerInteraction from "./LayerInteraction";
+import SelectionSource from "./SelectionSource";
 
 const MainMap: React.FC = () => {
   // onload callback handler
@@ -75,6 +76,7 @@ const MainMap: React.FC = () => {
     >
       <InventorySource />
       <BaseLayerSource />
+      <SelectionSource />
       <UserLocationSource />
       <LayerInteraction />
     </Map>
