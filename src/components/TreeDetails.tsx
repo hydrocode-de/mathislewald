@@ -1,4 +1,6 @@
 import {
+  IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -6,6 +8,7 @@ import {
   IonCardTitle,
   IonCol,
   IonGrid,
+  IonIcon,
   IonItem,
   IonLabel,
   IonNote,
@@ -13,12 +16,14 @@ import {
   IonSegment,
   IonSegmentButton,
 } from "@ionic/react";
+import { bookmarkOutline } from "ionicons/icons";
 import { Data, Layout } from "plotly.js";
 import { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import { useData } from "../context/data";
 import { InventoryFeature } from "../context/data.model";
 import { useOffline } from "../context/offline";
+import { useSelection } from "../context/selection";
 import * as plot from "../util/plot";
 import "./TreeDetails.css";
 
@@ -60,6 +65,9 @@ const TreeDetails: React.FC<TreeDetailsProps> = ({ treeID }) => {
 
   // load all inventory data
   const { filteredInventory, allInventory } = useData();
+
+  // get selection functions
+  const { addToActiveSelection } = useSelection()
 
   // compnent state to store this feature
   const [feature, setFeature] = useState<InventoryFeature>();

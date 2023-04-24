@@ -6,18 +6,8 @@ import { Source, Layer, useMap } from "react-map-gl";
 import { useData } from "../../context/data";
 import { InventoryData, InventoryFeature } from "../../context/data.model";
 import { useLayers } from "../../context/layers";
-import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonItem,
-  IonLabel,
-  IonPopover,
-} from "@ionic/react";
 import { useHistory } from "react-router";
 import { useOffline } from "../../context/offline";
-import bbox from "@turf/bbox";
 
 const InventoryLayer: React.FC = () => {
   const {

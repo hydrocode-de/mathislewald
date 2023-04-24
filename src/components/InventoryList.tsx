@@ -6,10 +6,12 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonSpinner,
   IonThumbnail,
 } from "@ionic/react";
 import {
   bookmarkOutline,
+  banOutline,
   navigate,
   swapVerticalOutline,
   arrowDownOutline,
@@ -24,8 +26,13 @@ import { useSettings } from "../context/settings";
 import { InventoryFeature } from "../context/data.model";
 
 import "./InventoryList.css";
+import { useSelection } from "../context/selection";
+import { useState } from "react";
 
 const InventoryList: React.FC = () => {
+  // add a state for processing selections
+  const [selectionProcessing, setSelectionProcessing] = useState<boolean>(false)
+
   // load the filtered inventory list
   const {
     filteredInventory,
@@ -34,6 +41,9 @@ const InventoryList: React.FC = () => {
     sortDirection,
     setSortDirection
   } = useData();
+
+  // get selection functions
+  const { addToActiveSelection, removeFromActiveSelection, activeSelection } = useSelection()
 
   // get a history context
   const history = useHistory();
@@ -76,10 +86,23 @@ const InventoryList: React.FC = () => {
   };
 
   const addToBookmarksHandler = (
-    event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLIonButtonElement, MouseEvent>,
+    treeId: number
   ) => {
+    // set selection processing
+    setSelectionProcessing(true)
+
+    // stop event propagation
     event.stopPropagation();
-    console.log("add to bookmarks");
+
+    // check if this treeId is already in the selection
+    if (activeSelection?.selection.treeIds.includes(treeId)) {
+      removeFromActiveSelection(treeId).finally(() => setSelectionProcessing(false))
+    } else {
+      addToActiveSelection(treeId).finally(() => setSelectionProcessing(false))
+    }
+
+    //console.log("add to bookmarks");
   };
 
   return (
@@ -145,8 +168,13 @@ const InventoryList: React.FC = () => {
                   {distString(f)}
                 </p>
               </IonLabel>
-              <IonButton fill="clear" onClick={(e) => addToBookmarksHandler(e)}>
-                <IonIcon icon={bookmarkOutline}></IonIcon>
+              <IonButton 
+                fill="clear" 
+                onClick={e => addToBookmarksHandler(e, Number(f.properties.treeid))}
+              >
+                { selectionProcessing ? <IonSpinner name="lines" /> : (
+                  <IonIcon icon={activeSelection?.selection.treeIds.includes(Number(f.properties.treeid)) ? banOutline : bookmarkOutline} />
+                )}
               </IonButton>
             </IonItem>
           );
