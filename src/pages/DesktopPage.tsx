@@ -43,7 +43,7 @@ const DesktopPage: React.FC = () => {
               <IonIcon icon={settingsOutline} color="primary" />
             </IonButton>
           </IonButtons>
-          <IonTitle>Mathislewald</IonTitle>
+          <IonTitle>Mathislewald App</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
