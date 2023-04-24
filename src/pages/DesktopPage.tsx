@@ -90,10 +90,10 @@ const DesktopPage: React.FC = () => {
                       style={{
                         position: "absolute",
                         margin: "0px",
-                        top: 60,
+                        top: 70,
                         left: 20,
                         // width: "33vw",
-                        width: "400px",
+                        width: "430px",
                         maxWidth: "80%",
                         height: "calc(100% - 60px - 20px)",
                         zIndex: 999,
