@@ -13,6 +13,8 @@ import {
   IonLabel,
   IonPage,
   IonRow,
+  IonSegment,
+  IonSegmentButton,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -21,7 +23,7 @@ import {
   closeCircleOutline,
   settingsOutline,
 } from "ionicons/icons";
-import React from "react";
+import React, { useState } from "react";
 import InventoryList from "../components/InventoryList";
 import MainMap from "../components/map-components/MainMapMaplibre";
 import BaseLayerPopover from "../components/popover/BaseLayerPopover";
@@ -32,8 +34,12 @@ import FilterBarPopover from "../components/popover/RangeFilterPopover";
 import MapButtonGroup from "../components/MapButtonGroup";
 import ActiveMapSelectionButton from "../components/ActiveMapSelectionButton";
 import VariableSelectionPopover from "../components/popover/VariableSelectionPopover";
+import SelectionList from "../components/SelectionList";
 
 const DesktopPage: React.FC = () => {
+  // component state for rendering the correct sidebar
+  const [sidebarContent, setSidebarContent] = useState<'inventory' | 'selection'>('inventory')
+
   return (
     <IonPage>
       <IonHeader>
@@ -51,7 +57,15 @@ const DesktopPage: React.FC = () => {
           <IonRow>
             <IonCol sizeMd="5" sizeLg="3.3" sizeXl="2.6">
               <div style={{ height: "95vh", overflowY: "auto" }}>
-                <InventoryList />
+                <IonSegment value={sidebarContent} onIonChange={e => setSidebarContent(e.target.value as 'inventory' | 'selection')}>
+                  <IonSegmentButton value="inventory">
+                    <IonLabel>Inventory</IonLabel>
+                  </IonSegmentButton>
+                  <IonSegmentButton value="selection">
+                    <IonLabel>Selections</IonLabel>
+                  </IonSegmentButton>
+                </IonSegment>
+                { sidebarContent === 'inventory' ? <InventoryList /> : <SelectionList />}
               </div>
             </IonCol>
             <IonCol>
